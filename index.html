@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <title>FPS 灵敏度夜航校准台</title>
+  <!--
+  THESIS: 让个人灵敏度推荐像一次可信的夜航仪表交叉校验，而不是黑底霓虹电竞仪表盘。
+  OWN-WORLD: 哑光石墨总面板、六联圆形仪表、暖白刻度、镭光绿有效态、琥珀警示灯、机械拨杆与短促阻尼运动。
+  STORY: 用户查看个人基线，输入 DPI 与当前灵敏度，校准舒适移动范围，完成四项游戏视角测试与一项桌面辅助测试，获得可解释且可保存的推荐值。
+  FIRST VIEWPORT: 左侧直接显示最近结果，中央启动拨杆，右侧本地飞行日志；下方提供四游戏互转与鼠标实验室入口。
+  FORM: 夜航六联仪表方向；组合 C 首页、B 测试台、A 结果页；线性校准 staging；seed 5dff0e76。
+  -->
+  <link rel="stylesheet" href="assets/shared.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>个人灵敏度夜航校准台</h1>
+          <div class="brand-sub"><span id="brandGameName">《无畏契约》</span>桌面鼠标校准 · 数据仅保存在本机</div>
+        </div>
+      </div>
+      <div class="top-status">
+        <!-- Embedded official-site icons, downloaded 2026-07-28:
+             VALORANT asset CDN via https://playvalorant.com/
+             Overwatch favicon via https://overwatch.blizzard.com/
+             Counter-Strike favicon via https://www.counter-strike.net/
+             Delta Force favicon via https://www.playdeltaforce.com/ -->
+        <div class="game-switcher" id="gameSwitcher" role="radiogroup" aria-label="选择游戏">
+          <button class="game-switch" type="button" role="radio" aria-checked="true" data-game="valorant" title="无畏契约">
+            <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAAXNSR0IArs4c6QAAAFdQTFRFAAAA/0hQ/0VT/0BQ/0VT/0VS/0ZU/0ZU/0VV/0dU/0ZU/0RU/0ZT/0ZU/0VU/0ZV/0VU/0ZU/0VV/0VV/0ZU/0VV/0ZW/0hU/0dU/0RU/0ZU/0ZT/0VUqN5dCQAAAB10Uk5TACCQEJ9g/49gcH9AUO/v37+vbzDPn19AT3CAoM8hME5OAAAClklEQVR4nO2Z61LiQBCFCWjjRhQw7K63939OFRUkmZk+fUOt6u8nVdNzKplz0s3MZkmSJEmSJEnyc+jmizPtdNEVf76k5Xn2X9JVRQD9Ocf+PdUF0HX8/itqCbgpvx1HutumAFoHH8RuTW0BtIkVsCVOQKwVeuIFRFrhjhABNETtPxAmYB1khfcDCAigXYgVFof9WQH0N0LAknAB1Pvv35NEAP3z3n9FMgHembxPYIkA50w+GgAW4JvJO5IL8MzkJWkE+GVyP64MCvBqT/5PCqMCfKwwOoASAS5WWEz3xwXQ1i5gWyiLC7Bn8uQACgVYM/muWFQi4MbUnpwmsEqAqT0pGEAuwNKe7ColZQL0mTxOYK0AbSYXDaASoMvkVb2eWIAmkysG0AlQZHLNAEoB8vZk06qmECC1Qv0AagXIrFBOYJsAycg4MKV0AvBMbh5AvQA4k0stiIsAdGSsJrBZANaetA2w57785PiFSHvSSOADldP0wK/kM7mVwJ881hbP+bWcFVgDvDKvL2/m5ztMJtdakC/sjPqbmcwbgHmGyBtsZDJggFvmHQJerLcn0yFwyqq9/2z2yNeoWQF5gVUDHHniq5TbEz6BmwY41nnm6xRHxtIQCCkfgzzJQiYDBxD9nnJf8zcmmcy0IHvgjgLJ5FGxDthf0FOJM9nJAEeATD5pT4bnNcNGNl4hloq9ZUQyOeAf7S9c8wKCbxkNmewEYoXQW0Ykk2NvGc3tiZnB1p44gLQnYbeMewArRN0yfgB85GNuGT9BMjnklvHA78hk91vGE1xGRhMOI6MR+8ho5Psz2TgyOmAaGV34/vZEPTJ6oR4Z3VCOjI6oRkZXFCOjM78ik1t/wjlwecESKyBJkiRJkiRJ/HkB4o9fvW8/kk4AAAAASUVORK5CYII=">
+          </button>
+          <button class="game-switch" type="button" role="radio" aria-checked="false" data-game="overwatch2" title="守望先锋 2">
+            <img alt="" src="data:image/png;base64,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">
+          </button>
+          <button class="game-switch" type="button" role="radio" aria-checked="false" data-game="cs2" title="CS2">
+            <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAM2SURBVFhHvZbbTxNBGMX7Z4jEF18KMV4e8IKIGvUJNcYaefDNhGgiMT5IIhilosSIJMVEEuMlogg0EAEFjKk2EvQFTKtAqUaIl0UuKrQ1UsBuu/s5M/vBdst0u12Cv+QkbWdyzunO7Oxaoo9XQbqab8yCqKcSFhj0fYesLWWKcu1pyVSBWOcmAHEG4xWGP47/vwLRJ7kYq+XalTZuiJ5MXoENAOExjFUpPdekMc/eVq5oq6r4caq0C8CYC+OSMz8XZaJIMlktUWKf52Yj4KjugpKzj2DjrsvpF4CRZmaUioUCiRoVpqHgsAPW7bgE2dtNXIF06Orwai51Mq1YgZqqDm5golIWiHXkAQzdQFvjtLe+5QYmKmUBEJ6jpTE8fZ/hVPF92G9zcAMTpVsg1pWPtsl51ullGvKNgtvt54boSbcADFzHmORMTYe5xkalW0DqPkYOnHGM4jM4IHCNjSrlHpB9dRjFp+j4La6xUekXaCVH7t8QRmkRhCk4c7rO1AMoXvp7oN+BcUsRvk2ZfgTHK2kBsT6THOJhjONzkT58VqpAqs1HmZwIrUwByW3DiDiCfoCJHvyiUl3ZzjU2Km4B+fVJtFeR+8rZGIRH8ReFUCgM+buVR6s1wdyI+AV6z6M9QvZC7GkOG5O6i/BHldu1LmZGXz4SA1KJWwB8N9Ea+dSgHf9wBwdU9hRUmdoPSwqAtwItVSTXocVxsWE1EwgvcVThwJGa5ReQvVfRLg7BtTjO1JwBopMUCJBNibzzflHCl1NAbCSmv96jpYrksmkKRB6Q82GwFkcV7GVOFr6sTSi9KEQ7FbnvgiZcdGZAtGUNQOQ3ziB3QXAG8uhdYOLfUy0WgGEnWiIjTZpwKnqVJNc+nKBQf/eV6XAqS7TFCtG29eRVNoCWhED/knCqyMNMkN8U4ySFwqPmNt+CLGKjFWSPHe0I0iy553cmLQB+df173D6wbi7hGhsVKwBfO9GS5Hef4IbT3U8FQR+bN/kDnwN08+E7vhmxJYCfHmZKX0C54URiE13/vco8QjDwBw6avPfjZdEcu/57amBbFtFa8pn8c/KdrX9vKU5Uoa/fOfkVXPPUssM/4WnZ0NvDpTwAAAAASUVORK5CYII=">
+          </button>
+          <button class="game-switch" type="button" role="radio" aria-checked="false" data-game="deltaforce" title="三角洲行动">
+            <img alt="" src="data:image/png;base64,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">
+          </button>
+        </div>
+        <a class="lab-entry-link" href="mouse-lab.html">
+          <span aria-hidden="true">⌁</span>
+          鼠标实验室
+        </a>
+        <div class="local-placard"><span class="lamp live"></span>LOCAL / 本地模式</div>
+        <div class="status-placard" id="deviceStatus"><span class="lamp" id="inputLamp"></span><span id="inputModeText">等待鼠标输入</span></div>
+        <button class="sound-toggle" id="soundToggle" type="button" aria-label="关闭声音" aria-pressed="true">🔊</button>
+      </div>
+    </header>
+
+    <aside class="mobile-gate panel">
+      <h2 class="section-title">需要更宽的桌面窗口</h2>
+      <p class="muted">瞄准测试需要稳定的鼠标移动区域。请把浏览器窗口扩展到至少 861 像素宽后再开始；历史记录仍保存在本机。</p>
+    </aside>
+
+    <main id="app">
+      <section class="screen active" id="screen-home" aria-labelledby="homeTitle">
+        <div class="home-shell">
+          <div class="home-grid">
+            <article class="instrument-cluster panel">
+              <div class="cluster-header">
+                <div>
+                  <p class="placard-title">LATEST CALIBRATION</p>
+                  <h2 class="section-title" id="homeTitle">最近一次推荐</h2>
+                </div>
+                <div class="status-placard"><span class="lamp" id="homeResultLamp"></span><span id="homeResultState">尚无记录</span></div>
+              </div>
+              <div class="home-result-empty" id="homeResultEmpty">
+                <div><strong>尚无可展示的测试结果</strong>完成一次完整测试并保存后，这里会直接显示推荐值、四游戏换算和射击证据。</div>
+              </div>
+              <div class="home-result-content" id="homeResultContent" hidden>
+                <div class="home-result-summary">
+                  <div>
+                    <span class="primary-result-label">当前游戏主推荐</span>
+                    <strong class="home-result-value" id="homePrimarySens">待测</strong>
+                    <span class="primary-result-unit" id="homePrimaryUnit">游戏内灵敏度</span>
+                  </div>
+                  <dl class="compact-facts">
+                    <div><dt>cm / 360°</dt><dd id="homeCm360">待测</dd></div>
+                    <div><dt>有效 eDPI</dt><dd id="homeEdpi">待测</dd></div>
+                    <div><dt>射击命中率</dt><dd id="homeAccuracy">待测</dd></div>
+                    <div><dt>结果置信度</dt><dd id="homeConfidence">待测</dd></div>
+                  </dl>
+                </div>
+                <section class="compact-section">
+                  <div class="compact-section-header"><strong>全部游戏等效推荐</strong><span>保持相同物理 cm/360°</span></div>
+                  <ol class="compact-conversion-list" id="homeConversionList"></ol>
+                </section>
+                <div class="recommendation-strip home-alternatives">
+                  <div class="candidate"><span>较低备选</span><strong id="homeLowSens">待测</strong></div>
+                  <div class="candidate primary"><span>主推荐值</span><strong id="homeMainSens">待测</strong></div>
+                  <div class="candidate"><span>较高备选</span><strong id="homeHighSens">待测</strong></div>
+                </div>
+                <section class="compact-section">
+                  <div class="compact-section-header"><strong>射击与控制证据</strong><span>越低越好：反应、偏差、过冲</span></div>
+                  <dl class="evidence-grid" id="homeEvidenceGrid"></dl>
+                </section>
+              </div>
+            </article>
+
+            <article class="start-bay panel">
+              <p class="placard-title">START NEW RUN</p>
+              <div class="lever-wrap">
+                <div class="lever-track" id="startLeverControl" role="slider" tabindex="0"
+                     aria-label="向下拉动开始新校准" aria-orientation="vertical"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div class="lever-handle" id="startLever"></div>
+                </div>
+                <span class="muted lever-hint" id="leverHint"><strong>按住向下拉</strong>拖到底开始</span>
+              </div>
+              <button class="primary-btn" id="startNewBtn" type="button">开始新校准</button>
+            </article>
+
+            <article class="history-panel panel">
+              <div class="history-header">
+                <div>
+                  <p class="placard-title">FLIGHT LOG / LOCAL HISTORY</p>
+                  <h2 class="section-title">个人校准记录</h2>
+                </div>
+                <div class="history-actions">
+                  <button class="secondary-btn" id="exportBtn" type="button">导出 JSON</button>
+                  <button class="danger-btn" id="clearBtn" type="button">清空记录</button>
+                </div>
+              </div>
+              <ol class="history-list" id="historyList"></ol>
+            </article>
+          </div>
+
+          <section class="converter-panel panel" aria-labelledby="converterTitle">
+            <div class="converter-copy">
+              <p class="placard-title">SENSITIVITY TRANSFER BOARD</p>
+              <h2 class="section-title" id="converterTitle">四游戏灵敏度互转</h2>
+              <p>选择来源游戏并输入正在使用的灵敏度，右侧会按相同物理转身距离换算四款游戏。DPI 只用于显示 cm/360°；鼠标 DPI 不变时，各游戏灵敏度的换算比例不受 DPI 影响。</p>
+            </div>
+            <div class="converter-controls">
+              <div class="converter-inputs">
+                <div class="converter-game-picker" id="converterGamePicker" role="radiogroup" aria-label="换算来源游戏"></div>
+                <div class="field">
+                  <label for="converterSensInput">来源游戏灵敏度</label>
+                  <input id="converterSensInput" type="number" min="0.01" max="10" step="0.001" value="0.320" inputmode="decimal">
+                </div>
+                <div class="field">
+                  <label for="converterDpiInput">鼠标 DPI</label>
+                  <input id="converterDpiInput" type="number" min="100" max="32000" step="50" value="800" inputmode="numeric">
+                </div>
+              </div>
+              <div class="converter-output-list" id="converterOutputList" aria-live="polite"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-setup" aria-labelledby="setupTitle">
+        <article class="workflow-panel panel">
+          <aside class="workflow-rail">
+            <p class="placard-title">CALIBRATION RUNWAY</p>
+            <ol class="step-list">
+              <li class="step-item current"><span class="step-num">1</span><span>输入当前设置</span></li>
+              <li class="step-item"><span class="step-num">2</span><span>移动范围校准</span></li>
+              <li class="step-item"><span class="step-num">3</span><span>大范围转向</span></li>
+              <li class="step-item"><span class="step-num">4</span><span>微小目标定位</span></li>
+              <li class="step-item"><span class="step-num">5</span><span>连续目标切换</span></li>
+              <li class="step-item"><span class="step-num">6</span><span>平滑追踪</span></li>
+              <li class="step-item"><span class="step-num">7</span><span>桌面微调辅助</span></li>
+              <li class="step-item"><span class="step-num">8</span><span>生成结果</span></li>
+            </ol>
+          </aside>
+          <div class="workflow-main">
+            <div class="setup-card">
+              <p class="placard-title">PREFLIGHT INPUT</p>
+              <h2 class="section-title" id="setupTitle">输入你现在正在使用的设置</h2>
+              <div class="game-context"><img id="setupGameIcon" alt="无畏契约图标" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAAXNSR0IArs4c6QAAAFdQTFRFAAAA/0hQ/0VT/0BQ/0VT/0VS/0ZU/0ZU/0VV/0dU/0ZU/0RU/0ZT/0ZU/0VU/0ZV/0VU/0ZU/0VV/0VV/0ZU/0VV/0ZW/0hU/0dU/0RU/0ZU/0ZT/0VUqN5dCQAAAB10Uk5TACCQEJ9g/49gcH9AUO/v37+vbzDPn19AT3CAoM8hME5OAAAClklEQVR4nO2Z61LiQBCFCWjjRhQw7K63939OFRUkmZk+fUOt6u8nVdNzKplz0s3MZkmSJEmSJEnyc+jmizPtdNEVf76k5Xn2X9JVRQD9Ocf+PdUF0HX8/itqCbgpvx1HutumAFoHH8RuTW0BtIkVsCVOQKwVeuIFRFrhjhABNETtPxAmYB1khfcDCAigXYgVFof9WQH0N0LAknAB1Pvv35NEAP3z3n9FMgHembxPYIkA50w+GgAW4JvJO5IL8MzkJWkE+GVyP64MCvBqT/5PCqMCfKwwOoASAS5WWEz3xwXQ1i5gWyiLC7Bn8uQACgVYM/muWFQi4MbUnpwmsEqAqT0pGEAuwNKe7ColZQL0mTxOYK0AbSYXDaASoMvkVb2eWIAmkysG0AlQZHLNAEoB8vZk06qmECC1Qv0AagXIrFBOYJsAycg4MKV0AvBMbh5AvQA4k0stiIsAdGSsJrBZANaetA2w57785PiFSHvSSOADldP0wK/kM7mVwJ881hbP+bWcFVgDvDKvL2/m5ztMJtdakC/sjPqbmcwbgHmGyBtsZDJggFvmHQJerLcn0yFwyqq9/2z2yNeoWQF5gVUDHHniq5TbEz6BmwY41nnm6xRHxtIQCCkfgzzJQiYDBxD9nnJf8zcmmcy0IHvgjgLJ5FGxDthf0FOJM9nJAEeATD5pT4bnNcNGNl4hloq9ZUQyOeAf7S9c8wKCbxkNmewEYoXQW0Ykk2NvGc3tiZnB1p44gLQnYbeMewArRN0yfgB85GNuGT9BMjnklvHA78hk91vGE1xGRhMOI6MR+8ho5Psz2TgyOmAaGV34/vZEPTJ6oR4Z3VCOjI6oRkZXFCOjM78ik1t/wjlwecESKyBJkiRJkiRJ/HkB4o9fvW8/kk4AAAAASUVORK5CYII="><strong id="setupGameName">无畏契约</strong><span id="setupEquivalence">切换游戏时自动保持 cm/360°</span></div>
+              <p>校准台会把鼠标相对位移换算成虚拟镜头角度，并比较当前灵敏度 65%–150% 范围内的五个候选值。四项游戏视角测试负责选择档位，最后一项桌面微调只补充控制稳定与置信度。</p>
+              <section class="setup-pro-selector" aria-labelledby="setupProTitle">
+                <header class="setup-pro-heading">
+                  <div>
+                    <span class="setup-pro-kicker"><span class="lamp live"></span>可选 / 职业选手 DPI 参考</span>
+                    <strong id="setupProTitle">从 VALORANT 选手设置选择起点</strong>
+                  </div>
+                  <a href="https://prosettings.net/lists/valorant/" target="_blank" rel="noreferrer">ProSettings 数据来源 ↗</a>
+                </header>
+                <div class="setup-pro-layout">
+                  <div class="setup-pro-directory">
+                    <div class="setup-pro-filters">
+                      <label>
+                        <span>搜索选手 / 战队 / 鼠标</span>
+                        <input id="setupProSearch" type="search" placeholder="例如 ZmjjKK、Fnatic、Razer" autocomplete="off">
+                      </label>
+                      <label>
+                        <span>来源 DPI</span>
+                        <select id="setupProDpiFilter"><option value="">全部</option></select>
+                      </label>
+                    </div>
+                    <div class="setup-pro-list" id="setupProList" role="listbox" aria-label="VALORANT 职业选手设置"></div>
+                    <span class="setup-pro-list-state" id="setupProListState" aria-live="polite">正在载入职业选手快照</span>
+                  </div>
+                  <div class="setup-pro-profile">
+                    <div class="setup-pro-selected">
+                      <span>当前参考</span>
+                      <strong id="setupProPlayer">尚未选择</strong>
+                      <small id="setupProMeta">选择一名选手后，可按相同转身距离换算到当前游戏。</small>
+                    </div>
+                    <div class="setup-pro-dpi-choices" id="setupProDpiChoices" aria-label="选择要使用的鼠标 DPI"></div>
+                    <div class="setup-pro-preview">
+                      <div><span>采用 DPI</span><strong id="setupProTargetDpi">待选</strong></div>
+                      <div><span id="setupProSensLabel">当前游戏灵敏度</span><strong id="setupProTargetSens">待选</strong></div>
+                      <div><span>参考转身距离</span><strong id="setupProTargetCm">待选</strong></div>
+                    </div>
+                    <button class="secondary-btn" id="applySetupProBtn" type="button" disabled>采用此 DPI 与灵敏度</button>
+                  </div>
+                </div>
+                <p class="setup-pro-disclaimer">职业选手数据只提供可体验的起点，不代表最佳设置；采用后仍会通过你的五档测试生成个人结果。</p>
+              </section>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="dpiInput">鼠标 DPI</label>
+                  <input id="dpiInput" type="number" min="100" max="32000" step="50" value="800" inputmode="numeric">
+                  <small>填写鼠标驱动或板载配置中的实际 DPI。</small>
+                </div>
+                <div class="field">
+                  <label for="sensInput">当前游戏灵敏度</label>
+                  <input id="sensInput" type="number" min="0.01" max="10" step="0.001" value="0.320" inputmode="decimal">
+                  <small id="sensHint">无畏契约常用输入范围 0.01–10，精度 0.001。</small>
+                </div>
+                <div class="field">
+                  <label for="fovInput">测试水平视野</label>
+                  <input id="fovInput" type="number" min="60" max="130" step="1" value="103" inputmode="numeric">
+                  <small>只影响浏览器中的视觉投影，不改变 cm/360° 换算。</small>
+                </div>
+              </div>
+
+              <div class="hid-assist" id="hidAssist">
+                <div class="hid-assist-copy">
+                  <div class="hid-assist-title"><span class="lamp" id="hidLamp"></span>可选 / WebHID 鼠标识别</div>
+                  <p id="hidStatus" aria-live="polite">正在检查浏览器能力。无法使用时仍可手动填写 DPI，不影响后续测试。</p>
+                  <span class="hid-device-meta" id="hidDeviceMeta" hidden></span>
+                  <div class="hid-readouts">
+                    <span>固件 DPI <strong id="hidDpiReadout">待测</strong></span>
+                    <span>固件回报率 <strong id="hidPollingReadout">待测</strong></span>
+                    <span>浏览器事件约 <strong id="measuredPollingReadout">等待移动</strong></span>
+                  </div>
+                </div>
+                <button class="secondary-btn" id="connectMouseBtn" type="button">只读连接鼠标配置</button>
+              </div>
+
+              <div class="action-row">
+                <button class="primary-btn" id="toCalibrationBtn" type="button">保存设置并校准移动范围</button>
+                <button class="secondary-btn" data-go-home type="button">返回首页</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="screen" id="screen-calibration" aria-labelledby="calibrationTitle">
+        <div class="calibration-layout">
+          <aside class="calibration-info panel">
+            <p class="placard-title">MOVEMENT ENVELOPE</p>
+            <h2 class="section-title" id="calibrationTitle">校准舒适移动范围</h2>
+            <p class="muted">点击开始后，保持手腕和手臂自然放松，在鼠标垫上做几次完整的左右扫动。无需点击任何目标。</p>
+            <div class="readout-stack">
+              <div class="readout"><span>剩余时间</span><strong id="calTime">8.0 s</strong></div>
+              <div class="readout"><span>相对移动跨度</span><strong id="calSpan">0</strong></div>
+              <div class="readout"><span>输入模式</span><strong id="calInputMode">待检测</strong></div>
+            </div>
+            <div class="notice">这里估算的是你的舒适移动包络，不宣称等同于鼠标垫的精确物理厘米宽度。</div>
+            <div class="action-row">
+              <button class="secondary-btn" data-go-home type="button">取消本次校准</button>
+            </div>
+          </aside>
+          <article class="calibration-stage panel" id="calibrationStage">
+            <canvas id="calibrationCanvas" aria-label="鼠标移动范围校准区域"></canvas>
+            <div class="stage-overlay" id="calOverlay">
+              <div class="overlay-card">
+                <p class="placard-title">READY</p>
+                <h3 class="section-title">做几次舒适的左右扫动</h3>
+                <p>点击开始会优先读取无系统加速的相对移动；浏览器不支持时会自动降级为兼容输入。</p>
+                <button class="primary-btn" id="startCalibrationBtn" type="button">开始 8 秒校准</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-test" aria-labelledby="testTitle">
+        <div class="test-layout">
+          <aside class="test-sidebar panel">
+            <p class="placard-title">CURRENT STAGE</p>
+            <div class="stage-counter"><span id="stageNumber">1</span> / <span id="stageTotal">5</span></div>
+            <h2 class="section-title" id="testTitle">大范围转向</h2>
+            <p class="stage-description" id="stageDescription"></p>
+            <div class="test-factor-card">
+              <span>正在测试的游戏灵敏度</span>
+              <strong id="liveCandidateSens">待测</strong>
+              <small id="liveCandidatePercent">当前设置的 100%</small>
+              <div class="test-factor-rail" id="testFactorRail" aria-label="五档候选进度"></div>
+            </div>
+
+            <button class="danger-btn test-cancel" id="cancelTestBtn" type="button">取消测试并返回首页</button>
+          </aside>
+
+          <article class="test-main panel">
+            <div class="test-stage" id="testStage">
+              <canvas id="aimCanvas" aria-label="内嵌瞄准测试区域"></canvas>
+              <div class="test-evidence-hud" id="testEvidenceHud">
+                <div class="live-evidence-strip" aria-label="实时测试数据">
+                  <div class="live-evidence-item"><span id="liveHitsLabel">命中 / 射击</span><strong id="liveHits">0 / 0</strong></div>
+                  <div class="live-evidence-item"><span id="liveAccuracyLabel">命中率</span><strong id="liveAccuracy">待测</strong></div>
+                  <div class="live-evidence-item"><span>空枪</span><strong id="liveMisses">0</strong></div>
+                  <div class="live-evidence-item"><span id="liveReactionLabel">平均反应</span><strong id="liveReaction">待测</strong></div>
+                  <div class="live-evidence-item"><span>点击偏差</span><strong id="liveClickError">待测</strong></div>
+                  <div class="live-evidence-item"><span>路径效率</span><strong id="liveEfficiency">待测</strong></div>
+                  <div class="live-evidence-item"><span>过冲</span><strong id="liveOvershoots">0</strong></div>
+                  <div class="live-evidence-item"><span id="liveGainLabel">当前档位</span><strong id="liveGain">1 / 5</strong></div>
+                </div>
+                <div class="factor-change-cue" id="factorChangeCue" role="status" aria-live="assertive" hidden>
+                  <span class="factor-change-kicker" id="factorChangeKicker">灵敏度档位切换</span>
+                  <strong id="factorChangeValue">100% · 0.320</strong>
+                  <span class="factor-change-countdown" id="factorChangeCountdown">2 秒后开始采样</span>
+                </div>
+              </div>
+              <div class="canvas-hud">
+                <div class="hud-readout">TEST TIME<strong id="testTime">25.0</strong></div>
+                <div class="hud-readout">SESSION<strong id="sessionProgress">1 / 5</strong></div>
+              </div>
+              <div class="big-countdown" id="bigCountdown" hidden>3</div>
+              <div class="stage-overlay" id="testOverlay">
+                <div class="overlay-card">
+                  <p class="placard-title" id="overlayKicker">TEST 1</p>
+                  <h3 class="section-title" id="overlayTitle">大范围转向</h3>
+                  <p id="overlayText">准星固定在中心。移动鼠标旋转虚拟视角，瞄准目标后按鼠标左键射击。</p>
+                  <button class="primary-btn" id="stageActionBtn" type="button">开始此项测试</button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <aside class="test-sidebar panel">
+            <p class="placard-title">TEST CHECKLIST</p>
+            <ol class="test-checklist" id="testChecklist"></ol>
+            <div class="notice">静态目标需要瞄准后按左键射击；追踪项目只需持续贴合。按 <strong>Esc</strong> 或切换窗口会暂停。</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-results" aria-labelledby="resultsTitle">
+        <div class="result-layout">
+          <article class="result-cluster panel">
+            <div class="result-header">
+              <div>
+                <p class="placard-title">CROSS-CHECK COMPLETE</p>
+                <h2 class="section-title" id="resultsTitle">本次灵敏度建议</h2>
+                <div class="game-context"><img id="resultGameIcon" alt="无畏契约图标" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAAXNSR0IArs4c6QAAAFdQTFRFAAAA/0hQ/0VT/0BQ/0VT/0VS/0ZU/0ZU/0VV/0dU/0ZU/0RU/0ZT/0ZU/0VU/0ZV/0VU/0ZU/0VV/0VV/0ZU/0VV/0ZW/0hU/0dU/0RU/0ZU/0ZT/0VUqN5dCQAAAB10Uk5TACCQEJ9g/49gcH9AUO/v37+vbzDPn19AT3CAoM8hME5OAAAClklEQVR4nO2Z61LiQBCFCWjjRhQw7K63939OFRUkmZk+fUOt6u8nVdNzKplz0s3MZkmSJEmSJEnyc+jmizPtdNEVf76k5Xn2X9JVRQD9Ocf+PdUF0HX8/itqCbgpvx1HutumAFoHH8RuTW0BtIkVsCVOQKwVeuIFRFrhjhABNETtPxAmYB1khfcDCAigXYgVFof9WQH0N0LAknAB1Pvv35NEAP3z3n9FMgHembxPYIkA50w+GgAW4JvJO5IL8MzkJWkE+GVyP64MCvBqT/5PCqMCfKwwOoASAS5WWEz3xwXQ1i5gWyiLC7Bn8uQACgVYM/muWFQi4MbUnpwmsEqAqT0pGEAuwNKe7ColZQL0mTxOYK0AbSYXDaASoMvkVb2eWIAmkysG0AlQZHLNAEoB8vZk06qmECC1Qv0AagXIrFBOYJsAycg4MKV0AvBMbh5AvQA4k0stiIsAdGSsJrBZANaetA2w57785PiFSHvSSOADldP0wK/kM7mVwJ881hbP+bWcFVgDvDKvL2/m5ztMJtdakC/sjPqbmcwbgHmGyBtsZDJggFvmHQJerLcn0yFwyqq9/2z2yNeoWQF5gVUDHHniq5TbEz6BmwY41nnm6xRHxtIQCCkfgzzJQiYDBxD9nnJf8zcmmcy0IHvgjgLJ5FGxDthf0FOJM9nJAEeATD5pT4bnNcNGNl4hloq9ZUQyOeAf7S9c8wKCbxkNmewEYoXQW0Ykk2NvGc3tiZnB1p44gLQnYbeMewArRN0yfgB85GNuGT9BMjnklvHA78hk91vGE1xGRhMOI6MR+8ho5Psz2TgyOmAaGV34/vZEPTJ6oR4Z3VCOjI6oRkZXFCOjM78ik1t/wjlwecESKyBJkiRJkiRJ/HkB4o9fvW8/kk4AAAAASUVORK5CYII="><strong id="resultGameName">无畏契约</strong><span>可直接输入当前游戏</span></div>
+              </div>
+              <div class="status-placard"><span class="lamp live" id="resultLamp"></span><span id="resultStateText">计算完成</span></div>
+            </div>
+            <div class="result-summary">
+              <div class="primary-result">
+                <span class="primary-result-label">当前游戏主推荐</span>
+                <strong class="primary-result-value" id="resultPrimarySens">待测</strong>
+                <span class="primary-result-unit" id="resultPrimaryUnit">游戏内灵敏度</span>
+              </div>
+              <dl class="result-facts">
+                <div><dt>cm / 360°</dt><dd id="resultCm360">待测</dd></div>
+                <div><dt>有效 eDPI</dt><dd id="resultEdpi">待测</dd></div>
+                <div><dt>射击命中率</dt><dd id="resultAccuracy">待测</dd></div>
+                <div><dt>结果置信度</dt><dd id="resultConfidence">待测</dd></div>
+              </dl>
+            </div>
+            <section class="result-evidence" aria-labelledby="resultEvidenceTitle">
+              <div class="compact-section-header"><strong id="resultEvidenceTitle">射击与控制证据</strong><span>点击偏差按目标半径归一化</span></div>
+              <dl class="evidence-grid" id="resultEvidenceGrid"></dl>
+            </section>
+            <section class="conversion-section" aria-labelledby="conversionTitle">
+              <div class="conversion-heading">
+                <div>
+                  <p class="placard-title">ALL GAME RECOMMENDATIONS</p>
+                  <h3 class="section-title" id="conversionTitle">全部游戏等效推荐</h3>
+                </div>
+                <span>保持相同物理 cm/360°</span>
+              </div>
+              <ol class="conversion-list" id="conversionList"></ol>
+            </section>
+            <div class="recommendation-strip">
+              <div class="candidate"><span>较低备选</span><strong id="lowSens">待测</strong></div>
+              <div class="candidate primary"><span>主推荐值</span><strong id="mainSens">待测</strong></div>
+              <div class="candidate"><span>较高备选</span><strong id="highSens">待测</strong></div>
+            </div>
+            <div class="action-row" style="padding: 0 4px;">
+              <button class="primary-btn" id="saveResultBtn" type="button">保存到本地历史</button>
+              <button class="secondary-btn" id="runAgainBtn" type="button">重新测试</button>
+              <button class="secondary-btn" data-go-home type="button">返回首页</button>
+            </div>
+          </article>
+
+          <aside class="result-detail panel">
+            <p class="placard-title">EVIDENCE & EXPLANATION</p>
+            <h2 class="section-title">五档候选得分</h2>
+            <p class="muted">五档是相对于测试前灵敏度的实验值。绿色标记的是最终胜出档位，不是允许输入范围。</p>
+            <div class="factor-score-list" id="factorScoreList"></div>
+            <h2 class="section-title">分项表现</h2>
+            <div class="score-bars" id="scoreBars"></div>
+            <div class="explanation" id="resultExplanation"></div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/valorant-pros.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

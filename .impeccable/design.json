@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-28T12:00:00+08:00",
+  "title": "Design System: Valorant Sensitivity Flight Deck",
+  "extensions": {
+    "colorMeta": {
+      "active-radium": {
+        "role": "primary",
+        "displayName": "Active Radium",
+        "canonical": "#9be564",
+        "tonalRamp": ["#172311", "#26391d", "#38542a", "#4e733b", "#699b4e", "#87c764", "#afe98a", "#e0f8cf"]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Matte Flight Panel",
+        "canonical": "#151917",
+        "tonalRamp": ["#0b0d0c", "#151917", "#222824", "#343d37", "#4c5850", "#6f7c72", "#a6aea8", "#edf0ed"]
+      },
+      "caution-amber": {
+        "role": "secondary",
+        "displayName": "Caution Amber",
+        "canonical": "#efb64b",
+        "tonalRamp": ["#2b1d08", "#48320e", "#684915", "#8d641d", "#b88429", "#dda43b", "#f3c96f", "#faeac5"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Instrument Display", "purpose": "Condensed headings and numeric readings." },
+      "body": { "displayName": "Operational Body", "purpose": "Chinese instructions, recovery, and explanation." },
+      "label": { "displayName": "Engraved Placard", "purpose": "Short control and state labels." }
+    },
+    "shadows": [
+      { "name": "panel-structural", "value": "0 18px 46px rgba(0,0,0,.58), 0 2px 7px rgba(0,0,0,.72)", "purpose": "Directional depth for the continuous console." },
+      { "name": "instrument-recess", "value": "inset 0 0 26px rgba(0,0,0,.92), 0 6px 12px rgba(0,0,0,.62)", "purpose": "Recessed circular instrument wells." }
+    ],
+    "motion": [
+      { "name": "damped-needle", "value": "850ms cubic-bezier(.2,.85,.22,1)", "purpose": "Physical needle settling and panel-state transitions." },
+      { "name": "score-reveal", "value": "750ms transform cubic-bezier(.2,.85,.22,1)", "purpose": "GPU-safe evidence-bar reveal." }
+    ],
+    "breakpoints": [
+      { "name": "safe-desktop", "value": "861px" },
+      { "name": "wide-console", "value": "1180px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Control",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single dominant action on an operational screen.",
+      "html": "<button class=\"ds-btn-primary\">开始新校准</button>",
+      "css": ".ds-btn-primary{min-height:44px;padding:9px 16px;border:1px solid #bff39c;border-radius:6px;background:#9be564;color:#071004;font:600 .78rem/1.2 Bahnschrift,'Arial Narrow',sans-serif;letter-spacing:.04em;box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 3px 0 #38572b,0 7px 12px rgba(0,0,0,.46);transition:transform .18s cubic-bezier(.2,.85,.22,1),filter .18s ease}.ds-btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}.ds-btn-primary:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.25),0 1px 0 #38572b}.ds-btn-primary:focus-visible{outline:2px solid #d7ffb4;outline-offset:3px}"
+    },
+    {
+      "name": "Secondary Control",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A machined graphite action that remains subordinate.",
+      "html": "<button class=\"ds-btn-secondary\">返回首页</button>",
+      "css": ".ds-btn-secondary{min-height:44px;padding:9px 16px;border:1px solid #050706;border-radius:6px;background:#1b201d;color:#f1f0df;font:600 .78rem/1.2 Bahnschrift,'Arial Narrow',sans-serif;letter-spacing:.04em;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 3px 5px rgba(0,0,0,.55);transition:transform .18s cubic-bezier(.2,.85,.22,1),filter .18s ease}.ds-btn-secondary:hover{filter:brightness(1.13);transform:translateY(-1px)}.ds-btn-secondary:focus-visible{outline:2px solid #d7ffb4;outline-offset:3px}"
+    },
+    {
+      "name": "Numeric Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "An inset instrument readout for DPI and sensitivity.",
+      "html": "<input class=\"ds-input\" type=\"number\" value=\"0.320\" aria-label=\"当前游戏灵敏度\">",
+      "css": ".ds-input{width:100%;height:58px;padding:0 16px;border:1px solid #3b433c;border-radius:6px;background:#070908;color:#c9f6a6;font:600 1.45rem/1 Bahnschrift,'Arial Narrow',sans-serif;box-shadow:inset 0 3px 8px #000}.ds-input:focus-visible{outline:2px solid #d7ffb4;outline-offset:3px}"
+    },
+    {
+      "name": "Status Placard",
+      "kind": "custom",
+      "description": "A literal one-lamp operational state.",
+      "html": "<div class=\"ds-placard\"><span class=\"ds-lamp\"></span>LOCAL / 本地模式</div>",
+      "css": ".ds-placard{display:inline-flex;align-items:center;gap:8px;min-height:36px;padding:7px 11px;border:1px solid #050706;border-radius:6px;background:#0d100f;color:#b8b9aa;font:600 .78rem/1.2 Bahnschrift,'Arial Narrow',sans-serif;letter-spacing:.035em;box-shadow:inset 0 1px 3px rgba(0,0,0,.78),0 1px 0 rgba(255,255,255,.04)}.ds-lamp{width:10px;height:10px;border-radius:50%;background:#9be564;box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}"
+    },
+    {
+      "name": "Instrument Gauge",
+      "kind": "custom",
+      "description": "One literal metric in a recessed circular well.",
+      "html": "<div class=\"ds-gauge\"><span>推荐灵敏度</span><strong>0.320</strong><small>SENSITIVITY</small></div>",
+      "css": ".ds-gauge{width:190px;aspect-ratio:1;display:grid;place-content:center;gap:6px;text-align:center;border:9px solid #202521;border-radius:50%;background:#070908;color:#b8b9aa;box-shadow:inset 0 0 0 2px #000,inset 0 0 26px rgba(0,0,0,.92),0 6px 12px rgba(0,0,0,.62);font-family:'Segoe UI',sans-serif}.ds-gauge strong{padding:2px 8px;border:1px solid #2b342a;border-radius:3px;background:#060906;color:#c9f6a6;font:600 1.5rem/1.2 Bahnschrift,'Arial Narrow',sans-serif}.ds-gauge small{color:#7d8279;font:600 .64rem/1.2 Bahnschrift,'Arial Narrow',sans-serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Night-Flight Six-Pack",
+    "overview": "A small aircraft crossing darkness by trusted instruments alone. Every dial owns one truth, the eye follows a practiced cross-check, and state is conveyed by measured needle movement rather than decorative spectacle.",
+    "keyCharacteristics": [
+      "Fixed instrument constellations with a clear cross-check order.",
+      "Near-black matte material, luminous marks, and restrained caution colors.",
+      "Physical, damped transitions that show trend as well as value.",
+      "Direct operating language; metaphor never replaces the real metric."
+    ],
+    "rules": [
+      { "name": "The Caution Lamp Rule", "body": "Amber and red are state signals, never decoration.", "section": "colors" },
+      { "name": "The Instrument Truth Rule", "body": "Metric labels and values remain literal, never cockpit jargon.", "section": "typography" },
+      { "name": "The Panel Rule", "body": "Surfaces belong to one physical console; they do not float independently.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let each instrument own one plainly named truth.",
+      "Do use damped needle motion and short mechanical state feedback.",
+      "Do preserve a stable cross-check order across result and history views.",
+      "Do provide visual equivalents for every sound cue.",
+      "Do let the canvas dominate every active aim-test state.",
+      "Do use monotonic timing and pause visibly when focus or pointer lock is lost."
+    ],
+    "donts": [
+      "Don't turn the interface into a neon esports HUD or glass card dashboard.",
+      "Don't use warning colors for emphasis unrelated to system state.",
+      "Don't hide task progress or controls behind the cockpit metaphor.",
+      "Don't crowd the active aim field with decorative telemetry.",
+      "Don't animate layout properties when a transform can carry the same state.",
+      "Don't present community-measured conversion constants as Riot-official data."
+    ]
+  }
+}

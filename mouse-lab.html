@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="data:,">
+  <title>鼠标实验室 · FPS 灵敏度夜航校准台</title>
+  <!--
+  THESIS: 把零散的鼠标网页测试变成一份可解释的输入体检档案，拒绝用一个“回报率数字”冒充硬件诊断。
+  OWN-WORLD: 继承哑光石墨夜航台；中央测试台负责操作，镭光绿只表示有效样本，琥珀只表示降级或需排查。
+  STORY: 用户依次核对按键与滚轮、测量浏览器输入链路、校准握持角度、检查点击与反应表现，再保存个人鼠标档案。
+  FIRST VIEWPORT: 左侧检查目录，中间大面积鼠标测试台，右侧实时诊断日志；返回灵敏度校准器始终可见。
+  FORM: 鼠标体检档案结构，候选 5；三栏维护台 staging；surface seed 579c8305。
+  -->
+  <link rel="stylesheet" href="assets/shared.css">
+  <link rel="stylesheet" href="assets/mouse-lab.css">
+</head>
+<body class="lab-body">
+  <div class="app-shell lab-app-shell">
+    <header class="topbar lab-topbar">
+      <div class="brand">
+        <div class="brand-mark lab-brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>鼠标实验室</h1>
+          <div class="brand-sub">输入链路体检 · 角度校准 · DPI 体验 · 数据仅保存在本机</div>
+        </div>
+      </div>
+      <div class="top-status">
+        <a class="lab-entry-link" href="index.html"><span aria-hidden="true">←</span>返回灵敏度校准器</a>
+        <div class="local-placard"><span class="lamp live"></span>STATIC / 纯前端</div>
+        <div class="status-placard"><span class="lamp" id="labInputLamp"></span><span id="labInputState">等待鼠标进入测试台</span></div>
+        <button class="sound-toggle" id="labSoundToggle" type="button" aria-label="关闭声音" aria-pressed="true">🔊</button>
+      </div>
+    </header>
+
+    <main class="lab-layout">
+      <nav class="lab-directory panel" aria-label="鼠标实验室测试目录">
+        <div class="lab-directory-heading">
+          <div>
+            <p class="placard-title">CHECK DIRECTORY</p>
+            <h2 class="section-title">测试目录</h2>
+          </div>
+          <span class="lab-count" id="completedCount">0 / 6</span>
+        </div>
+
+        <div class="lab-nav-list" role="tablist" aria-orientation="vertical">
+          <button class="lab-nav-item active" id="lab-tab-overview" type="button" role="tab" aria-selected="true" aria-controls="lab-view-overview" tabindex="0" data-lab-view="overview">
+            <span class="lab-nav-symbol" aria-hidden="true">⌁</span>
+            <span><strong>综合输入</strong><small>按键、滚轮与移动事件</small></span>
+            <span class="lamp warn"></span>
+          </button>
+          <button class="lab-nav-item" id="lab-tab-health" type="button" role="tab" aria-selected="false" aria-controls="lab-view-health" tabindex="-1" data-lab-view="health">
+            <span class="lab-nav-symbol" aria-hidden="true">∿</span>
+            <span><strong>输入链路</strong><small>频率、抖动与长间隔</small></span>
+            <span class="lamp"></span>
+          </button>
+          <button class="lab-nav-item" id="lab-tab-angle" type="button" role="tab" aria-selected="false" aria-controls="lab-view-angle" tabindex="-1" data-lab-view="angle">
+            <span class="lab-nav-symbol" aria-hidden="true">∠</span>
+            <span><strong>角度校准</strong><small>自然握持方向偏移</small></span>
+            <span class="lamp"></span>
+          </button>
+          <button class="lab-nav-item" id="lab-tab-cps" type="button" role="tab" aria-selected="false" aria-controls="lab-view-cps" tabindex="-1" data-lab-view="cps">
+            <span class="lab-nav-symbol" aria-hidden="true">×</span>
+            <span><strong>CPS 测试</strong><small>点击频率与稳定性</small></span>
+            <span class="lamp"></span>
+          </button>
+          <button class="lab-nav-item" id="lab-tab-latency" type="button" role="tab" aria-selected="false" aria-controls="lab-view-latency" tabindex="-1" data-lab-view="latency">
+            <span class="lab-nav-symbol" aria-hidden="true">↯</span>
+            <span><strong>事件延迟</strong><small>点击事件到下一帧代理值</small></span>
+            <span class="lamp"></span>
+          </button>
+          <button class="lab-nav-item" id="lab-tab-reaction" type="button" role="tab" aria-selected="false" aria-controls="lab-view-reaction" tabindex="-1" data-lab-view="reaction">
+            <span class="lab-nav-symbol" aria-hidden="true">◴</span>
+            <span><strong>反应力测试</strong><small>五轮随机信号反应</small></span>
+            <span class="lamp"></span>
+          </button>
+        </div>
+
+        <section class="lab-environment">
+          <p class="placard-title">TEST ENVIRONMENT</p>
+          <dl>
+            <div><dt>事件接口</dt><dd id="eventApiReadout">检测中</dd></div>
+            <div><dt>安全上下文</dt><dd id="secureContextReadout">检测中</dd></div>
+            <div><dt>指针锁定</dt><dd id="pointerLockReadout">未锁定</dd></div>
+            <div><dt>本地档案</dt><dd id="profileCountReadout">0 条</dd></div>
+          </dl>
+        </section>
+      </nav>
+
+      <section class="lab-workbench panel">
+        <article class="lab-view active" id="lab-view-overview" data-view="overview" role="tabpanel" aria-labelledby="lab-tab-overview">
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">GENERAL INPUT CHECK</p>
+              <h2 class="section-title">综合输入测试</h2>
+              <p class="muted">鼠标示意区和右侧移动区都可操作；移动、点击五个按键或滚动滚轮后，下方计数会立即变化。</p>
+            </div>
+            <button class="secondary-btn compact-btn" id="resetOverviewBtn" type="button">清零计数</button>
+          </header>
+
+          <div class="overview-grid" id="overviewCaptureArea">
+            <section class="mouse-map" aria-label="鼠标按键状态示意">
+              <div class="mouse-shell" aria-hidden="true">
+                <div class="mouse-button mouse-left" data-mouse-part="0"><span>左键</span></div>
+                <div class="mouse-button mouse-right" data-mouse-part="2"><span>右键</span></div>
+                <div class="mouse-wheel" data-mouse-part="1"><span>滚轮</span></div>
+                <div class="mouse-side mouse-back" data-mouse-part="3"><span>后退</span></div>
+                <div class="mouse-side mouse-forward" data-mouse-part="4"><span>前进</span></div>
+              </div>
+              <div class="button-counts" id="buttonCounts">
+                <div><span>左键</span><strong data-button-count="0">0</strong></div>
+                <div><span>中键</span><strong data-button-count="1">0</strong></div>
+                <div><span>右键</span><strong data-button-count="2">0</strong></div>
+                <div><span>后退</span><strong data-button-count="3">0</strong></div>
+                <div><span>前进</span><strong data-button-count="4">0</strong></div>
+              </div>
+            </section>
+
+            <section class="movement-surface active-surface" id="overviewSurface" tabindex="0" aria-label="综合鼠标移动测试区域">
+              <canvas id="overviewCanvas"></canvas>
+              <div class="surface-crosshair" aria-hidden="true"></div>
+              <div class="surface-empty" id="overviewEmpty">
+                <strong>移动测试台</strong>
+                <span>移动鼠标、点击按键并滚动滚轮</span>
+              </div>
+              <div class="surface-status">
+                <span id="surfacePresence">等待鼠标进入</span>
+                <strong id="liveEventRate">≈ 0 Hz*</strong>
+              </div>
+            </section>
+          </div>
+
+          <div class="overview-readouts">
+            <div><span>累计移动距离</span><strong id="overviewDistance">0 px</strong></div>
+            <div><span>滚轮向上</span><strong id="wheelUpCount">0</strong></div>
+            <div><span>滚轮向下</span><strong id="wheelDownCount">0</strong></div>
+            <div><span>已接收事件</span><strong id="overviewEvents">0</strong></div>
+          </div>
+        </article>
+
+        <article class="lab-view" id="lab-view-health" data-view="health" role="tabpanel" aria-labelledby="lab-tab-health" hidden>
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">INPUT PATH HEALTH</p>
+              <h2 class="section-title">输入链路健康检查</h2>
+              <p class="muted">在测试台内持续画圈 10 秒。结果反映浏览器收到事件的稳定性，不等同于鼠标固件回报率。</p>
+            </div>
+            <div class="lab-header-actions">
+              <span class="test-clock" id="healthClock">10.0 s</span>
+              <button class="primary-btn compact-btn" id="startHealthBtn" type="button">开始 10 秒检查</button>
+            </div>
+          </header>
+
+          <section class="movement-surface health-surface" id="healthSurface" tabindex="0" aria-label="输入链路健康检查区域">
+            <canvas id="healthCanvas"></canvas>
+            <div class="health-orbit" aria-hidden="true"></div>
+            <div class="surface-empty" id="healthEmpty">
+              <strong>持续、均匀地画圈</strong>
+              <span>不要停顿；切换窗口会中止本轮测试</span>
+            </div>
+            <div class="surface-status">
+              <span id="healthSampleState">尚未开始</span>
+              <strong id="healthLiveRate">≈ 0 Hz*</strong>
+            </div>
+          </section>
+
+          <div class="metric-bay">
+            <div><span>有效样本</span><strong id="healthSamples">0</strong></div>
+            <div><span>估算事件频率</span><strong id="healthRate">待测</strong></div>
+            <div><span>P95 间隔</span><strong id="healthP95">待测</strong></div>
+            <div><span>间隔抖动</span><strong id="healthJitter">待测</strong></div>
+            <div><span>长间隔</span><strong id="healthLongGaps">待测</strong></div>
+          </div>
+        </article>
+
+        <article class="lab-view" id="lab-view-angle" data-view="angle" role="tabpanel" aria-labelledby="lab-tab-angle" hidden>
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">GRIP ANGLE CALIBRATION</p>
+              <h2 class="section-title">鼠标角度偏移校准</h2>
+              <p class="muted">沿鼠标垫上的真实水平边缘做五次自然直线移动。网页只测量方向偏移，不会修改驱动设置。</p>
+            </div>
+            <div class="trial-indicator"><strong id="angleTrialCount">0 / 5</strong><span>有效直线</span></div>
+          </header>
+
+          <section class="angle-ruler">
+            <div class="angle-axis"><span>左</span><span>沿真实水平边缘移动</span><span>右</span></div>
+            <canvas id="angleCanvas" aria-label="角度校准轨迹"></canvas>
+            <div class="angle-instruction" id="angleInstruction">
+              <strong>准备第一条直线</strong>
+              <span>点击“开始记录”，再完成一次自然水平扫动</span>
+            </div>
+          </section>
+
+          <div class="action-row lab-action-row">
+            <button class="primary-btn" id="startAngleBtn" type="button">开始记录</button>
+            <button class="secondary-btn" id="finishAngleBtn" type="button" disabled>结束本条直线</button>
+            <button class="secondary-btn" id="resetAngleBtn" type="button">重新校准</button>
+          </div>
+
+          <ol class="angle-trials" id="angleTrials"></ol>
+        </article>
+
+        <article class="lab-view" id="lab-view-cps" data-view="cps" role="tabpanel" aria-labelledby="lab-tab-cps" hidden>
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">CLICK RATE & CONSISTENCY</p>
+              <h2 class="section-title">CPS 点击测试</h2>
+              <p class="muted">在五秒内正常连续点击。这里测量浏览器收到的点击节奏，不代表鼠标硬件点击延迟。</p>
+            </div>
+            <span class="test-clock" id="cpsClock">5.0 s</span>
+          </header>
+
+          <button class="cps-stage" id="cpsStage" type="button">
+            <span class="cps-kicker" id="cpsState">点击开始</span>
+            <strong id="cpsLive">0</strong>
+            <small>CLICK / 点击区域</small>
+          </button>
+
+          <div class="metric-bay four">
+            <div><span>总点击</span><strong id="cpsClicks">0</strong></div>
+            <div><span>平均 CPS</span><strong id="cpsAverage">待测</strong></div>
+            <div><span>峰值 1 秒</span><strong id="cpsPeak">待测</strong></div>
+            <div><span>间隔稳定性</span><strong id="cpsStability">待测</strong></div>
+          </div>
+        </article>
+
+        <article class="lab-view" id="lab-view-latency" data-view="latency" role="tabpanel" aria-labelledby="lab-tab-latency" hidden>
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">EVENT-TO-FRAME PROXY</p>
+              <h2 class="section-title">浏览器事件延迟代理</h2>
+              <p class="muted">完成 20 次独立点击，测量事件时间戳到处理函数、再到下一动画帧的间隔。它不包含鼠标硬件、显示器扫描或游戏引擎延迟。</p>
+            </div>
+            <div class="trial-indicator"><strong id="latencySampleCount">0 / 20</strong><span>有效点击</span></div>
+          </header>
+
+          <button class="latency-stage" id="latencyStage" type="button">
+            <span id="latencyMessage">按正常节奏点击 20 次</span>
+            <strong id="latencyLive">READY</strong>
+            <small>EVENT → HANDLER → NEXT FRAME</small>
+          </button>
+
+          <div class="metric-bay four">
+            <div><span>事件到处理</span><strong id="latencyHandlerMedian">待测</strong></div>
+            <div><span>事件到下一帧</span><strong id="latencyFrameMedian">待测</strong></div>
+            <div><span>下一帧 P95</span><strong id="latencyFrameP95">待测</strong></div>
+            <div><span>超过 20 ms</span><strong id="latencyLongFrames">待测</strong></div>
+          </div>
+
+          <div class="action-row lab-action-row">
+            <button class="secondary-btn" id="resetLatencyBtn" type="button">重新采样</button>
+          </div>
+        </article>
+
+        <article class="lab-view" id="lab-view-reaction" data-view="reaction" role="tabpanel" aria-labelledby="lab-tab-reaction" hidden>
+          <header class="lab-view-header">
+            <div>
+              <p class="placard-title">VISUAL REACTION CHECK</p>
+              <h2 class="section-title">五轮反应力测试</h2>
+              <p class="muted">等待测试台变绿后尽快点击。提前点击会记为抢跑并重新开始当前轮。</p>
+            </div>
+            <div class="trial-indicator"><strong id="reactionRound">0 / 5</strong><span>有效轮次</span></div>
+          </header>
+
+          <button class="reaction-stage" id="reactionStage" type="button" data-state="idle">
+            <span id="reactionMessage">点击开始第一轮</span>
+            <strong id="reactionLiveResult">READY</strong>
+          </button>
+
+          <div class="metric-bay four">
+            <div><span>平均反应</span><strong id="reactionAverage">待测</strong></div>
+            <div><span>最好成绩</span><strong id="reactionBest">待测</strong></div>
+            <div><span>稳定性</span><strong id="reactionStability">待测</strong></div>
+            <div><span>抢跑</span><strong id="reactionFalseStarts">0</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <aside class="lab-diagnostics panel">
+        <div class="diagnostic-heading">
+          <div>
+            <p class="placard-title">DIAGNOSTIC LOGBOOK</p>
+            <h2 class="section-title">诊断档案</h2>
+          </div>
+          <span class="status-placard"><span class="lamp live"></span>实时</span>
+        </div>
+
+        <section class="diagnostic-section">
+          <h3>当前测试</h3>
+          <dl class="diagnostic-readouts" id="diagnosticReadouts">
+            <div><dt>状态</dt><dd id="diagState">等待输入</dd></div>
+            <div><dt>实时事件频率</dt><dd id="diagRate">≈ 0 Hz*</dd></div>
+            <div><dt>累计事件</dt><dd id="diagEvents">0</dd></div>
+            <div><dt>输入模式</dt><dd id="diagMode">浏览器事件</dd></div>
+          </dl>
+        </section>
+
+        <section class="diagnostic-section event-log-section">
+          <div class="section-inline-heading"><h3>事件日志</h3><button id="clearEventLogBtn" type="button">清空</button></div>
+          <ol class="event-log" id="eventLog"></ol>
+        </section>
+
+        <section class="diagnostic-section conclusion-section">
+          <h3>最近结论</h3>
+          <div class="conclusion-state" id="conclusionState">
+            <span class="conclusion-mark">○</span>
+            <div><strong>尚无完整测试</strong><p>完成输入链路或角度校准后，结论会保存在本机。</p></div>
+          </div>
+        </section>
+
+        <div class="diagnostic-actions">
+          <button class="secondary-btn" id="exportLabBtn" type="button">导出鼠标档案 JSON</button>
+          <button class="danger-btn" id="clearLabHistoryBtn" type="button">清空实验室记录</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="lab-footer">
+      <span>浏览器测量只覆盖网页输入链路；不能替代示波器、LDAT 或厂商驱动诊断。</span>
+      <span>职业选手 DPI 选择已移动到灵敏度校准器的第 1 步。</span>
+    </footer>
+  </div>
+
+  <div class="toast" id="labToast" role="status" aria-live="polite"></div>
+
+  <script src="data/valorant-pros.js"></script>
+  <script src="assets/mouse-lab.js"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+FPS 灵敏度夜航校准台 · 静态部署说明
+
+一、直接使用
+
+保持以下目录结构不变，双击 index.html 可进入灵敏度生成器；也可以直接打开 mouse-lab.html 进入鼠标实验室。
+
+index.html
+mouse-lab.html
+assets/
+data/
+
+二、静态托管
+
+把整个目录上传到任意静态网站服务即可，例如 GitHub Pages、Cloudflare Pages、Netlify、Vercel 静态站点或普通 Nginx/Apache 目录。项目没有后端、数据库、构建步骤和运行时跨域请求。
+
+网站入口为 index.html，鼠标实验室入口为 mouse-lab.html。HTTPS 托管能提供更完整的浏览器安全上下文；部分指针锁定或设备接口在 file://、HTTP 局域网地址或不支持的浏览器中会自动降级。
+
+三、本地 HTTP
+
+如果浏览器限制 file:// 页面，可在项目目录运行“启动本地HTTP.cmd”，随后访问：
+
+http://127.0.0.1:8765/
+
+四、职业选手数据
+
+data/valorant-pros.js 是 ProSettings VALORANT 列表的日期化静态快照。网页不会在运行时访问第三方站点。需要更新数据时，在联网开发环境执行：
+
+powershell -ExecutionPolicy Bypass -File scripts/snapshot-prosettings.ps1
+
+职业选手设置只用于体验和参考，不代表官方推荐或最佳 DPI。
+
+五、测量边界
+
+网页可以记录浏览器收到的鼠标按键、滚轮、移动事件及其时间间隔，但不能凭这些数据读取全部鼠标固件设置，也不能测得真实硬件点击延迟、显示器扫描延迟或游戏引擎延迟。页面中的频率和事件延迟都明确标注为浏览器代理值。
