@@ -110,6 +110,135 @@
       const $ = (id) => document.getElementById(id);
       const screens = [...document.querySelectorAll(".screen")];
       const gridCache = new WeakMap();
+      const motionAnimations = new WeakMap();
+      const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const MOTION_EASE = "cubic-bezier(.16, 1, .3, 1)";
+
+      function motionAllowed() {
+        return !reducedMotionQuery.matches && typeof Element.prototype.animate === "function";
+      }
+
+      function playMotion(element, keyframes, options = {}) {
+        if (!element || !motionAllowed()) return null;
+        const running = motionAnimations.get(element);
+        if (running) running.cancel();
+        const animation = element.animate(keyframes, {
+          duration: 320,
+          easing: MOTION_EASE,
+          fill: "both",
+          ...options
+        });
+        motionAnimations.set(element, animation);
+        animation.onfinish = () => {
+          if (motionAnimations.get(element) === animation) motionAnimations.delete(element);
+          animation.cancel();
+        };
+        animation.oncancel = () => {
+          if (motionAnimations.get(element) === animation) motionAnimations.delete(element);
+        };
+        return animation;
+      }
+
+      function runConsoleBoot() {
+        if (!motionAllowed()) return;
+        document.body.classList.remove("console-boot");
+        void document.body.offsetWidth;
+        document.body.classList.add("console-boot");
+        setTimeout(() => document.body.classList.remove("console-boot"), 980);
+      }
+
+      function animateNumericReadout(element, from, to, formatter, duration = 620) {
+        if (!element || !motionAllowed() || !Number.isFinite(from) || !Number.isFinite(to)) return;
+        const token = Symbol("readout");
+        element.motionToken = token;
+        const startedAt = performance.now();
+        const tick = (now) => {
+          if (element.motionToken !== token) return;
+          const progress = clamp((now - startedAt) / duration, 0, 1);
+          const eased = 1 - ((1 - progress) ** 4);
+          element.textContent = formatter(from + (to - from) * eased);
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            element.textContent = formatter(to);
+            playMotion(element, [
+              { color: "var(--ink)", textShadow: "0 0 0 rgba(155,229,100,0)" },
+              { color: "var(--active-soft)", textShadow: "0 0 16px rgba(155,229,100,.42)", offset: .38 },
+              { color: "var(--active-soft)", textShadow: "0 0 0 rgba(155,229,100,0)" }
+            ], { duration: 360 });
+          }
+        };
+        requestAnimationFrame(tick);
+      }
+
+      function runResultLockSequence() {
+        const result = app.currentResult;
+        if (!result || !motionAllowed()) return;
+        const resultGame = GAMES[result.gameId] || GAMES.valorant;
+        const baseSensitivity = Number(result.baseSens) || Number(result.mainSens);
+        const baseDistance = cm360(result.dpi, baseSensitivity, resultGame.yaw);
+        animateNumericReadout($("resultPrimarySens"), baseSensitivity, result.mainSens, (value) => formatSens(value, resultGame.id), 720);
+        animateNumericReadout($("resultCm360"), baseDistance, result.cm360, (value) => `${value.toFixed(1)} cm`);
+        animateNumericReadout($("resultEdpi"), edpi(result.dpi, baseSensitivity), result.edpi, (value) => String(Math.round(value)));
+        animateNumericReadout($("resultAccuracy"), 0, (result.accuracy || 0) * 100, (value) => `${Math.round(value)}%`, 540);
+        animateNumericReadout($("resultConfidence"), 0, result.confidence * 100, (value) => `${Math.round(value)}%`, 580);
+
+        document.querySelectorAll("#screen-results .factor-score-fill, #screen-results .score-fill").forEach((fill, index) => {
+          const computed = getComputedStyle(fill).transform;
+          playMotion(fill, [
+            { transform: "scaleX(0)", filter: "brightness(1.65)" },
+            { transform: computed === "none" ? "scaleX(1)" : computed, filter: "brightness(1)" }
+          ], { duration: 560, delay: 210 + index * 55 });
+        });
+      }
+
+      function runScreenMotion(name) {
+        if (!motionAllowed()) return;
+        const screen = $(`screen-${name}`);
+        if (!screen) return;
+        const plans = {
+          home: [
+            [".instrument-cluster", "translateX(-18px)", "inset(0 100% 0 0 round 12px)"],
+            [".start-bay", "scaleY(.94)", "inset(48% 0 48% 0 round 12px)"],
+            [".history-panel", "translateX(18px)", "inset(0 0 0 100% round 12px)"],
+            [".converter-panel", "translateY(12px)", "inset(0 48% 0 48% round 12px)"]
+          ],
+          setup: [
+            [".workflow-rail", "translateX(-18px)", "inset(0 100% 0 0)"],
+            [".setup-card", "translateY(12px)", "inset(0 0 100% 0 round 8px)"]
+          ],
+          calibration: [
+            [".calibration-info", "translateX(-16px)", "inset(0 100% 0 0 round 12px)"],
+            [".calibration-stage", "translateX(12px)", "inset(0 0 0 100% round 12px)"]
+          ],
+          test: [
+            [".test-sidebar:first-child", "translateX(-12px)", "inset(0 100% 0 0 round 12px)"],
+            [".test-main", "scale(.992)", "inset(46% 0 46% 0 round 12px)"],
+            [".test-sidebar:last-child", "translateX(12px)", "inset(0 0 0 100% round 12px)"]
+          ],
+          results: [
+            [".result-cluster", "translateX(-18px)", "inset(0 100% 0 0 round 12px)"],
+            [".result-detail", "translateX(18px)", "inset(0 0 0 100% round 12px)"]
+          ]
+        };
+        (plans[name] || []).forEach(([selector, transform, clipPath], index) => {
+          playMotion(screen.querySelector(selector), [
+            { opacity: .3, transform, clipPath, filter: "brightness(.72)" },
+            { opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 12px)", filter: "brightness(1)" }
+          ], { duration: name === "test" ? 280 : 520, delay: 30 + index * 75 });
+        });
+        if (name === "results") setTimeout(runResultLockSequence, 150);
+      }
+
+      function pulseControl(control) {
+        if (!control || !motionAllowed() || control.disabled) return;
+        const restingShadow = getComputedStyle(control).boxShadow;
+        playMotion(control, [
+          { filter: "brightness(1)", boxShadow: restingShadow },
+          { filter: "brightness(1.28)", boxShadow: "0 0 0 2px rgba(155,229,100,.2), 0 5px 14px rgba(0,0,0,.54)", offset: .38 },
+          { filter: "brightness(1)", boxShadow: restingShadow }
+        ], { duration: 260 });
+      }
 
       function clamp(value, min, max) {
         return Math.min(max, Math.max(min, value));
@@ -513,6 +642,12 @@
         $("sensInput").value = formatSens(converted, to.id);
         updateGameUi();
         renderHome();
+        const selectedButton = document.querySelector(`.game-switch[data-game="${nextGameId}"]`);
+        playMotion(selectedButton, [
+          { transform: "scale(.82) rotate(-4deg)", filter: "brightness(1.7)" },
+          { transform: "scale(1.08) rotate(1deg)", filter: "brightness(1.25)", offset: .56 },
+          { transform: "scale(1) rotate(0)", filter: "brightness(1)" }
+        ], { duration: 360 });
         tone(620, .045, .028);
         const afterCm = cm360(dpi, Number($("sensInput").value), to.yaw);
         const clampedNote = Math.abs(afterCm - beforeCm) / beforeCm > .01 ? "；已受目标游戏输入范围限制" : "";
@@ -830,7 +965,8 @@
           delete app.canvasBounds.calibrationCanvas;
           gridCache.delete($("calibrationCanvas"));
         }
-        window.scrollTo({ top: 0, behavior: name === "test" ? "auto" : "smooth" });
+        window.scrollTo({ top: 0, behavior: name === "test" || reducedMotionQuery.matches ? "auto" : "smooth" });
+        requestAnimationFrame(() => runScreenMotion(name));
       }
 
       function loadHistory() {
@@ -1530,12 +1666,27 @@
         $("factorChangeValue").textContent = `${Math.round(factor * 100)}% · ${formatSens(candidateSensitivity(app.currentSens, factor, game), game.id)}`;
         $("factorChangeCountdown").textContent = `${count} 秒后开始采样`;
         cue.hidden = false;
+        const motionKey = `${factorIndex}:${count}`;
+        if (cue.dataset.motionKey !== motionKey) {
+          cue.dataset.motionKey = motionKey;
+          cue.classList.remove("motion-tick");
+          void cue.offsetWidth;
+          cue.classList.add("motion-tick");
+          playMotion($("bigCountdown"), [
+            { transform: "translate(-50%, -50%) scale(.76)", opacity: .25, filter: "blur(3px)" },
+            { transform: "translate(-50%, -50%) scale(1)", opacity: 1, filter: "blur(0)" }
+          ], { duration: 280 });
+        }
         $("testEvidenceHud")?.classList.add("is-switching");
       }
 
       function hideFactorChangeCue() {
         const cue = $("factorChangeCue");
-        if (cue) cue.hidden = true;
+        if (cue) {
+          cue.hidden = true;
+          cue.classList.remove("motion-tick");
+          delete cue.dataset.motionKey;
+        }
         $("testEvidenceHud")?.classList.remove("is-switching");
       }
 
@@ -2590,6 +2741,13 @@
         }
       }
 
+      function bindMotionFeedback() {
+        document.addEventListener("click", (event) => {
+          const control = event.target.closest("button:not(.game-switch), .lab-entry-link");
+          if (control) pulseControl(control);
+        });
+      }
+
       function init() {
         applyLaunchParameters();
         loadHistory();
@@ -2597,10 +2755,15 @@
         initializeSetupProSelector();
         renderHome();
         bindEvents();
+        bindMotionFeedback();
         initHidAssist();
         setInputStatus("等待鼠标输入", "");
         drawCalibration();
         drawTestScene();
+        requestAnimationFrame(() => {
+          runConsoleBoot();
+          runScreenMotion("home");
+        });
       }
 
       init();
