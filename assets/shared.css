@@ -308,6 +308,52 @@ a { color: inherit; }
     .home-shell {
       display: grid;
       gap: 12px;
+      position: relative;
+      isolation: isolate;
+    }
+
+    .home-shell > :not(.power-bus-network) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .power-bus-network {
+      position: absolute;
+      z-index: 3;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      opacity: 0;
+      pointer-events: none;
+      filter: drop-shadow(0 0 5px rgba(155, 229, 100, .28));
+    }
+
+    .power-bus-rail,
+    .power-bus-flow {
+      fill: none;
+      stroke-linecap: square;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .power-bus-rail {
+      stroke: color-mix(in srgb, var(--ink-muted) 48%, transparent);
+      stroke-width: 5;
+    }
+
+    .power-bus-flow {
+      stroke: var(--active);
+      stroke-width: 2;
+    }
+
+    .power-bus-nodes circle {
+      fill: var(--active-soft);
+      stroke: var(--panel-raised);
+      stroke-width: 2;
+      vector-effect: non-scaling-stroke;
+      transform-box: fill-box;
+      transform-origin: center;
     }
 
     .home-grid {
@@ -2035,7 +2081,7 @@ a { color: inherit; }
       .mobile-gate { display: block; }
     }
 
-/* Motion system: night-flight power-on, state latching and result lock. */
+/* Motion system: GSAP-linked night-flight power bus, state latching and result lock. */
 .topbar {
   isolation: isolate;
   overflow: hidden;

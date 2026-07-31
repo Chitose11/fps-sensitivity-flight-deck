@@ -113,9 +113,15 @@
       const motionAnimations = new WeakMap();
       const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
       const MOTION_EASE = "cubic-bezier(.16, 1, .3, 1)";
+      let homePowerTimeline = null;
+      let homePowerResizeFrame = 0;
 
       function motionAllowed() {
         return !reducedMotionQuery.matches && typeof Element.prototype.animate === "function";
+      }
+
+      function gsapAvailable() {
+        return !reducedMotionQuery.matches && typeof window.gsap?.timeline === "function";
       }
 
       function playMotion(element, keyframes, options = {}) {
@@ -145,6 +151,178 @@
         void document.body.offsetWidth;
         document.body.classList.add("console-boot");
         setTimeout(() => document.body.classList.remove("console-boot"), 980);
+      }
+
+      function layoutHomePowerBus() {
+        const shell = document.querySelector(".home-shell");
+        const network = $("homePowerBus");
+        const rail = $("homePowerBusRail");
+        const flow = $("homePowerBusFlow");
+        const nodeLayer = $("homePowerBusNodes");
+        const cluster = document.querySelector(".instrument-cluster");
+        const lever = document.querySelector(".start-bay");
+        const history = document.querySelector(".history-panel");
+        const converter = document.querySelector(".converter-panel");
+        if (!shell || !network || !rail || !flow || !nodeLayer || !cluster || !lever || !history || !converter) return null;
+
+        const shellRect = shell.getBoundingClientRect();
+        const relativeRect = (element) => {
+          const rect = element.getBoundingClientRect();
+          return {
+            left: rect.left - shellRect.left,
+            top: rect.top - shellRect.top,
+            right: rect.right - shellRect.left,
+            bottom: rect.bottom - shellRect.top,
+            width: rect.width,
+            height: rect.height
+          };
+        };
+        const clusterRect = relativeRect(cluster);
+        const leverRect = relativeRect(lever);
+        const historyRect = relativeRect(history);
+        const converterRect = relativeRect(converter);
+        const points = [
+          [clusterRect.left + 20, clusterRect.top + 12],
+          [clusterRect.right - 12, clusterRect.top + 12],
+          [leverRect.left + leverRect.width / 2, clusterRect.top + 12],
+          [leverRect.left + leverRect.width / 2, leverRect.bottom - 16],
+          [historyRect.left + 14, leverRect.bottom - 16],
+          [historyRect.left + 14, historyRect.top + 14],
+          [historyRect.right - 14, historyRect.top + 14],
+          [historyRect.right - 14, historyRect.bottom - 14],
+          [converterRect.right - 20, converterRect.top + 14],
+          [converterRect.left + 20, converterRect.top + 14]
+        ];
+        const pathData = points.map(([x, y], index) => `${index ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
+        network.setAttribute("viewBox", `0 0 ${Math.max(1, shellRect.width)} ${Math.max(1, shellRect.height)}`);
+        rail.setAttribute("d", pathData);
+        flow.setAttribute("d", pathData);
+
+        const nodePoints = [
+          points[0],
+          [leverRect.left + leverRect.width / 2, leverRect.top + leverRect.height / 2],
+          [historyRect.left + 14, historyRect.top + 14],
+          [converterRect.left + converterRect.width / 2, converterRect.top + 14]
+        ];
+        nodeLayer.replaceChildren(...nodePoints.map(([x, y], index) => {
+          const node = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          node.setAttribute("cx", x.toFixed(1));
+          node.setAttribute("cy", y.toFixed(1));
+          node.setAttribute("r", index === 0 ? "4.5" : "4");
+          node.dataset.powerNode = String(index);
+          return node;
+        }));
+        return { network, flow, nodes: [...nodeLayer.children], cluster, lever, history, converter };
+      }
+
+      function stopHomePowerSequence({ reset = false } = {}) {
+        if (homePowerTimeline) {
+          homePowerTimeline.kill();
+          homePowerTimeline = null;
+        }
+        if (!reset || !window.gsap) return;
+        const elements = [
+          document.querySelector(".instrument-cluster"),
+          document.querySelector(".start-bay"),
+          document.querySelector(".history-panel"),
+          document.querySelector(".converter-panel"),
+          document.querySelector(".lever-track"),
+          ...document.querySelectorAll(".power-bus-nodes circle")
+        ].filter(Boolean);
+        window.gsap.set(elements, { clearProps: "opacity,transform,filter,clipPath,boxShadow" });
+        window.gsap.set("#homePowerBus", { autoAlpha: 0 });
+      }
+
+      function runHomePowerSequence() {
+        if (!gsapAvailable()) return false;
+        stopHomePowerSequence({ reset: true });
+        const parts = layoutHomePowerBus();
+        if (!parts) return false;
+
+        const gsap = window.gsap;
+        const pathLength = parts.flow.getTotalLength();
+        const lamps = [...document.querySelectorAll(".topbar .lamp.live")];
+        const brandMark = document.querySelector(".brand-mark");
+        const leverTrack = document.querySelector(".lever-track");
+        const panelDefaults = { duration: .48, ease: "power3.out", opacity: 1, filter: "brightness(1)" };
+
+        gsap.set(parts.network, { autoAlpha: 1 });
+        gsap.set(parts.flow, { strokeDasharray: pathLength, strokeDashoffset: pathLength, opacity: 1 });
+        gsap.set(parts.nodes, { opacity: .16, scale: .55, transformOrigin: "center" });
+
+        homePowerTimeline = gsap.timeline({
+          defaults: { overwrite: "auto" },
+          onComplete: () => {
+            gsap.set([parts.cluster, parts.lever, parts.history, parts.converter], { clearProps: "opacity,transform,filter,clipPath,boxShadow" });
+            gsap.set(leverTrack, { clearProps: "filter,boxShadow" });
+            gsap.set(parts.flow, { strokeDasharray: "none", strokeDashoffset: 0 });
+            gsap.to(parts.flow, { opacity: .2, duration: .45, ease: "power1.out" });
+            homePowerTimeline = null;
+          }
+        });
+
+        homePowerTimeline
+          .addLabel("mainPower", 0)
+          .fromTo(brandMark,
+            { rotate: -24, scale: .9, filter: "brightness(.72)" },
+            { rotate: 0, scale: 1, filter: "brightness(1)", duration: .62, ease: "back.out(1.5)" },
+            "mainPower")
+          .fromTo(lamps,
+            { opacity: .28, filter: "brightness(.55)" },
+            { opacity: 1, filter: "brightness(1)", duration: .5, stagger: .07, ease: "power2.out" },
+            "mainPower+=.08")
+          .to(parts.flow, { strokeDashoffset: 0, duration: 2.05, ease: "power1.inOut" }, "mainPower+=.08")
+          .addLabel("clusterOnline", .16)
+          .fromTo(parts.cluster,
+            { x: -18, opacity: .28, clipPath: "inset(0 100% 0 0 round 12px)", filter: "brightness(.66)" },
+            { ...panelDefaults, x: 0, clipPath: "inset(0 0 0 0 round 12px)" },
+            "clusterOnline")
+          .to(parts.nodes[0], { opacity: 1, scale: 1.45, duration: .18, yoyo: true, repeat: 1, ease: "power2.out" }, "clusterOnline+=.2")
+          .fromTo(parts.cluster.querySelectorAll(".cluster-header, .home-result-empty, .home-result-content"),
+            { y: 7, opacity: .35 },
+            { y: 0, opacity: 1, duration: .35, stagger: .06, ease: "power2.out" },
+            "clusterOnline+=.24")
+          .addLabel("leverOnline", .62)
+          .fromTo(parts.lever,
+            { scaleY: .92, opacity: .26, clipPath: "inset(48% 0 48% 0 round 12px)", filter: "brightness(.62)" },
+            { ...panelDefaults, scaleY: 1, clipPath: "inset(0 0 0 0 round 12px)" },
+            "leverOnline")
+          .fromTo(leverTrack,
+            { filter: "brightness(.55)", boxShadow: "inset 0 8px 18px var(--panel-void), 0 0 0 rgba(155,229,100,0)" },
+            { filter: "brightness(1)", boxShadow: "inset 0 8px 18px var(--panel-void), 0 0 22px rgba(155,229,100,.24)", duration: .32, yoyo: true, repeat: 1, ease: "power2.out" },
+            "leverOnline+=.14")
+          .to(parts.nodes[1], { opacity: 1, scale: 1.5, duration: .18, yoyo: true, repeat: 1, ease: "power2.out" }, "leverOnline+=.18")
+          .addLabel("historyOnline", 1.03)
+          .fromTo(parts.history,
+            { x: 18, opacity: .26, clipPath: "inset(0 0 0 100% round 12px)", filter: "brightness(.62)" },
+            { ...panelDefaults, x: 0, clipPath: "inset(0 0 0 0 round 12px)" },
+            "historyOnline")
+          .to(parts.nodes[2], { opacity: 1, scale: 1.5, duration: .18, yoyo: true, repeat: 1, ease: "power2.out" }, "historyOnline+=.18")
+          .fromTo(parts.history.querySelectorAll(".history-header, .history-list"),
+            { x: 8, opacity: .35 },
+            { x: 0, opacity: 1, duration: .32, stagger: .08, ease: "power2.out" },
+            "historyOnline+=.2")
+          .addLabel("converterOnline", 1.43)
+          .fromTo(parts.converter,
+            { y: 12, opacity: .24, clipPath: "inset(0 48% 0 48% round 12px)", filter: "brightness(.6)" },
+            { ...panelDefaults, y: 0, clipPath: "inset(0 0 0 0 round 12px)" },
+            "converterOnline")
+          .to(parts.nodes[3], { opacity: 1, scale: 1.55, duration: .18, yoyo: true, repeat: 1, ease: "power2.out" }, "converterOnline+=.18")
+          .fromTo(parts.converter.querySelectorAll(".converter-copy, .converter-controls"),
+            { y: 7, opacity: .34 },
+            { y: 0, opacity: 1, duration: .34, stagger: .08, ease: "power2.out" },
+            "converterOnline+=.2")
+          .to(parts.nodes, { opacity: .48, scale: 1, duration: .32, stagger: .04, ease: "power1.out" }, 1.82)
+          .to(parts.network, { opacity: .52, duration: .5, ease: "power1.out" }, 1.86);
+        return true;
+      }
+
+      function queueHomePowerLayout() {
+        cancelAnimationFrame(homePowerResizeFrame);
+        homePowerResizeFrame = requestAnimationFrame(() => {
+          layoutHomePowerBus();
+          homePowerResizeFrame = 0;
+        });
       }
 
       function animateNumericReadout(element, from, to, formatter, duration = 620) {
@@ -196,13 +374,14 @@
         if (!motionAllowed()) return;
         const screen = $(`screen-${name}`);
         if (!screen) return;
+        if (name === "home") {
+          runConsoleBoot();
+          if (runHomePowerSequence()) return;
+        } else {
+          stopHomePowerSequence({ reset: true });
+        }
         const plans = {
-          home: [
-            [".instrument-cluster", "translateX(-18px)", "inset(0 100% 0 0 round 12px)"],
-            [".start-bay", "scaleY(.94)", "inset(48% 0 48% 0 round 12px)"],
-            [".history-panel", "translateX(18px)", "inset(0 0 0 100% round 12px)"],
-            [".converter-panel", "translateY(12px)", "inset(0 48% 0 48% round 12px)"]
-          ],
+          home: [],
           setup: [
             [".workflow-rail", "translateX(-18px)", "inset(0 100% 0 0)"],
             [".setup-card", "translateY(12px)", "inset(0 0 100% 0 round 8px)"]
@@ -2756,14 +2935,12 @@
         renderHome();
         bindEvents();
         bindMotionFeedback();
+        window.addEventListener("resize", queueHomePowerLayout, { passive: true });
         initHidAssist();
         setInputStatus("等待鼠标输入", "");
         drawCalibration();
         drawTestScene();
-        requestAnimationFrame(() => {
-          runConsoleBoot();
-          runScreenMotion("home");
-        });
+        requestAnimationFrame(() => runScreenMotion("home"));
       }
 
       init();
