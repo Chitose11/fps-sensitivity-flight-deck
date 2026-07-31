@@ -13,6 +13,15 @@
   FIRST VIEWPORT: å·¦ä¾§ç›´æŽ¥æ˜¾ç¤ºæœ€è¿‘ç»“æžœï¼Œä¸­å¤®å¯åŠ¨æ‹¨æ†ï¼Œå³ä¾§æœ¬åœ°é£žè¡Œæ—¥å¿—ï¼›ä¸‹æ–¹æä¾›å››æ¸¸æˆäº’è½¬ä¸Žé¼ æ ‡å®žéªŒå®¤å…¥å£ã€‚
   FORM: å¤œèˆªå…­è”ä»ªè¡¨æ–¹å‘ï¼›ç»„åˆ C é¦–é¡µã€B æµ‹è¯•å°ã€A ç»“æžœé¡µï¼›çº¿æ€§æ ¡å‡† stagingï¼›seed 5dff0e76ã€‚
   -->
+  <script>
+    (() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      document.documentElement.classList.add("motion-prep");
+      window.setTimeout(() => {
+        document.documentElement.classList.remove("motion-prep");
+      }, 4000);
+    })();
+  </script>
   <link rel="stylesheet" href="assets/shared.css">
 </head>
 <body>
@@ -64,8 +73,8 @@
       <section class="screen active" id="screen-home" aria-labelledby="homeTitle">
         <div class="home-shell">
           <svg class="power-bus-network" id="homePowerBus" aria-hidden="true">
-            <path class="power-bus-rail" id="homePowerBusRail"></path>
-            <path class="power-bus-flow" id="homePowerBusFlow"></path>
+            <g class="power-bus-connectors" id="homePowerBusConnectors"></g>
+            <g class="power-bus-circuits" id="homePowerBusCircuits"></g>
             <g class="power-bus-nodes" id="homePowerBusNodes"></g>
           </svg>
           <div class="home-grid">
@@ -104,325 +113,14 @@
                   <div class="candidate"><span>è¾ƒé«˜å¤‡é€‰</span><strong id="homeHighSens">å¾…æµ‹</strong></div>
                 </div>
                 <section class="compact-section">
-                  <div class="compact-section-header"><strong>å°„å‡»ä¸ŽæŽ§åˆ¶è¯æ®</strong><span>è¶Šä½Žè¶Šå¥½ï¼šååº”ã€åå·®ã€è¿‡å†²</span></div>
-                  <dl class="evidence-grid" id="homeEvidenceGrid"></dl>
-                </section>
-              </div>
-            </article>
-
-            <article class="start-bay panel">
-              <p class="placard-title">START NEW RUN</p>
-              <div class="lever-wrap">
-                <div class="lever-track" id="startLeverControl" role="slider" tabindex="0"
-                     aria-label="å‘ä¸‹æ‹‰åŠ¨å¼€å§‹æ–°æ ¡å‡†" aria-orientation="vertical"
-                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                  <div class="lever-handle" id="startLever"></div>
-                </div>
-                <span class="muted lever-hint" id="leverHint"><strong>æŒ‰ä½å‘ä¸‹æ‹‰</strong>æ‹–åˆ°åº•å¼€å§‹</span>
-              </div>
-              <button class="primary-btn" id="startNewBtn" type="button">å¼€å§‹æ–°æ ¡å‡†</button>
-            </article>
-
-            <article class="history-panel panel">
-              <div class="history-header">
-                <div>
-                  <p class="placard-title">FLIGHT LOG / LOCAL HISTORY</p>
-                  <h2 class="section-title">ä¸ªäººæ ¡å‡†è®°å½•</h2>
-                </div>
-                <div class="history-actions">
-                  <button class="secondary-btn" id="exportBtn" type="button">å¯¼å‡º JSON</button>
-                  <button class="danger-btn" id="clearBtn" type="button">æ¸…ç©ºè®°å½•</button>
-                </div>
-              </div>
-              <ol class="history-list" id="historyList"></ol>
-            </article>
-          </div>
-
-          <section class="converter-panel panel" aria-labelledby="converterTitle">
-            <div class="converter-copy">
-              <p class="placard-title">SENSITIVITY TRANSFER BOARD</p>
-              <h2 class="section-title" id="converterTitle">å››æ¸¸æˆçµæ•åº¦äº’è½¬</h2>
-              <p>é€‰æ‹©æ¥æºæ¸¸æˆå¹¶è¾“å…¥æ­£åœ¨ä½¿ç”¨çš„çµæ•åº¦ï¼Œå³ä¾§ä¼šæŒ‰ç›¸åŒç‰©ç†è½¬èº«è·ç¦»æ¢ç®—å››æ¬¾æ¸¸æˆã€‚DPI åªç”¨äºŽæ˜¾ç¤º cm/360Â°ï¼›é¼ æ ‡ DPI ä¸å˜æ—¶ï¼Œå„æ¸¸æˆçµæ•åº¦çš„æ¢ç®—æ¯”ä¾‹ä¸å— DPI å½±å“ã€‚</p>
-            </div>
-            <div class="converter-controls">
-              <div class="converter-inputs">
-                <div class="converter-game-picker" id="converterGamePicker" role="radiogroup" aria-label="æ¢ç®—æ¥æºæ¸¸æˆ"></div>
-                <div class="field">
-                  <label for="converterSensInput">æ¥æºæ¸¸æˆçµæ•åº¦</label>
-                  <input id="converterSensInput" type="number" min="0.01" max="10" step="0.001" value="0.320" inputmode="decimal">
-                </div>
-                <div class="field">
-                  <label for="converterDpiInput">é¼ æ ‡ DPI</label>
-                  <input id="converterDpiInput" type="number" min="100" max="32000" step="50" value="800" inputmode="numeric">
-                </div>
-              </div>
-              <div class="converter-output-list" id="converterOutputList" aria-live="polite"></div>
-            </div>
-          </section>
-        </div>
-      </section>
-
-      <section class="screen" id="screen-setup" aria-labelledby="setupTitle">
-        <article class="workflow-panel panel">
-          <aside class="workflow-rail">
-            <p class="placard-title">CALIBRATION RUNWAY</p>
-            <ol class="step-list">
-              <li class="step-item current"><span class="step-num">1</span><span>è¾“å…¥å½“å‰è®¾ç½®</span></li>
-              <li class="step-item"><span class="step-num">2</span><span>ç§»åŠ¨èŒƒå›´æ ¡å‡†</span></li>
-              <li class="step-item"><span class="step-num">3</span><span>å¤§èŒƒå›´è½¬å‘</span></li>
-              <li class="step-item"><span class="step-num">4</span><span>å¾®å°ç›®æ ‡å®šä½</span></li>
-              <li class="step-item"><span class="step-num">5</span><span>è¿žç»­ç›®æ ‡åˆ‡æ¢</span></li>
-              <li class="step-item"><span class="step-num">6</span><span>å¹³æ»‘è¿½è¸ª</span></li>
-              <li class="step-item"><span class="step-num">7</span><span>æ¡Œé¢å¾®è°ƒè¾…åŠ©</span></li>
-              <li class="step-item"><span class="step-num">8</span><span>ç”Ÿæˆç»“æžœ</span></li>
-            </ol>
-          </aside>
-          <div class="workflow-main">
-            <div class="setup-card">
-              <p class="placard-title">PREFLIGHT INPUT</p>
-              <h2 class="section-title" id="setupTitle">è¾“å…¥ä½ çŽ°åœ¨æ­£åœ¨ä½¿ç”¨çš„è®¾ç½®</h2>
-              <div class="game-context"><img id="setupGameIcon" alt="æ— ç•å¥‘çº¦å›¾æ ‡" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAAXNSR0IArs4c6QAAAFdQTFRFAAAA/0hQ/0VT/0BQ/0VT/0VS/0ZU/0ZU/0VV/0dU/0ZU/0RU/0ZT/0ZU/0VU/0ZV/0VU/0ZU/0VV/0VV/0ZU/0VV/0ZW/0hU/0dU/0RU/0ZU/0ZT/0VUqN5dCQAAAB10Uk5TACCQEJ9g/49gcH9AUO/v37+vbzDPn19AT3CAoM8hME5OAAAClklEQVR4nO2Z61LiQBCFCWjjRhQw7K63939OFRUkmZk+fUOt6u8nVdNzKplz0s3MZkmSJEmSJEnyc+jmizPtdNEVf76k5Xn2X9JVRQD9Ocf+PdUF0HX8/itqCbgpvx1HutumAFoHH8RuTW0BtIkVsCVOQKwVeuIFRFrhjhABNETtPxAmYB1khfcDCAigXYgVFof9WQH0N0LAknAB1Pvv35NEAP3z3n9FMgHembxPYIkA50w+GgAW4JvJO5IL8MzkJWkE+GVyP64MCvBqT/5PCqMCfKwwOoASAS5WWEz3xwXQ1i5gWyiLC7Bn8uQACgVYM/muWFQi4MbUnpwmsEqAqT0pGEAuwNKe7ColZQL0mTxOYK0AbSYXDaASoMvkVb2eWIAmkysG0AlQZHLNAEoB8vZk06qmECC1Qv0AagXIrFBOYJsAycg4MKV0AvBMbh5AvQA4k0stiIsAdGSsJrBZANaetA2w57785PiFSHvSSOADldP0wK/kM7mVwJ881hbP+bWcFVgDvDKvL2/m5ztMJtdakC/sjPqbmcwbgHmGyBtsZDJggFvmHQJerLcn0yFwyqq9/2z2yNeoWQF5gVUDHHniq5TbEz6BmwY41nnm6xRHxtIQCCkfgzzJQiYDBxD9nnJf8zcmmcy0IHvgjgLJ5FGxDthf0FOJM9nJAEeATD5pT4bnNcNGNl4hloq9ZUQyOeAf7S9c8wKCbxkNmewEYoXQW0Ykk2NvGc3tiZnB1p44gLQnYbeMewArRN0yfgB85GNuGT9BMjnklvHA78hk91vGE1xGRhMOI6MR+8ho5Psz2TgyOmAaGV34/vZEPTJ6oR4Z3VCOjI6oRkZXFCOjM78ik1t/wjlwecESKyBJkiRJkiRJ/HkB4o9fvW8/kk4AAAAASUVORK5CYII="><strong id="setupGameName">æ— ç•å¥‘çº¦</strong><span id="setupEquivalence">åˆ‡æ¢æ¸¸æˆæ—¶è‡ªåŠ¨ä¿æŒ cm/360Â°</span></div>
-              <p>æ ¡å‡†å°ä¼šæŠŠé¼ æ ‡ç›¸å¯¹ä½ç§»æ¢ç®—æˆè™šæ‹Ÿé•œå¤´è§’åº¦ï¼Œå¹¶æ¯”è¾ƒå½“å‰çµæ•åº¦ 65%â€“150% èŒƒå›´å†…çš„äº”ä¸ªå€™é€‰å€¼ã€‚å››é¡¹æ¸¸æˆè§†è§’æµ‹è¯•è´Ÿè´£é€‰æ‹©æ¡£ä½ï¼Œæœ€åŽä¸€é¡¹æ¡Œé¢å¾®è°ƒåªè¡¥å……æŽ§åˆ¶ç¨³å®šä¸Žç½®ä¿¡åº¦ã€‚</p>
-              <section class="setup-pro-selector" aria-labelledby="setupProTitle">
-                <header class="setup-pro-heading">
-                  <div>
-                    <span class="setup-pro-kicker"><span class="lamp live"></span>å¯é€‰ / èŒä¸šé€‰æ‰‹ DPI å‚è€ƒ</span>
-                    <strong id="setupProTitle">ä»Ž VALORANT é€‰æ‰‹è®¾ç½®é€‰æ‹©èµ·ç‚¹</strong>
-                  </div>
-                  <a href="https://prosettings.net/lists/valorant/" target="_blank" rel="noreferrer">ProSettings æ•°æ®æ¥æº â†—</a>
-                </header>
-                <div class="setup-pro-layout">
-                  <div class="setup-pro-directory">
-                    <div class="setup-pro-filters">
-                      <label>
-                        <span>æœç´¢é€‰æ‰‹ / æˆ˜é˜Ÿ / é¼ æ ‡</span>
-                        <input id="setupProSearch" type="search" placeholder="ä¾‹å¦‚ ZmjjKKã€Fnaticã€Razer" autocomplete="off">
-                      </label>
-                      <label>
-                        <span>æ¥æº DPI</span>
-                        <select id="setupProDpiFilter"><option value="">å…¨éƒ¨</option></select>
-                      </label>
-                    </div>
-                    <div class="setup-pro-list" id="setupProList" role="listbox" aria-label="VALORANT èŒä¸šé€‰æ‰‹è®¾ç½®"></div>
-                    <span class="setup-pro-list-state" id="setupProListState" aria-live="polite">æ­£åœ¨è½½å…¥èŒä¸šé€‰æ‰‹å¿«ç…§</span>
-                  </div>
-                  <div class="setup-pro-profile">
-                    <div class="setup-pro-selected">
-                      <span>å½“å‰å‚è€ƒ</span>
-                      <strong id="setupProPlayer">å°šæœªé€‰æ‹©</strong>
-                      <small id="setupProMeta">é€‰æ‹©ä¸€åé€‰æ‰‹åŽï¼Œå¯æŒ‰ç›¸åŒè½¬èº«è·ç¦»æ¢ç®—åˆ°å½“å‰æ¸¸æˆã€‚</small>
-                    </div>
-                    <div class="setup-pro-dpi-choices" id="setupProDpiChoices" aria-label="é€‰æ‹©è¦ä½¿ç”¨çš„é¼ æ ‡ DPI"></div>
-                    <div class="setup-pro-preview">
-                      <div><span>é‡‡ç”¨ DPI</span><strong id="setupProTargetDpi">å¾…é€‰</strong></div>
-                      <div><span id="setupProSensLabel">å½“å‰æ¸¸æˆçµæ•åº¦</span><strong id="setupProTargetSens">å¾…é€‰</strong></div>
-                      <div><span>å‚è€ƒè½¬èº«è·ç¦»</span><strong id="setupProTargetCm">å¾…é€‰</strong></div>
-                    </div>
-                    <button class="secondary-btn" id="applySetupProBtn" type="button" disabled>é‡‡ç”¨æ­¤ DPI ä¸Žçµæ•åº¦</button>
-                  </div>
-                </div>
-                <p class="setup-pro-disclaimer">èŒä¸šé€‰æ‰‹æ•°æ®åªæä¾›å¯ä½“éªŒçš„èµ·ç‚¹ï¼Œä¸ä»£è¡¨æœ€ä½³è®¾ç½®ï¼›é‡‡ç”¨åŽä»ä¼šé€šè¿‡ä½ çš„äº”æ¡£æµ‹è¯•ç”Ÿæˆä¸ªäººç»“æžœã€‚</p>
-              </section>
-              <div class="form-grid">
-                <div class="field">
-                  <label for="dpiInput">é¼ æ ‡ DPI</label>
-                  <input id="dpiInput" type="number" min="100" max="32000" step="50" value="800" inputmode="numeric">
-                  <small>å¡«å†™é¼ æ ‡é©±åŠ¨æˆ–æ¿è½½é…ç½®ä¸­çš„å®žé™… DPIã€‚</small>
-                </div>
-                <div class="field">
-                  <label for="sensInput">å½“å‰æ¸¸æˆçµæ•åº¦</label>
-                  <input id="sensInput" type="number" min="0.01" max="10" step="0.001" value="0.320" inputmode="decimal">
-                  <small id="sensHint">æ— ç•å¥‘çº¦å¸¸ç”¨è¾“å…¥èŒƒå›´ 0.01â€“10ï¼Œç²¾åº¦ 0.001ã€‚</small>
-                </div>
-                <div class="field">
-                  <label for="fovInput">æµ‹è¯•æ°´å¹³è§†é‡Ž</label>
-                  <input id="fovInput" type="number" min="60" max="130" step="1" value="103" inputmode="numeric">
-                  <small>åªå½±å“æµè§ˆå™¨ä¸­çš„è§†è§‰æŠ•å½±ï¼Œä¸æ”¹å˜ cm/360Â° æ¢ç®—ã€‚</small>
-                </div>
-              </div>
-
-              <div class="hid-assist" id="hidAssist">
-                <div class="hid-assist-copy">
-                  <div class="hid-assist-title"><span class="lamp" id="hidLamp"></span>å¯é€‰ / WebHID é¼ æ ‡è¯†åˆ«</div>
-                  <p id="hidStatus" aria-live="polite">æ­£åœ¨æ£€æŸ¥æµè§ˆå™¨èƒ½åŠ›ã€‚æ— æ³•ä½¿ç”¨æ—¶ä»å¯æ‰‹åŠ¨å¡«å†™ DPIï¼Œä¸å½±å“åŽç»­æµ‹è¯•ã€‚</p>
-                  <span class="hid-device-meta" id="hidDeviceMeta" hidden></span>
-                  <div class="hid-readouts">
-                    <span>å›ºä»¶ DPI <strong id="hidDpiReadout">å¾…æµ‹</strong></span>
-                    <span>å›ºä»¶å›žæŠ¥çŽ‡ <strong id="hidPollingReadout">å¾…æµ‹</strong></span>
-                    <span>æµè§ˆå™¨äº‹ä»¶çº¦ <strong id="measuredPollingReadout">ç­‰å¾…ç§»åŠ¨</strong></span>
-                  </div>
-                </div>
-                <button class="secondary-btn" id="connectMouseBtn" type="button">åªè¯»è¿žæŽ¥é¼ æ ‡é…ç½®</button>
-              </div>
-
-              <div class="action-row">
-                <button class="primary-btn" id="toCalibrationBtn" type="button">ä¿å­˜è®¾ç½®å¹¶æ ¡å‡†ç§»åŠ¨èŒƒå›´</button>
-                <button class="secondary-btn" data-go-home type="button">è¿”å›žé¦–é¡µ</button>
-              </div>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <section class="screen" id="screen-calibration" aria-labelledby="calibrationTitle">
-        <div class="calibration-layout">
-          <aside class="calibration-info panel">
-            <p class="placard-title">MOVEMENT ENVELOPE</p>
-            <h2 class="section-title" id="calibrationTitle">æ ¡å‡†èˆ’é€‚ç§»åŠ¨èŒƒå›´</h2>
-            <p class="muted">ç‚¹å‡»å¼€å§‹åŽï¼Œä¿æŒæ‰‹è…•å’Œæ‰‹è‡‚è‡ªç„¶æ”¾æ¾ï¼Œåœ¨é¼ æ ‡åž«ä¸Šåšå‡ æ¬¡å®Œæ•´çš„å·¦å³æ‰«åŠ¨ã€‚æ— éœ€ç‚¹å‡»ä»»ä½•ç›®æ ‡ã€‚</p>
-            <div class="readout-stack">
-              <div class="readout"><span>å‰©ä½™æ—¶é—´</span><strong id="calTime">8.0 s</strong></div>
-              <div class="readout"><span>ç›¸å¯¹ç§»åŠ¨è·¨åº¦</span><strong id="calSpan">0</strong></div>
-              <div class="readout"><span>è¾“å…¥æ¨¡å¼</span><strong id="calInputMode">å¾…æ£€æµ‹</strong></div>
-            </div>
-            <div class="notice">è¿™é‡Œä¼°ç®—çš„æ˜¯ä½ çš„èˆ’é€‚ç§»åŠ¨åŒ…ç»œï¼Œä¸å®£ç§°ç­‰åŒäºŽé¼ æ ‡åž«çš„ç²¾ç¡®ç‰©ç†åŽ˜ç±³å®½åº¦ã€‚</div>
-            <div class="action-row">
-              <button class="secondary-btn" data-go-home type="button">å–æ¶ˆæœ¬æ¬¡æ ¡å‡†</button>
-            </div>
-          </aside>
-          <article class="calibration-stage panel" id="calibrationStage">
-            <canvas id="calibrationCanvas" aria-label="é¼ æ ‡ç§»åŠ¨èŒƒå›´æ ¡å‡†åŒºåŸŸ"></canvas>
-            <div class="stage-overlay" id="calOverlay">
-              <div class="overlay-card">
-                <p class="placard-title">READY</p>
-                <h3 class="section-title">åšå‡ æ¬¡èˆ’é€‚çš„å·¦å³æ‰«åŠ¨</h3>
-                <p>ç‚¹å‡»å¼€å§‹ä¼šä¼˜å…ˆè¯»å–æ— ç³»ç»ŸåŠ é€Ÿçš„ç›¸å¯¹ç§»åŠ¨ï¼›æµè§ˆå™¨ä¸æ”¯æŒæ—¶ä¼šè‡ªåŠ¨é™çº§ä¸ºå…¼å®¹è¾“å…¥ã€‚</p>
-                <button class="primary-btn" id="startCalibrationBtn" type="button">å¼€å§‹ 8 ç§’æ ¡å‡†</button>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="screen" id="screen-test" aria-labelledby="testTitle">
-        <div class="test-layout">
-          <aside class="test-sidebar panel">
-            <p class="placard-title">CURRENT STAGE</p>
-            <div class="stage-counter"><span id="stageNumber">1</span> / <span id="stageTotal">5</span></div>
-            <h2 class="section-title" id="testTitle">å¤§èŒƒå›´è½¬å‘</h2>
-            <p class="stage-description" id="stageDescription"></p>
-            <div class="test-factor-card">
-              <span>æ­£åœ¨æµ‹è¯•çš„æ¸¸æˆçµæ•åº¦</span>
-              <strong id="liveCandidateSens">å¾…æµ‹</strong>
-              <small id="liveCandidatePercent">å½“å‰è®¾ç½®çš„ 100%</small>
-              <div class="test-factor-rail" id="testFactorRail" aria-label="äº”æ¡£å€™é€‰è¿›åº¦"></div>
-            </div>
-
-            <button class="danger-btn test-cancel" id="cancelTestBtn" type="button">å–æ¶ˆæµ‹è¯•å¹¶è¿”å›žé¦–é¡µ</button>
-          </aside>
-
-          <article class="test-main panel">
-            <div class="test-stage" id="testStage">
-              <canvas id="aimCanvas" aria-label="å†…åµŒçž„å‡†æµ‹è¯•åŒºåŸŸ"></canvas>
-              <div class="test-evidence-hud" id="testEvidenceHud">
-                <div class="live-evidence-strip" aria-label="å®žæ—¶æµ‹è¯•æ•°æ®">
-                  <div class="live-evidence-item"><span id="liveHitsLabel">å‘½ä¸­ / å°„å‡»</span><strong id="liveHits">0 / 0</strong></div>
-                  <div class="live-evidence-item"><span id="liveAccuracyLabel">å‘½ä¸­çŽ‡</span><strong id="liveAccuracy">å¾…æµ‹</strong></div>
-                  <div class="live-evidence-item"><span>ç©ºæžª</span><strong id="liveMisses">0</strong></div>
-                  <div class="live-evidence-item"><span id="liveReactionLabel">å¹³å‡ååº”</span><strong id="liveReaction">å¾…æµ‹</strong></div>
-                  <div class="live-evidence-item"><span>ç‚¹å‡»åå·®</span><strong id="liveClickError">å¾…æµ‹</strong></div>
-                  <div class="live-evidence-item"><span>è·¯å¾„æ•ˆçŽ‡</span><strong id="liveEfficiency">å¾…æµ‹</strong></div>
-                  <div class="live-evidence-item"><span>è¿‡å†²</span><strong id="liveOvershoots">0</strong></div>
-                  <div class="live-evidence-item"><span id="liveGainLabel">å½“å‰æ¡£ä½</span><strong id="liveGain">1 / 5</strong></div>
-                </div>
-                <div class="factor-change-cue" id="factorChangeCue" role="status" aria-live="assertive" hidden>
-                  <span class="factor-change-kicker" id="factorChangeKicker">çµæ•åº¦æ¡£ä½åˆ‡æ¢</span>
-                  <strong id="factorChangeValue">100% Â· 0.320</strong>
-                  <span class="factor-change-countdown" id="factorChangeCountdown">2 ç§’åŽå¼€å§‹é‡‡æ ·</span>
-                </div>
-              </div>
-              <div class="canvas-hud">
-                <div class="hud-readout">TEST TIME<strong id="testTime">25.0</strong></div>
-                <div class="hud-readout">SESSION<strong id="sessionProgress">1 / 5</strong></div>
-              </div>
-              <div class="big-countdown" id="bigCountdown" hidden>3</div>
-              <div class="stage-overlay" id="testOverlay">
-                <div class="overlay-card">
-                  <p class="placard-title" id="overlayKicker">TEST 1</p>
-                  <h3 class="section-title" id="overlayTitle">å¤§èŒƒå›´è½¬å‘</h3>
-                  <p id="overlayText">å‡†æ˜Ÿå›ºå®šåœ¨ä¸­å¿ƒã€‚ç§»åŠ¨é¼ æ ‡æ—‹è½¬è™šæ‹Ÿè§†è§’ï¼Œçž„å‡†ç›®æ ‡åŽæŒ‰é¼ æ ‡å·¦é”®å°„å‡»ã€‚</p>
-                  <button class="primary-btn" id="stageActionBtn" type="button">å¼€å§‹æ­¤é¡¹æµ‹è¯•</button>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <aside class="test-sidebar panel">
-            <p class="placard-title">TEST CHECKLIST</p>
-            <ol class="test-checklist" id="testChecklist"></ol>
-            <div class="notice">é™æ€ç›®æ ‡éœ€è¦çž„å‡†åŽæŒ‰å·¦é”®å°„å‡»ï¼›è¿½è¸ªé¡¹ç›®åªéœ€æŒç»­è´´åˆã€‚æŒ‰ <strong>Esc</strong> æˆ–åˆ‡æ¢çª—å£ä¼šæš‚åœã€‚</div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="screen" id="screen-results" aria-labelledby="resultsTitle">
-        <div class="result-layout">
-          <article class="result-cluster panel">
-            <div class="result-header">
-              <div>
-                <p class="placard-title">CROSS-CHECK COMPLETE</p>
-                <h2 class="section-title" id="resultsTitle">æœ¬æ¬¡çµæ•åº¦å»ºè®®</h2>
-                <div class="game-context"><img id="resultGameIcon" alt="æ— ç•å¥‘çº¦å›¾æ ‡" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAAAXNSR0IArs4c6QAAAFdQTFRFAAAA/0hQ/0VT/0BQ/0VT/0VS/0ZU/0ZU/0VV/0dU/0ZU/0RU/0ZT/0ZU/0VU/0ZV/0VU/0ZU/0VV/0VV/0ZU/0VV/0ZW/0hU/0dU/0RU/0ZU/0ZT/0VUqN5dCQAAAB10Uk5TACCQEJ9g/49gcH9AUO/v37+vbzDPn19AT3CAoM8hME5OAAAClklEQVR4nO2Z61LiQBCFCWjjRhQw7K63939OFRUkmZk+fUOt6u8nVdNzKplz0s3MZkmSJEmSJEnyc+jmizPtdNEVf76k5Xn2X9JVRQD9Ocf+PdUF0HX8/itqCbgpvx1HutumAFoHH8RuTW0BtIkVsCVOQKwVeuIFRFrhjhABNETtPxAmYB1khfcDCAigXYgVFof9WQH0N0LAknAB1Pvv35NEAP3z3n9FMgHembxPYIkA50w+GgAW4JvJO5IL8MzkJWkE+GVyP64MCvBqT/5PCqMCfKwwOoASAS5WWEz3xwXQ1i5gWyiLC7Bn8uQACgVYM/muWFQi4MbUnpwmsEqAqT0pGEAuwNKe7ColZQL0mTxOYK0AbSYXDaASoMvkVb2eWIAmkysG0AlQZHLNAEoB8vZk06qmECC1Qv0AagXIrFBOYJsAycg4MKV0AvBMbh5AvQA4k0stiIsAdGSsJrBZANaetA2w57785PiFSHvSSOADldP0wK/kM7mVwJ881hbP+bWcFVgDvDKvL2/m5ztMJtdakC/sjPqbmcwbgHmGyBtsZDJggFvmHQJerLcn0yFwyqq9/2z2yNeoWQF5gVUDHHniq5TbEz6BmwY41nnm6xRHxtIQCCkfgzzJQiYDBxD9nnJf8zcmmcy0IHvgjgLJ5FGxDthf0FOJM9nJAEeATD5pT4bnNcNGNl4hloq9ZUQyOeAf7S9c8wKCbxkNmewEYoXQW0Ykk2NvGc3tiZnB1p44gLQnYbeMewArRN0yfgB85GNuGT9BMjnklvHA78hk91vGE1xGRhMOI6MR+8ho5Psz2TgyOmAaGV34/vZEPTJ6oR4Z3VCOjI6oRkZXFCOjM78ik1t/wjlwecESKyBJkiRJkiRJ/HkB4o9fvW8/kk4AAAAASUVORK5CYII="><strong id="resultGameName">æ— ç•å¥‘çº¦</strong><span>å¯ç›´æŽ¥è¾“å…¥å½“å‰æ¸¸æˆ</span></div>
-              </div>
-              <div class="status-placard"><span class="lamp live" id="resultLamp"></span><span id="resultStateText">è®¡ç®—å®Œæˆ</span></div>
-            </div>
-            <div class="result-summary">
-              <div class="primary-result">
-                <span class="primary-result-label">å½“å‰æ¸¸æˆä¸»æŽ¨è</span>
-                <strong class="primary-result-value" id="resultPrimarySens">å¾…æµ‹</strong>
-                <span class="primary-result-unit" id="resultPrimaryUnit">æ¸¸æˆå†…çµæ•åº¦</span>
-              </div>
-              <dl class="result-facts">
-                <div><dt>cm / 360Â°</dt><dd id="resultCm360">å¾…æµ‹</dd></div>
-                <div><dt>æœ‰æ•ˆ eDPI</dt><dd id="resultEdpi">å¾…æµ‹</dd></div>
-                <div><dt>å°„å‡»å‘½ä¸­çŽ‡</dt><dd id="resultAccuracy">å¾…æµ‹</dd></div>
-                <div><dt>ç»“æžœç½®ä¿¡åº¦</dt><dd id="resultConfidence">å¾…æµ‹</dd></div>
-              </dl>
-            </div>
-            <section class="result-evidence" aria-labelledby="resultEvidenceTitle">
-              <div class="compact-section-header"><strong id="resultEvidenceTitle">å°„å‡»ä¸ŽæŽ§åˆ¶è¯æ®</strong><span>ç‚¹å‡»åå·®æŒ‰ç›®æ ‡åŠå¾„å½’ä¸€åŒ–</span></div>
-              <dl class="evidence-grid" id="resultEvidenceGrid"></dl>
-            </section>
-            <section class="conversion-section" aria-labelledby="conversionTitle">
-              <div class="conversion-heading">
-                <div>
-                  <p class="placard-title">ALL GAME RECOMMENDATIONS</p>
-                  <h3 class="section-title" id="conversionTitle">å…¨éƒ¨æ¸¸æˆç­‰æ•ˆæŽ¨è</h3>
-                </div>
-                <span>ä¿æŒç›¸åŒç‰©ç† cm/360Â°</span>
-              </div>
-              <ol class="conversion-list" id="conversionList"></ol>
-            </section>
-            <div class="recommendation-strip">
-              <div class="candidate"><span>è¾ƒä½Žå¤‡é€‰</span><strong id="lowSens">å¾…æµ‹</strong></div>
-              <div class="candidate primary"><span>ä¸»æŽ¨èå€¼</span><strong id="mainSens">å¾…æµ‹</strong></div>
-              <div class="candidate"><span>è¾ƒé«˜å¤‡é€‰</span><strong id="highSens">å¾…æµ‹</strong></div>
-            </div>
-            <div class="action-row" style="padding: 0 4px;">
-              <button class="primary-btn" id="saveResultBtn" type="button">ä¿å­˜åˆ°æœ¬åœ°åŽ†å²</button>
-              <button class="secondary-btn" id="runAgainBtn" type="button">é‡æ–°æµ‹è¯•</button>
-              <button class="secondary-btn" data-go-home type="button">è¿”å›žé¦–é¡µ</button>
-            </div>
-          </article>
-
-          <aside class="result-detail panel">
-            <p class="placard-title">EVIDENCE & EXPLANATION</p>
-            <h2 class="section-title">äº”æ¡£å€™é€‰å¾—åˆ†</h2>
-            <p class="muted">äº”æ¡£æ˜¯ç›¸å¯¹äºŽæµ‹è¯•å‰çµæ•åº¦çš„å®žéªŒå€¼ã€‚ç»¿è‰²æ ‡è®°çš„æ˜¯æœ€ç»ˆèƒœå‡ºæ¡£ä½ï¼Œä¸æ˜¯å…è®¸è¾“å…¥èŒƒå›´ã€‚</p>
-            <div class="factor-score-list" id="factorScoreList"></div>
-            <h2 class="section-title">åˆ†é¡¹è¡¨çŽ°</h2>
-            <div class="score-bars" id="scoreBars"></div>
-            <div class="explanation" id="resultExplanation"></div>
-          </aside>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="data/valorant-pros.js"></script>
-  <script src="assets/vendor/gsap-3.15.0.min.js"></script>
-  <script src="assets/app.js"></script>
-</body>
-</html>
+                  <div class="compact-section-header">Û®»¶‰žËkºwµç@€€ñÍµ…±°¥ô‰Í•ÑÕÁAÉ½5•Ñ„ˆû¦'š.§’â–B7¦'š&/–B;¾ò3–>¿š2'žnã–B3¢ö³¢ê¯¢Þwžšïš6‹žº_–"Ã–öO–&7šâãš"?Žð½Íµ…±°ø4(€€€€€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Í•ÑÕÀµÁÉ¼µ‘Á¤µ¡½¥•Ìˆ¥ô‰Í•ÑÕÁAÉ½Á¥¡½¥•Ìˆ…É¥„µ±…‰•°ô‹¦'š.§¢š’öÿžR£žj¦òƒš‚A$ˆøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Í•ÑÕÀµÁÉ¼µÁÉ•Ù¥•Üˆø4(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥ØøñÍÁ…¸û¦žR A$ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰Í•ÑÕÁAÉ½Q…É•ÑÁ¤ˆû–ú¦$ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥ØøñÍÁ…¸¥ô‰Í•ÑÕÁAÉ½M•¹Í1…‰•°ˆû–öO–&7šâãš"?ž×šV?–ê˜ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰Í•ÑÕÁAÉ½Q…É•ÑM•¹Ìˆû–ú¦$ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€€€ñ‘¥ØøñÍÁ…¸û–>¢¢ö³¢ê¯¢Þwžšìð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰Í•ÑÕÁAÉ½Q…É•Ñ´ˆû–ú¦$ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ¥ô‰…ÁÁ±åM•ÑÕÁAÉ½	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆ‘¥Í…‰±•û¦žR£š¶A$ƒ’â;ž×šV?–ê˜ð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñÀ±…ÍÌô‰Í•ÑÕÀµÁÉ¼µ‘¥Í±…¥µ•Èˆû¢3’âk¦'š&/šVÃš6»–>«š>C’úo–>¿’öO¦ª3žj¢Ößž
+ç¾ò3’â7’î¢†£šr’öÏ¢ºûžö»¾òo¦žR£–B;’î7’òk¦k¢þ’öƒžj’êSš†šÖ/¢¾WžRš"C’â«’êëžîOšzsŽð½Àø4(€€€€€€€€€€€€€€ð½Í•Ñ¥½¸ø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™½É´µÉ¥ˆø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™¥•±ˆø4(€€€€€€€€€€€€€€€€€€ñ±…‰•°™½Èô‰‘Á¥%¹ÁÕÐˆû¦òƒš‚A$ð½±…‰•°ø4(€€€€€€€€€€€€€€€€€€ñ¥¹ÁÕÐ¥ô‰‘Á¥%¹ÁÕÐˆÑåÁ”ô‰¹Õµ‰•Èˆµ¥¸ôˆÄÀÀˆµ…àôˆÌÈÀÀÀˆÍÑ•ÀôˆÔÀˆÙ…±Õ”ôˆàÀÀˆ¥¹ÁÕÑµ½‘”ô‰¹Õµ•É¥Œˆø4(€€€€€€€€€€€€€€€€€€ñÍµ…±°û–†¯–g¦òƒš‚¦¦Ç–*£š"[švÿ¢ö÷¦7žö»’â·žj–º{¦fA'Žð½Íµ…±°ø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™¥•±ˆø4(€€€€€€€€€€€€€€€€€€ñ±…‰•°™½Èô‰Í•¹Í%¹ÁÕÐˆû–öO–&7šâãš"?ž×šV?–ê˜ð½±…‰•°ø4(€€€€€€€€€€€€€€€€€€ñ¥¹ÁÕÐ¥ô‰Í•¹Í%¹ÁÕÐˆÑåÁ”ô‰¹Õµ‰•Èˆµ¥¸ôˆÀ¸ÀÄˆµ…àôˆÄÀˆÍÑ•ÀôˆÀ¸ÀÀÄˆÙ…±Õ”ôˆÀ¸ÌÈÀˆ¥¹ÁÕÑµ½‘”ô‰‘•¥µ…°ˆø4(€€€€€€€€€€€€€€€€€€ñÍµ…±°¥ô‰Í•¹Í!¥¹Ðˆûš^ƒžV?––Gžê›–âãžR£¢úO–—¢2–nÐ€À¸ÀÇŠLÄÃ¾ò3žÊû–ê˜€À¸ÀÀÇŽð½Íµ…±°ø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™¥•±ˆø4(€€€€€€€€€€€€€€€€€€ñ±…‰•°™½Èô‰™½Ù%¹ÁÕÐˆûšÖ/¢¾WšÂÓ–æÏ¢ž¦8ð½±…‰•°ø4(€€€€€€€€€€€€€€€€€€ñ¥¹ÁÕÐ¥ô‰™½Ù%¹ÁÕÐˆÑåÁ”ô‰¹Õµ‰•Èˆµ¥¸ôˆØÀˆµ…àôˆÄÌÀˆÍÑ•ÀôˆÄˆÙ…±Õ”ôˆÄÀÌˆ¥¹ÁÕÑµ½‘”ô‰¹Õµ•É¥Œˆø4(€€€€€€€€€€€€€€€€€€ñÍµ…±°û–>«–öÇ–N7šÖ?¢ž#–f£’â·žj¢ž¢ž'š*W–öÇ¾ò3’â7šRç–>`´¼ÌØÃ
+Àƒš6‹žº_Žð½Íµ…±°ø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘¥Øø4(4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡¥µ…ÍÍ¥ÍÐˆ¥ô‰¡¥‘ÍÍ¥ÍÐˆø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡¥µ…ÍÍ¥ÍÐµ½Áäˆø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡¥µ…ÍÍ¥ÍÐµÑ¥Ñ±”ˆøñÍÁ…¸±…ÍÌô‰±…µÀˆ¥ô‰¡¥‘1…µÀˆøð½ÍÁ…¸û–>¿¦$€¼]•‰!%ƒ¦òƒš‚¢¾–"¬ð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñÀ¥ô‰¡¥‘MÑ…ÑÕÌˆ…É¥„µ±¥Ù”ô‰Á½±¥Ñ”ˆûš¶–r£šŽš~—šÖ?¢ž#–f£¢÷–*oŽš^ƒšÎW’öÿžR£š^Û’î7–>¿š&/–*£–†¯–dA'¾ò3’â7–öÇ–N7–B;žî·šÖ/¢¾WŽð½Àø4(€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰¡¥µ‘•Ù¥”µµ•Ñ„ˆ¥ô‰¡¥‘•Ù¥•5•Ñ„ˆ¡¥‘‘•¸øð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡¥µÉ•…‘½ÕÑÌˆø4(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸û–në’îØA$€ñÍÑÉ½¹œ¥ô‰¡¥‘Á¥I•…‘½ÕÐˆû–úšÖ,ð½ÍÑÉ½¹œøð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸û–në’îÛ–n{š*—ž:€ñÍÑÉ½¹œ¥ô‰¡¥‘A½±±¥¹I•…‘½ÕÐˆû–úšÖ,ð½ÍÑÉ½¹œøð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€€€€€ñÍÁ…¸ûšÖ?¢ž#–f£’ê/’îÛžê˜€ñÍÑÉ½¹œ¥ô‰µ•…ÍÕÉ•‘A½±±¥¹I•…‘½ÕÐˆûž¶'–úžžï–* ð½ÍÑÉ½¹œøð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ¥ô‰½¹¹•Ñ5½ÕÍ•	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû–>«¢¾ï¢þ{š:—¦òƒš‚¦7žö¸ð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€ð½‘¥Øø4(4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…Ñ¥½¸µÉ½Üˆø4(€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰ÁÉ¥µ…Éäµ‰Ñ¸ˆ¥ô‰Ñ½…±¥‰É…Ñ¥½¹	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû’þw–¶c¢ºûžö»–æÛš‚‡–žžï–*£¢2–nÐð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ‘…Ñ„µ¼µ¡½µ”ÑåÁ”ô‰‰ÕÑÑ½¸ˆû¢þS–n{¦š[¦†Ôð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€ð½…ÉÑ¥±”ø4(€€€€€€ð½Í•Ñ¥½¸ø4(4(€€€€€€ñÍ•Ñ¥½¸±…ÍÌô‰ÍÉ••¸ˆ¥ô‰ÍÉ••¸µ…±¥‰É…Ñ¥½¸ˆ…É¥„µ±…‰•±±•‘‰äô‰…±¥‰É…Ñ¥½¹Q¥Ñ±”ˆø4(€€€€€€€€ñ‘¥Ø±…ÍÌô‰…±¥‰É…Ñ¥½¸µ±…å½ÕÐˆø4(€€€€€€€€€€ñ…Í¥‘”±…ÍÌô‰…±¥‰É…Ñ¥½¸µ¥¹™¼Á…¹•°ˆø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆù5=Y59P9Y1=Að½Àø4(€€€€€€€€€€€€ñ È±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆ¥ô‰…±¥‰É…Ñ¥½¹Q¥Ñ±”ˆûš‚‡–¢"K¦žžï–*£¢2–nÐð½ Èø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰µÕÑ•ˆûž
+ç–ï–ò–ž/–B;¾ò3’þwš2š&/¢W–J3š&/¢¢«žÛšRûšvû¾ò3–r£¦òƒš‚–z¯’â+–k–ƒš²‡–º3šVÓžj–Þ›–>Ïš&¯–*£Žš^ƒ¦rž
+ç–ï’îï’öWžn»š‚Žð½Àø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•…‘½ÕÐµÍÑ…¬ˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•…‘½ÕÐˆøñÍÁ…¸û–&§’ögš^Û¦^Ðð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰…±Q¥µ”ˆøà¸ÀÌð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•…‘½ÕÐˆøñÍÁ…¸ûžnã–¾çžžï–*£¢Þ£–ê˜ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰…±MÁ…¸ˆøÀð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•…‘½ÕÐˆøñÍÁ…¸û¢úO–—š¢‡–ò<ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰…±%¹ÁÕÑ5½‘”ˆû–úšŽšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¹½Ñ¥”ˆû¢þg¦3’òÃžº_žjšb¿’öƒžj¢"K¦žžï–*£–2žîs¾ò3’â7–ºžžÃž¶'–B3’ê;¦òƒš‚–z¯žjžÊûž†»ž&§žB–:cžÆÏ–º÷–ê›Žð½‘¥Øø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…Ñ¥½¸µÉ½Üˆø4(€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ‘…Ñ„µ¼µ¡½µ”ÑåÁ”ô‰‰ÕÑÑ½¸ˆû–>[šÚ#šr³š²‡š‚‡–ð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€ð½…Í¥‘”ø4(€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÌô‰…±¥‰É…Ñ¥½¸µÍÑ…”Á…¹•°ˆ¥ô‰…±¥‰É…Ñ¥½¹MÑ…”ˆø4(€€€€€€€€€€€€ñ…¹Ù…Ì¥ô‰…±¥‰É…Ñ¥½¹…¹Ù…Ìˆ…É¥„µ±…‰•°ô‹¦òƒš‚žžï–*£¢2–nÓš‚‡––2ë–~|ˆøð½…¹Ù…Ìø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…”µ½Ù•É±…äˆ¥ô‰…±=Ù•É±…äˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰½Ù•É±…äµ…Éˆø4(€€€€€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆùIdð½Àø4(€€€€€€€€€€€€€€€€ñ Ì±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆû–k–ƒš²‡¢"K¦žj–Þ›–>Ïš&¯–* ð½ Ìø4(€€€€€€€€€€€€€€€€ñÀûž
+ç–ï–ò–ž/’òk’òc–#¢¾ï–>[š^ƒžÎïžî–*ƒ¦žjžnã–¾çžžï–*£¾òošÖ?¢ž#–f£’â7šR¿š2š^Û’òk¢«–*£¦f7žêŸ’âë–ó–ºç¢úO–—Žð½Àø4(€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰ÁÉ¥µ…Éäµ‰Ñ¸ˆ¥ô‰ÍÑ…ÉÑ…±¥‰É…Ñ¥½¹	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû–ò–ž,€àƒžžKš‚‡–ð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€ð½…ÉÑ¥±”ø4(€€€€€€€€ð½‘¥Øø4(€€€€€€ð½Í•Ñ¥½¸ø4(4(€€€€€€ñÍ•Ñ¥½¸±…ÍÌô‰ÍÉ••¸ˆ¥ô‰ÍÉ••¸µÑ•ÍÐˆ…É¥„µ±…‰•±±•‘‰äô‰Ñ•ÍÑQ¥Ñ±”ˆø4(€€€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ•ÍÐµ±…å½ÕÐˆø4(€€€€€€€€€€ñ…Í¥‘”±…ÍÌô‰Ñ•ÍÐµÍ¥‘•‰…ÈÁ…¹•°ˆø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆùUII9PMQð½Àø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…”µ½Õ¹Ñ•ÈˆøñÍÁ…¸¥ô‰ÍÑ…•9Õµ‰•ÈˆøÄð½ÍÁ…¸ø€¼€ñÍÁ…¸¥ô‰ÍÑ…•Q½Ñ…°ˆøÔð½ÍÁ…¸øð½‘¥Øø4(€€€€€€€€€€€€ñ È±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆ¥ô‰Ñ•ÍÑQ¥Ñ±”ˆû–’Ÿ¢2–nÓ¢ö³–BDð½ Èø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰ÍÑ…”µ‘•ÍÉ¥ÁÑ¥½¸ˆ¥ô‰ÍÑ…••ÍÉ¥ÁÑ¥½¸ˆøð½Àø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ•ÍÐµ™…Ñ½Èµ…Éˆø4(€€€€€€€€€€€€€€ñÍÁ…¸ûš¶–r£šÖ/¢¾Wžjšâãš"?ž×šV?–ê˜ð½ÍÁ…¸ø4(€€€€€€€€€€€€€€ñÍÑÉ½¹œ¥ô‰±¥Ù•…¹‘¥‘…Ñ•M•¹Ìˆû–úšÖ,ð½ÍÑÉ½¹œø4(€€€€€€€€€€€€€€ñÍµ…±°¥ô‰±¥Ù•…¹‘¥‘…Ñ•A•É•¹Ðˆû–öO–&7¢ºûžö»žj€ÄÀÀ”ð½Íµ…±°ø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ•ÍÐµ™…Ñ½ÈµÉ…¥°ˆ¥ô‰Ñ•ÍÑ…Ñ½ÉI…¥°ˆ…É¥„µ±…‰•°ô‹’êSš†–g¦'¢þo–ê˜ˆøð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(4(€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰‘…¹•Èµ‰Ñ¸Ñ•ÍÐµ…¹•°ˆ¥ô‰…¹•±Q•ÍÑ	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû–>[šÚ#šÖ/¢¾W–æÛ¢þS–n{¦š[¦†Ôð½‰ÕÑÑ½¸ø4(€€€€€€€€€€ð½…Í¥‘”ø4(4(€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÌô‰Ñ•ÍÐµµ…¥¸Á…¹•°ˆø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ•ÍÐµÍÑ…”ˆ¥ô‰Ñ•ÍÑMÑ…”ˆø4(€€€€€€€€€€€€€€ñ…¹Ù…Ì¥ô‰…¥µ…¹Ù…Ìˆ…É¥„µ±…‰•°ô‹––Ö3žz–šÖ/¢¾W–2ë–~|ˆøð½…¹Ù…Ìø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Ñ•ÍÐµ•Ù¥‘•¹”µ¡Õˆ¥ô‰Ñ•ÍÑÙ¥‘•¹•!Õˆø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µÍÑÉ¥Àˆ…É¥„µ±…‰•°ô‹–º{š^ÛšÖ/¢¾WšVÃš6¸ˆø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸¥ô‰±¥Ù•!¥ÑÍ1…‰•°ˆû–F÷’â´€¼ƒ–Â–ìð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•!¥ÑÌˆøÀ€¼€Àð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸¥ô‰±¥Ù•ÕÉ…å1…‰•°ˆû–F÷’â·ž:ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•ÕÉ…äˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸ûž¦ëšz¨ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•5¥ÍÍ•ÌˆøÀð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸¥ô‰±¥Ù•I•…Ñ¥½¹1…‰•°ˆû–æÏ–v–>7–êPð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•I•…Ñ¥½¸ˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸ûž
+ç–ï–?–Þ¸ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•±¥­ÉÉ½Èˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸û¢Þ¿–úšV#ž:ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•™™¥¥•¹äˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸û¢þ–Èð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•=Ù•ÉÍ¡½½ÑÌˆøÀð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰±¥Ù”µ•Ù¥‘•¹”µ¥Ñ•´ˆøñÍÁ…¸¥ô‰±¥Ù•…¥¹1…‰•°ˆû–öO–&7š†’ö4ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±¥Ù•…¥¸ˆøÄ€¼€Ôð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™…Ñ½Èµ¡…¹”µÕ”ˆ¥ô‰™…Ñ½É¡…¹•Õ”ˆÉ½±”ô‰ÍÑ…ÑÕÌˆ…É¥„µ±¥Ù”ô‰…ÍÍ•ÉÑ¥Ù”ˆ¡¥‘‘•¸ø4(€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰™…Ñ½Èµ¡…¹”µ­¥­•Èˆ¥ô‰™…Ñ½É¡…¹•-¥­•Èˆûž×šV?–ê›š†’ö7–"š6ˆð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€€€ñÍÑÉ½¹œ¥ô‰™…Ñ½É¡…¹•Y…±Õ”ˆøÄÀÀ”ƒ
+Ü€À¸ÌÈÀð½ÍÑÉ½¹œø4(€€€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰™…Ñ½Èµ¡…¹”µ½Õ¹Ñ‘½Ý¸ˆ¥ô‰™…Ñ½É¡…¹•½Õ¹Ñ‘½Ý¸ˆøÈƒžžK–B;–ò–ž/¦š‚Üð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…¹Ù…Ìµ¡Õˆø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡ÕµÉ•…‘½ÕÐˆùQMPQ%5ñÍÑÉ½¹œ¥ô‰Ñ•ÍÑQ¥µ”ˆøÈÔ¸Àð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¡ÕµÉ•…‘½ÕÐˆùMMM%=8ñÍÑÉ½¹œ¥ô‰Í•ÍÍ¥½¹AÉ½É•ÍÌˆøÄ€¼€Ôð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰‰¥œµ½Õ¹Ñ‘½Ý¸ˆ¥ô‰‰¥½Õ¹Ñ‘½Ý¸ˆ¡¥‘‘•¸øÌð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…”µ½Ù•É±…äˆ¥ô‰Ñ•ÍÑ=Ù•É±…äˆø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰½Ù•É±…äµ…Éˆø4(€€€€€€€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆ¥ô‰½Ù•É±…å-¥­•ÈˆùQMP€Äð½Àø4(€€€€€€€€€€€€€€€€€€ñ Ì±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆ¥ô‰½Ù•É±…åQ¥Ñ±”ˆû–’Ÿ¢2–nÓ¢ö³–BDð½ Ìø4(€€€€€€€€€€€€€€€€€€ñÀ¥ô‰½Ù•É±…åQ•áÐˆû–šb–në–ºk–r£’â·–þŽžžï–*£¦òƒš‚š^/¢ö³¢fkš.¢ž¢žK¾ò3žz–žn»š‚–B;š2'¦òƒš‚–Þ›¦R»–Â–ïŽð½Àø4(€€€€€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰ÁÉ¥µ…Éäµ‰Ñ¸ˆ¥ô‰ÍÑ…•Ñ¥½¹	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû–ò–ž/š¶“¦†çšÖ/¢¾Tð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€ð½…ÉÑ¥±”ø4(4(€€€€€€€€€€ñ…Í¥‘”±…ÍÌô‰Ñ•ÍÐµÍ¥‘•‰…ÈÁ…¹•°ˆø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆùQMP!-1%MPð½Àø4(€€€€€€€€€€€€ñ½°±…ÍÌô‰Ñ•ÍÐµ¡•­±¥ÍÐˆ¥ô‰Ñ•ÍÑ¡•­±¥ÍÐˆøð½½°ø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰¹½Ñ¥”ˆû¦vgšžn»š‚¦r¢šžz––B;š2'–Þ›¦R»–Â–ï¾òo¢þ÷¢â«¦†çžn»–>«¦rš2žî·¢ÒÓ–B#Žš2$€ñÍÑÉ½¹œùÍŒð½ÍÑÉ½¹œøƒš"[–"š6‹žª_–>’òkšj–sŽð½‘¥Øø4(€€€€€€€€€€ð½…Í¥‘”ø4(€€€€€€€€ð½‘¥Øø4(€€€€€€ð½Í•Ñ¥½¸ø4(4(€€€€€€ñÍ•Ñ¥½¸±…ÍÌô‰ÍÉ••¸ˆ¥ô‰ÍÉ••¸µÉ•ÍÕ±ÑÌˆ…É¥„µ±…‰•±±•‘‰äô‰É•ÍÕ±ÑÍQ¥Ñ±”ˆø4(€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•ÍÕ±Ðµ±…å½ÕÐˆø4(€€€€€€€€€€ñ…ÉÑ¥±”±…ÍÌô‰É•ÍÕ±Ðµ±ÕÍÑ•ÈÁ…¹•°ˆø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•ÍÕ±Ðµ¡•…‘•Èˆø4(€€€€€€€€€€€€€€ñ‘¥Øø4(€€€€€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆùI=MLµ!,=5A1Qð½Àø4(€€€€€€€€€€€€€€€€ñ È±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆ¥ô‰É•ÍÕ±ÑÍQ¥Ñ±”ˆûšr³š²‡ž×šV?–ê›–îë¢º¸ð½ Èø4(€€€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…µ”µ½¹Ñ•áÐˆøñ¥µœ¥ô‰É•ÍÕ±Ñ…µ•%½¸ˆ…±Ðô‹š^ƒžV?––Gžê›–nûš‚ˆÍÉŒô‰‘…Ñ„é¥µ…”½Á¹œí‰…Í”ØÐ±¥Y	=IÜÁ-½9MU¡U%5ÀÑ) Õa9MHÁ%ÉÌÑŒÙE‘EQI¼Á¡D¼ÁYP¼Á	D¼ÁYP¼ÁYL¼ÁiT¼ÁiT¼ÁYX¼Á‘T¼ÁiT¼ÁIT¼ÁiP¼ÁiT¼ÁYT¼ÁiX¼ÁYT¼ÁiT¼ÁYX¼ÁYX¼ÁiT¼ÁYX¼Ái\¼Á¡T¼Á‘T¼ÁIT¼ÁiT¼ÁiP¼ÁYUÅ8Õ‘EÄÁU¬ÕQE(åœ¼Ðå åU<½ØÌÜ­Ù‰éA¸ÄåPÍ½4á¡5Õ=±­±EYHÑ¹<ÉhØÅ1¥E	]©©I¡EÜÝ,ØÌäÌå=IU­µi¬­™U=ÐÙÔá¹Y‘9é-Á±èÁÌÍ5i­µM)µM)¹åŒ­©µ¥éAÑ‘9Y˜ÜÙ¬Õa¸É`å)YIEå=˜­A‘UÁ!`à½¥ÑÅ‰ÁÙàÅ!ÕÑÕµ½! áIÕQ\Á	Ñ%­YÍY=E-ÝY•Õ%IÉ¡©¡	9QÑAáµeÅ­¡™¥aeY½˜å]E Á8Á1­¹ÅAÙØÌÕ9@ÍèÍ¸å5!•µ‰áAe%­ÔÁÜ­\Ñ)Ù)<Õ%0á5é­)]­­Yå@ØÑ5Ù	ÅP¼ÕAÅ5™-ÝÝ=½MLÕ]]èÍáÝaDÅ¤Õ]å¥1Ý	¸áÕEYe4½µÕ]E¤Ñ5‰U¹ÁÝµÍÅÅPÁÁÕÝ9-”Ý½±iE0ÁµQá=e,Á‰Mea…M½5Ù­YˆÉ•]%µ­åÍÁ±Ei!19½áÙi¬ÀÙÅµÅEØÁ…a%É	=e)ÍåœÑ5-XÁÙ	5‰ ÕÙEÑ¬ÁÍÑ¥%Í‘MÍ)É	i9…•ÑÉÜÔÜÜàÕA¥M!ÙMM=±‘@ÁÝ,½­4ÝµYÝ(ààÅ¡‰@­‰]YÙ-Ù0È½´ÕéÑ5)Ñ‘…­½Í©AÅ‰µÝ‰!µå	ÑÍi)Ùµ!E)•É1¸ÁåÝåÅÄä¼ÉèÉå9•½]EÕYU!!¹¥ÄÕQ‰èÙ	µÝdÐÅ¹¹´ÙáI!áÑ%E­™éé)E¥e	áå¹¹)˜áéµµäÁ%!Ù©1(ÕáÑ¡˜Á=)4å¹)•QÕÁPÑ‰¹999°Ñ¡±½ÄåiUEå=•˜ÝLåŒáÝ-‰á­9µ•Ýe½aE\Áe­¬É9ÙŒÍÑ¥i¹ÅÀÐÑ1E¹e‰•5•ÝÉI8Áå™àÕ9ÕPå	5©¹­±Ù!Üá¡¬äÅÙÅáI¡5=$Ù5H¬á¡¼ÕAÍèÉQå=µ…XÌÐ½ÙiAQ(Ù½HÑhÍY=©$Ù½I­ia=©4Üá¥¬ÅÐ½Ý©±Ý•M-å	)­¥I)­¥I(½!­Ñ¼å™Ù\à½­¬ÑMUY=I,Õe%$ôˆøñÍÑÉ½¹œ¥ô‰É•ÍÕ±Ñ…µ•9…µ”ˆûš^ƒžV?––Gžê˜ð½ÍÑÉ½¹œøñÍÁ…¸û–>¿žnÓš:—¢úO–—–öO–&7šâãš"<ð½ÍÁ…¸øð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÍÑ…ÑÕÌµÁ±……ÉˆøñÍÁ…¸±…ÍÌô‰±…µÀ±¥Ù”ˆ¥ô‰É•ÍÕ±Ñ1…µÀˆøð½ÍÁ…¸øñÍÁ…¸¥ô‰É•ÍÕ±ÑMÑ…Ñ•Q•áÐˆû¢º‡žº_–º3š"@ð½ÍÁ…¸øð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•ÍÕ±ÐµÍÕµµ…Éäˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰ÁÉ¥µ…ÉäµÉ•ÍÕ±Ðˆø4(€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰ÁÉ¥µ…ÉäµÉ•ÍÕ±Ðµ±…‰•°ˆû–öO–&7šâãš"?’âïš:£¢6@ð½ÍÁ…¸ø4(€€€€€€€€€€€€€€€€ñÍÑÉ½¹œ±…ÍÌô‰ÁÉ¥µ…ÉäµÉ•ÍÕ±ÐµÙ…±Õ”ˆ¥ô‰É•ÍÕ±ÑAÉ¥µ…ÉåM•¹Ìˆû–úšÖ,ð½ÍÑÉ½¹œø4(€€€€€€€€€€€€€€€€ñÍÁ…¸±…ÍÌô‰ÁÉ¥µ…ÉäµÉ•ÍÕ±ÐµÕ¹¥Ðˆ¥ô‰É•ÍÕ±ÑAÉ¥µ…ÉåU¹¥Ðˆûšâãš"?–ž×šV?–ê˜ð½ÍÁ…¸ø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘°±…ÍÌô‰É•ÍÕ±Ðµ™…ÑÌˆø4(€€€€€€€€€€€€€€€€ñ‘¥Øøñ‘Ðù´€¼€ÌØÃ
+Àð½‘Ðøñ‘¥ô‰É•ÍÕ±Ñ´ÌØÀˆû–úšÖ,ð½‘øð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Øøñ‘Ðûšr'šV •A$ð½‘Ðøñ‘¥ô‰É•ÍÕ±Ñ‘Á¤ˆû–úšÖ,ð½‘øð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Øøñ‘Ðû–Â–ï–F÷’â·ž:ð½‘Ðøñ‘¥ô‰É•ÍÕ±ÑÕÉ…äˆû–úšÖ,ð½‘øð½‘¥Øø4(€€€€€€€€€€€€€€€€ñ‘¥Øøñ‘ÐûžîOšzsžö»’þ‡–ê˜ð½‘Ðøñ‘¥ô‰É•ÍÕ±Ñ½¹™¥‘•¹”ˆû–úšÖ,ð½‘øð½‘¥Øø4(€€€€€€€€€€€€€€ð½‘°ø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ñÍ•Ñ¥½¸±…ÍÌô‰É•ÍÕ±Ðµ•Ù¥‘•¹”ˆ…É¥„µ±…‰•±±•‘‰äô‰É•ÍÕ±ÑÙ¥‘•¹•Q¥Ñ±”ˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰½µÁ…ÐµÍ•Ñ¥½¸µ¡•…‘•ÈˆøñÍÑÉ½¹œ¥ô‰É•ÍÕ±ÑÙ¥‘•¹•Q¥Ñ±”ˆû–Â–ï’â;š:Ÿ–"Û¢¾š6¸ð½ÍÑÉ½¹œøñÍÁ…¸ûž
+ç–ï–?–Þ»š2'žn»š‚–6+–ú–öK’â–2Xð½ÍÁ…¸øð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘°±…ÍÌô‰•Ù¥‘•¹”µÉ¥ˆ¥ô‰É•ÍÕ±ÑÙ¥‘•¹•É¥ˆøð½‘°ø4(€€€€€€€€€€€€ð½Í•Ñ¥½¸ø4(€€€€€€€€€€€€ñÍ•Ñ¥½¸±…ÍÌô‰½¹Ù•ÉÍ¥½¸µÍ•Ñ¥½¸ˆ…É¥„µ±…‰•±±•‘‰äô‰½¹Ù•ÉÍ¥½¹Q¥Ñ±”ˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰½¹Ù•ÉÍ¥½¸µ¡•…‘¥¹œˆø4(€€€€€€€€€€€€€€€€ñ‘¥Øø4(€€€€€€€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆù105I=559Q%=9Lð½Àø4(€€€€€€€€€€€€€€€€€€ñ Ì±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆ¥ô‰½¹Ù•ÉÍ¥½¹Q¥Ñ±”ˆû–£¦£šâãš"?ž¶'šV#š:£¢6@ð½ Ìø4(€€€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€€€ñÍÁ…¸û’þwš2žnã–B3ž&§žB´¼ÌØÃ
+Àð½ÍÁ…¸ø4(€€€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€€€ñ½°±…ÍÌô‰½¹Ù•ÉÍ¥½¸µ±¥ÍÐˆ¥ô‰½¹Ù•ÉÍ¥½¹1¥ÍÐˆøð½½°ø4(€€€€€€€€€€€€ð½Í•Ñ¥½¸ø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰É•½µµ•¹‘…Ñ¥½¸µÍÑÉ¥Àˆø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…¹‘¥‘…Ñ”ˆøñÍÁ…¸û¢ú’ö;–’¦$ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰±½ÝM•¹Ìˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…¹‘¥‘…Ñ”ÁÉ¥µ…ÉäˆøñÍÁ…¸û’âïš:£¢6C–ðð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰µ…¥¹M•¹Ìˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…¹‘¥‘…Ñ”ˆøñÍÁ…¸û¢ú¦®c–’¦$ð½ÍÁ…¸øñÍÑÉ½¹œ¥ô‰¡¥¡M•¹Ìˆû–úšÖ,ð½ÍÑÉ½¹œøð½‘¥Øø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰…Ñ¥½¸µÉ½ÜˆÍÑå±”ô‰Á…‘‘¥¹œè€À€ÑÁàìˆø4(€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰ÁÉ¥µ…Éäµ‰Ñ¸ˆ¥ô‰Í…Ù•I•ÍÕ±Ñ	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû’þw–¶c–"Ãšr³–rÃ–:–>Èð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ¥ô‰ÉÕ¹…¥¹	Ñ¸ˆÑåÁ”ô‰‰ÕÑÑ½¸ˆû¦7šZÃšÖ/¢¾Tð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€€€ñ‰ÕÑÑ½¸±…ÍÌô‰Í•½¹‘…Éäµ‰Ñ¸ˆ‘…Ñ„µ¼µ¡½µ”ÑåÁ”ô‰‰ÕÑÑ½¸ˆû¢þS–n{¦š[¦†Ôð½‰ÕÑÑ½¸ø4(€€€€€€€€€€€€ð½‘¥Øø4(€€€€€€€€€€ð½…ÉÑ¥±”ø4(4(€€€€€€€€€€ñ…Í¥‘”±…ÍÌô‰É•ÍÕ±Ðµ‘•Ñ…¥°Á…¹•°ˆø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰Á±……ÉµÑ¥Ñ±”ˆùY%9€˜aA19Q%=8ð½Àø4(€€€€€€€€€€€€ñ È±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆû’êSš†–g¦'–ú_–"ð½ Èø4(€€€€€€€€€€€€ñÀ±…ÍÌô‰µÕÑ•ˆû’êSš†šb¿žnã–¾ç’ê;šÖ/¢¾W–&7ž×šV?–ê›žj–º{¦ª3–óŽžîÿ¢&Ëš‚¢ºÃžjšb¿šržî#¢s–ëš†’ö7¾ò3’â7šb¿–¢ºã¢úO–—¢2–nÓŽð½Àø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰™…Ñ½ÈµÍ½É”µ±¥ÍÐˆ¥ô‰™…Ñ½ÉM½É•1¥ÍÐˆøð½‘¥Øø4(€€€€€€€€€€€€ñ È±…ÍÌô‰Í•Ñ¥½¸µÑ¥Ñ±”ˆû–"¦†ç¢†£ž:Àð½ Èø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰Í½É”µ‰…ÉÌˆ¥ô‰Í½É•	…ÉÌˆøð½‘¥Øø4(€€€€€€€€€€€€ñ‘¥Ø±…ÍÌô‰•áÁ±…¹…Ñ¥½¸ˆ¥ô‰É•ÍÕ±ÑáÁ±…¹…Ñ¥½¸ˆøð½‘¥Øø4(€€€€€€€€€€ð½…Í¥‘”ø4(€€€€€€€€ð½‘¥Øø4(€€€€€€ð½Í•Ñ¥½¸ø4(€€€€ð½µ…¥¸ø4(€€ð½‘¥Øø4(4(€€ñ‘¥Ø±…ÍÌô‰Ñ½…ÍÐˆ¥ô‰Ñ½…ÍÐˆÉ½±”ô‰ÍÑ…ÑÕÌˆ…É¥„µ±¥Ù”ô‰Á½±¥Ñ”ˆøð½‘¥Øø4(4(€€ñÍÉ¥ÁÐÍÉŒô‰‘…Ñ„½Ù…±½É…¹ÐµÁÉ½Ì¹©Ìˆøð½ÍÉ¥ÁÐø4(€€ñÍÉ¥ÁÐÍÉŒô‰…ÍÍ•ÑÌ½Ù•¹‘½È½Í…À´Ì¸ÄÔ¸À¹µ¥¸¹©Ìˆøð½ÍÉ¥ÁÐø4(€€ñÍÉ¥ÁÐÍÉŒô‰…ÍÍ•ÑÌ½…ÁÀ¹©Ìˆøð½ÍÉ¥ÁÐø4(ð½‰½‘äø4(ð½¡Ñµ°ø4
