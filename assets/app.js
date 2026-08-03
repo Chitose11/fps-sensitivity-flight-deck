@@ -14,24 +14,24 @@
       const LEVER_BOTTOM = 170;
       const GAMES = Object.freeze({
         valorant: Object.freeze({
-          id: "valorant", name: "æ— ç•å¥‘çº¦", brandName: "ã€Šæ— ç•å¥‘çº¦ã€‹", yaw: 0.07, fov: 103,
+          id: "valorant", name: "????", brandName: "??????", yaw: 0.07, fov: 103,
           sens: Object.freeze({ min: .01, max: 10, step: .001, digits: 3, default: .32 }),
-          sourceNote: "ç¤¾åŒºå¸¸ç”¨ yaw 0.07Â°/countï¼›æ°´å¹³è§†é‡Žå¸¸æŒ‰ 103Â° æ¨¡æ‹Ÿ"
+          sourceNote: "???? yaw 0.07?/count??????? 103? ??"
         }),
         overwatch2: Object.freeze({
-          id: "overwatch2", name: "å®ˆæœ›å…ˆé”‹ 2", brandName: "ã€Šå®ˆæœ›å…ˆé”‹ 2ã€‹", yaw: .0066, fov: 103,
+          id: "overwatch2", name: "???? 2", brandName: "????? 2?", yaw: .0066, fov: 103,
           sens: Object.freeze({ min: .01, max: 100, step: .01, digits: 2, default: 5 }),
-          sourceNote: "ç¤¾åŒºå¸¸ç”¨ yaw 0.0066Â°/countï¼›æ°´å¹³è§†é‡Žå¯åœ¨æ¸¸æˆä¸­è°ƒæ•´"
+          sourceNote: "???? yaw 0.0066?/count????????????"
         }),
         cs2: Object.freeze({
-          id: "cs2", name: "CS2", brandName: "ã€ŠCS2ã€‹", yaw: .022, fov: 90,
+          id: "cs2", name: "CS2", brandName: "?CS2?", yaw: .022, fov: 90,
           sens: Object.freeze({ min: .1, max: 8, step: .001, digits: 3, default: 1 }),
-          sourceNote: "é»˜è®¤ m_yaw é€šå¸¸ä¸º 0.022Â°/countï¼›æœ¬é¡µä»¥ 90Â° æ°´å¹³è§†é‡Žä½œè§†è§‰æ¨¡æ‹Ÿ"
+          sourceNote: "?? m_yaw ??? 0.022?/count???? 90? ?????????"
         }),
         deltaforce: Object.freeze({
-          id: "deltaforce", name: "ä¸‰è§’æ´²è¡ŒåŠ¨", brandName: "ã€Šä¸‰è§’æ´²è¡ŒåŠ¨ã€‹", yaw: .022, fov: 100,
+          id: "deltaforce", name: "?????", brandName: "???????", yaw: .022, fov: 100,
           sens: Object.freeze({ min: .01, max: 100, step: .01, digits: 2, default: 5 }),
-          sourceNote: "ç¤¾åŒºæ¢ç®—å¸¸æŒ‰ yaw 0.022Â°/countï¼›è§†é‡Žå¯è°ƒï¼Œæœ¬é¡µé»˜è®¤ 100Â°"
+          sourceNote: "?????? yaw 0.022?/count?????????? 100?"
         })
       });
       const HID_VENDOR_FILTERS = [
@@ -49,11 +49,11 @@
       ];
 
       const stageDefs = [
-        { id: "wide", name: "å¤§èŒƒå›´è½¬å‘", description: "å›ºå®šä¸­å¤®å‡†æ˜Ÿï¼Œç›®æ ‡åœ¨å·¦å³å¤§è§’åº¦äº¤æ›¿å‡ºçŽ°ã€‚ç§»åŠ¨é¼ æ ‡å®Œæˆè½¬å‘ï¼Œçž„å‡†åŽå·¦é”®å°„å‡»ï¼Œæµ‹é‡é€Ÿåº¦ã€è·¯å¾„æ•ˆçŽ‡ã€å‘½ä¸­çŽ‡ä¸Žè¿‡å†²ã€‚" },
-        { id: "micro", name: "å¾®å°ç›®æ ‡å®šä½", description: "å°ç›®æ ‡åœ¨ä¸­å¿ƒé™„è¿‘ä»¥è¾ƒå°è§’åº¦å‡ºçŽ°ã€‚çž„å‡†åŽå·¦é”®å°„å‡»ï¼Œé‡ç‚¹æµ‹é‡æœ«ç«¯æŽ§åˆ¶ã€ç‚¹å‡»è¯¯å·®ä¸Žç¨³å®šæ€§ã€‚" },
-        { id: "switch", name: "è¿žç»­ç›®æ ‡åˆ‡æ¢", description: "ç›®æ ‡åœ¨ä¸åŒæ–¹ä½è§’è¿žç»­å‡ºçŽ°ã€‚é€ä¸ªçž„å‡†å¹¶å·¦é”®å°„å‡»ï¼Œé‡ç‚¹æµ‹é‡åˆ‡æ¢å»¶è¿Ÿã€å‘½ä¸­çŽ‡ä¸Žæ–¹å‘ä¿®æ­£ã€‚" },
-        { id: "track", name: "å¹³æ»‘è¿½è¸ª", description: "æŒç»­æ—‹è½¬è™šæ‹Ÿè§†è§’è·Ÿéšç§»åŠ¨ç›®æ ‡ã€‚ä¸­å¤®å‡†æ˜Ÿè¿›å…¥ç›®æ ‡åŽä¿æŒè´´åˆï¼Œé‡ç‚¹æµ‹é‡å¹³å‡è§’åº¦è¯¯å·®ä¸Žè·Ÿéšæ—¶é—´ã€‚" },
-        { id: "desktop", mode: "desktop", name: "æ¡Œé¢å¾®è°ƒè¾…åŠ©", description: "æœ€åŽè¿›è¡Œä¸€é¡¹ç‹¬ç«‹çš„äºŒç»´å¾®è°ƒæµ‹è¯•ã€‚å‡†æ˜Ÿéšé¼ æ ‡ç§»åŠ¨ï¼Œçž„å‡†åŽå·¦é”®å°„å‡»ï¼›è¯¥ç»“æžœåªè¾…åŠ©è¯„ä¼°æŽ§åˆ¶ç¨³å®šä¸Žç½®ä¿¡åº¦ï¼Œä¸ç›´æŽ¥é€‰æ‹©æ¸¸æˆçµæ•åº¦æ¡£ä½ã€‚" }
+        { id: "wide", name: "?????", description: "??????????????????????????????????????????????????????" },
+        { id: "micro", name: "??????", description: "??????????????????????????????????????????" },
+        { id: "switch", name: "??????", description: "?????????????????????????????????????????" },
+        { id: "track", name: "????", description: "?????????????????????????????????????????????" },
+        { id: "desktop", mode: "desktop", name: "??????", description: "??????????????????????????????????????????????????????????????" }
       ];
 
       const app = {
@@ -334,8 +334,2828 @@
         gsap.set(parts.nodes, { opacity: 0, scale: .45, transformOrigin: "center" });
         document.documentElement.classList.remove("motion-prep");
 
-        homePowerßÞ}òÚ$z{-®éÜj×¶f÷&ÖE6Vç2‡&W7VÇBæ&6U6Vç2Â&W7VÇDvÖRæ–B—ÓÂ÷7G&öæsây¨NK©NKŠ®Zéîš¨ÎXÎûÉ£cR^8ƒ"^8^8#"RY(ÂS^8.Kˆ®ikž[^zK®K¨njøþj>Zéî™˜^i[XÎKˆî{»ÎYŽ[é~Xˆn8#ÂöÆ“àÐ¢ÆÆ“î™Ùžhyºîj~YÎi{nˆ>Zùþ[zn™Jî[NX{¾y¨NYÞKŠÞxè~8XøÞ[©Ni{n™{N8x+žX{¾Šúþ[zî8‹zþ[èNiXŽxè~Kˆî‹ø~Xk.ûÉ¾™»n[NX{¾Xˆnjë^ŠëK‹¢XˆnûÈÎKˆÞˆ;ÞYÊŽk*iÈžj~iÊÎi{nˆ9ÎX{®8#ÂöÆ“àÐ¢ÆÆ“îiÊÎjÊjŽ[ø>[NX{¾X[Ç7G&öæsâG·&W7VÇBç6†÷G7ÓÂ÷7G&öæsâXùûÈÎYÞKŠÒÇ7G&öæsâG·&W7VÇBæ†—G7ÓÂ÷7G&öæsâXùûÈÎiÊ®YÞKŠÒÇ7G&öæsâG·&W7VÇBæÖ—76W7ÓÂ÷7G&öæsâXùûÉ¾XÙ^{ªþ[ú¾˜	þhš¾‹ø~yºîj~KˆÞXhÞŠêK‹®YÞKŠÞ8#ÂöÆ“àÐ¢ÆÆ“îjÎ™Ú.[êî‹>‹è^Xªž[é~XˆnK‹¢Ç7G&öæsâG´ÖF‚ç&÷VæB‡&W7VÇBæW†–Æ–'•66÷&R—ÓÂ÷7G&öæsîûÈÎXú®Š^XX^hê~X‹nz‹>Zé®Kˆî{ÚîKú[ªnûÈÎKˆÞy»Nhê^Xø.Kˆîk‹Žhˆþx^iXþ[ªnj>KØÞy¨Nˆ9Î‹Iþ˜žhºž8#ÂöÆ“àÐ¢ÆÆ“îiÊÎjÊ{ÚîKú[ªnK‹¢Ç7G&öæsâG´ÖF‚ç&÷VæB‡&W7VÇBæ6öæf–FVæ6R¢—ÒSÂ÷7G&öæsîûÉ²G·&W7VÇBç&t–çWBò.kXþŠxŽYšŽhê^Xù~K¨niz{;¾{¹þXª˜	þy¨Ny»ŽZûž‹é>XZ^Šû~k.8""¢&W7VÇBæ–çWDÖöFRÓÓÒ&FW6·F÷"ò.iÊÎjÊhÈž{;¾{¹þZHNyn‹é>XZ^‹ùŠÎûÈÎŠxnŠy.hÚ.zé~K¸ÞKÛþyJŽX	ž˜žk‹Žhˆþx^iXþ[ªnûÈÎKØnXúþˆ;ÞXÈ^Y
-¾{;¾{¹þ›Êj~Xª˜	þ8""¢.iz{;¾{¹þXª˜	þ‹é>XZ^KˆÞXúþyJŽûÈÎkXþŠxŽYšŽ[{.iKžyJŽ{;¾{¹þZHNyny¨Ny»ŽZûž‹é>XZ^ûÈÎYºjÚN{ÚîKú[ªnXù~X‹h©ŽXxþ8"'ÓÂöÆ“àÐ¢ÆÆ“îZûž[©Nk‹ŽhˆþXhRTE’K‹¢Ç7G&öæsâG´ÖF‚ç&÷VæB‡&W7VÇBæVG’—ÓÂ÷7G&öæsîûÈÎhÈ’–rG·&W7VÇBç–wÒhÚ.zé~y¨B6Òó3c+{ªnK‹¢Ç7G&öæsâG·&W7VÇBæ6Ó3cçFôf—†VBƒ—Ò6ÓÂ÷7G&öæsî8#ÂöÆ“àÐ¢ÆÆ“îKˆ®ikž[{.hÈžy»ŽYÎxšžyb6Òó3c+ˆz®XªŽhÚ.zé~XZŽ˜:ŽiJþhÈk‹ŽhˆþûÉ¾KˆÞYÂdõby¨NŠxnŠxž˜	þ[ªnK¸ÞXúþˆ;ÞKˆÞYÎ8#ÂöÆ“àÐ¢ÆÆ“îXXŽYÊŽk‹ŽhˆþŠêÞ{¸>YË®Šù^yJŽK‹¾hêŽˆÙXÎûÉ¾ˆº^‹ÚÎ‹ª¾KˆÞ‹k>h‰n‹ø~Xk.iˆîi‹îûÈÎXhÞXˆnXŠ¾[	ÞŠù^‹è>š¹Žh‰n‹è>KØîZH~˜ž8#ÂöÆ“àÐ¢Â÷VÃàÐ¢ÆF—b6Æ73Ò&æ÷F–6R#ãÇ7G&öæsî˜xÞŠhûÉ£Â÷7G&öæsâiÊÎjÊG·&W7VÇDvÖRææÖWÒjŠh¹þKÛþyJ‚G·&W7VÇBæ†÷&—¦öçFÄf÷gÜ+kN[›>Šxn˜xîKˆâG·&W7VÇBç–wÜ+ö6÷VçBhÚ.zé~jŠYè¾ûÈÎYØ~KˆÞj~KÙÎXè.YXnXZÎ[Èy¨NZèÎi[NXh^˜:ŽZéîxë8.‹zŽk‹ŽhˆþhÚ.zé~XúþKùÞhÈxšžyb6Òó3c+ûÈÎKØnKˆÞYÂdõn8{ÊžiKîY(Î[É^i8î‹é>XZ^™;î‹zþK¸ÞKÉ®iKžXùŽŠxnŠxžKÙ>hIþûÉ¾{¹>iéÎ[©NKÙÎK‹®XúþŠz>˜x®y¨NKŠ®K«®‹[~x+žûÈÎˆÎKˆÞiŠþ{¹ÞZûžzÙNjŽ8#ÂöF—cæ°Ð¢ÐÐ Ð¢gVæ7F–öâ6fT7W'&VçE&W7VÇB‚’°Ð¢6öç7B&W7VÇBÒæ7W'&VçE&W7VÇC°Ð¢–b‚&W7VÇBÇÂ&W7VÇBç6fVB’&WGW&ã°Ð¢6öç7B7F÷&VBÒ²ââç&W7VÇBÓ°Ð¢FVÆWFR7F÷&VBç6fVC°Ð¢æ†—7F÷'’çVç6†–gB‡7F÷&VB“°Ð¢æ†—7F÷'’Òæ†—7F÷'’ç6Æ–6RƒÂS“°Ð¢–b‡W'6—7D†—7F÷'’‚’’°Ð¢&W7VÇBç6fVBÒG'VS°Ð¢æ6öçfW'FW$vÖT–BÒ7F÷&VBævÖT–C°Ð¢æ6öçfW'FW%6Vç2Ò7F÷&VBæÖ–å6Vç3°Ð¢æ6öçfW'FW$G’Ò7F÷&VBæG“°Ð¢æ6öçfW'FW$–æ—F–Æ—¦VBÒG'VS°Ð¢&VæFW%&W7VÇG2‚“°Ð¢&VæFW$†öÖR‚“°Ð¢6ö×ÆWFUFöæR‚“°Ð¢6†÷uFö7B‚.iÊÎjÊ{¹>iéÎ[{.KùÞZÙŽX‹kXþŠxŽYšŽiÊÎYËXènXû.8""“°Ð¢ÐÐ¢ÐÐ Ð¢gVæ7F–öâ&W7F'E'Vâ‚’°Ð¢ç7FvU&W7VÇG2ÒµÓ°Ð¢æ7W'&VçE&W7VÇBÒçVÆÃ°Ð¢6†÷u67&VVâ‚'6WGW"“°Ð¢ÐÐ Ð¢gVæ7F–öâW6T7F—fUFW7B‡&V6öâ’°Ð¢6öç7BFW7BÒçFW7C°Ð¢–b‚FW7BÇÂ²''Vææ–ær"Â&6÷VçFF÷vâ"Â&f7F÷"Ö6÷VçFF÷vâ%Òæ–æ6ÇVFW2‡FW7Bç†6R’’&WGW&ã°Ð¢6öç7Bæ÷rÒW&f÷&Öæ6Rææ÷r‚“°Ð¢FW7Bç&W7VÖU†6RÒFW7Bç†6S°Ð¢FW7Bç†6RÒ'W6VB#°Ð¢FW7BçW6VE&VÖ–æ–ærÒFW7Bç&W7VÖU†6RÓÓÒ&6÷VçFF÷vâ Ð¢òÖF‚æÖ‚ƒÂFW7Bæ6÷VçFF÷väVæBÒæ÷rÐ¢¢FW7Bç&W7VÖU†6RÓÓÒ&f7F÷"Ö6÷VçFF÷vâ Ð¢òÖF‚æÖ‚ƒÂFW7Bæf7F÷$6÷VçFF÷väVæBÒæ÷rÐ¢¢ÖF‚æÖ‚ƒÂFW7BæVæDBÒæ÷r“°Ð¢çW6T6÷VçB³Ò°Ð¢B‚'FW7D÷fW&Æ’"’æ†–FFVâÒfÇ6S°Ð¢B‚&÷fW&Æ”¶–6¶W""’çFW‡D6öçFVçBÒ%U4TB#°Ð¢B‚&÷fW&Æ•F—FÆR"’çFW‡D6öçFVçBÒ.kX¾Šù^[{.i¨.XÂ#°Ð¢B‚&÷fW&Æ•FW‡B"’çFW‡D6öçFVçBÒG·&V6öçÞ8.˜xÞikx+žX{¾{º~{ºÞYîûÈÎŠêi{n[nK¸îi¨.XÎZHNh.ZHÞ8&°Ð¢B‚'7FvT7F–öä'Fâ"’çFW‡D6öçFVçBÒ.{º~{ºÞ[Ù>X˜ÞkX¾ŠùR#°Ð¢B‚'7FvT7F–öä'Fâ"’æöæ6Æ–6²Ò&W7VÖU7FvS°Ð¢6WF–öåFöæR‚“°Ð¢ÐÐ Ð¢7–æ2gVæ7F–öâ&W7VÖU7FvR‚’°Ð¢6öç7BFW7BÒçFW7C°Ð¢–b‚FW7BÇÂFW7Bç†6RÓÒ'W6VB"’&WGW&ã°Ð¢v—BVç7W&TVF–ò‚“°Ð¢FW7BæÆö6¶VBÒv—B&WVW7E&VÆF—fT–çWB‚B‚'FW7E7FvR"’ÂFW7Bç7FvRæÖöFRÓÓÒ&FW6·F÷"ò&FW6·F÷"¢æ–çWDÖöFR“°Ð¢–b‡FW7Bç7FvRæÖöFRÓÒ&FW6·F÷"bbç&t–çWB’æ6÷&U&t–çWBÒG'VS°Ð¢6öç7Bæ÷rÒW&f÷&Öæ6Rææ÷r‚“°Ð¢FW7Bç†6RÒFW7Bç&W7VÖU†6S°Ð¢–b‡FW7Bç†6RÓÓÒ&6÷VçFF÷vâ"’FW7Bæ6÷VçFF÷väVæBÒæ÷r²FW7BçW6VE&VÖ–æ–æs°Ð¢VÇ6R–b‡FW7Bç†6RÓÓÒ&f7F÷"Ö6÷VçFF÷vâ"’FW7Bæf7F÷$6÷VçFF÷väVæBÒæ÷r²FW7BçW6VE&VÖ–æ–æs°Ð¢VÇ6R°Ð¢FW7BæVæDBÒæ÷r²FW7BçW6VE&VÖ–æ–æs°Ð¢FW7BæÆ7Dg&ÖTBÒæ÷s°Ð¢ÐÐ¢B‚'FW7D÷fW&Æ’"’æ†–FFVâÒG'VS°Ð¢6æ6VÄæ–ÖF–öäg&ÖR†ç&b“°Ð¢ç&bÒ&WVW7Dæ–ÖF–öäg&ÖR‡F–6µFW7B“°Ð¢ÐÐ Ð¢gVæ7F–öâöäÖ÷W6TÖ÷fR†WfVçB’°Ð¢6öç7Bæ÷rÒW&f÷&Öæ6Rææ÷r‚“°Ð¢–b†æÆ7DÖV7W&VDÖ÷fTB’°Ð¢6öç7B–çFW'fÂÒæ÷rÒæÆ7DÖV7W&VDÖ÷fTC°Ð¢–b†–çFW'fÂâã‚bb–çFW'fÂÂC’°Ð¢æÖV7W&VEöÆÆ–æu6×ÆW2çW6‚†–çFW'fÂ“°Ð¢–b†æÖV7W&VEöÆÆ–æu6×ÆW2æÆVæwF‚â#C’æÖV7W&VEöÆÆ–æu6×ÆW2ç6†–gB‚“°Ð¢ÐÐ¢ÐÐ¢æÆ7DÖV7W&VDÖ÷fTBÒæ÷s°Ð¢–b†æÖV7W&VEöÆÆ–æu6×ÆW2æÆVæwF‚ãÒ#Bbbæ÷rÒæÆ7DÖV7W&VE&VæFW$BâS’°Ð¢6öç7B6÷'FVBÒ²ââææÖV7W&VEöÆÆ–æu6×ÆW5Òç6÷'B‚†Â"’ÓâÒ"“°Ð¢6öç7BÆ÷vW$†ÆbÒ6÷'FVBç6Æ–6RƒÂÖF‚æÖ‚ƒ‚ÂÖF‚æ6V–Â‡6÷'FVBæÆVæwF‚¢ãcR’’“°Ð¢6öç7BÖVF–âÒÆ÷vW$†Æe´ÖF‚æfÆö÷"†Æ÷vW$†ÆbæÆVæwF‚ò"•Ó°Ð¢6öç7BÖV7W&VBÒ6Æ×„ÖF‚ç&÷VæBƒòÖVF–â’ÂÂƒ“°Ð¢B‚&ÖV7W&VEöÆÆ–æu&VF÷WB"’çFW‡D6öçFVçBÒG¶ÖV7W&VGÒ‡¢¦°Ð¢B‚&ÖV7W&VEöÆÆ–æu&VF÷WB"’çF—FÆRÒ.kXþŠxŽYš‚Ö÷W6VÖ÷fRK¨¾K»n™{N™©NKËzé~ûÈÎXúþˆ;ÞŠ*¾kXþŠxŽYšŽYŽ[›nûÈÎKˆÞzØžK¨î›Êj~Y»®K»n˜XÞ{Úâ#°Ð¢æÆ7DÖV7W&VE&VæFW$BÒæ÷s°Ð¢ÐÐ¢–b†æÆ7DÖ÷fTBbbæ÷rÒæÆ7DÖ÷fTBâ#’æ–çWDv6÷VçB³Ò°Ð¢æÆ7DÖ÷fTBÒæ÷s°Ð¢6öç7BfÆÆ&6µ‚ÒæÆ7D6Æ–VçE‚ÓÓÒçVÆÂò¢WfVçBæ6Æ–VçE‚ÒæÆ7D6Æ–VçEƒ°Ð¢6öç7BfÆÆ&6µ’ÒæÆ7D6Æ–VçE’ÓÓÒçVÆÂò¢WfVçBæ6Æ–VçE’ÒæÆ7D6Æ–VçE“°Ð¢6öç7BÖ÷fVÖVçE‚ÒWfVçBæÖ÷fVÖVçE‚ÇÂfÆÆ&6µƒ°Ð¢6öç7BÖ÷fVÖVçE’ÒWfVçBæÖ÷fVÖVçE’ÇÂfÆÆ&6µ“°Ð¢æÆ7D6Æ–VçE‚ÒWfVçBæ6Æ–VçEƒ°Ð¢æÆ7D6Æ–VçE’ÒWfVçBæ6Æ–VçE“°Ð Ð¢–b†ç67&VVâÓÓÒ&6Æ–'&F–öâ"bbæ6Æ–'&F–öãòç†6RÓÓÒ''Vææ–ær"’°Ð¢6öç7BG‚ÒçVÖ&W"æ—4f–æ—FR†Ö÷fVÖVçE‚’òÖ÷fVÖVçE‚¢°Ð¢æ6Æ–'&F–öâçF÷FÄF—7Fæ6R³ÒÖF‚æ'2†G‚“°Ð¢çVæF–æt6Æ–'&F–öå‚³ÒGƒ°Ð¢&WGW&ã°Ð¢ÐÐ Ð¢6öç7BFW7BÒçFW7C°Ð¢–b†ç67&VVâÓÒ'FW7B"ÇÂFW7Còç†6RÓÒ''Vææ–ær"’&WGW&ã°Ð¢6öç7BG‚ÒçVÖ&W"æ—4f–æ—FR†Ö÷fVÖVçE‚’òÖ÷fVÖVçE‚¢°Ð¢6öç7BG’ÒçVÖ&W"æ—4f–æ—FR†Ö÷fVÖVçE’’òÖ÷fVÖVçE’¢°Ð¢çVæF–æt–çWE‚³ÒGƒ°Ð¢çVæF–æt–çWE’³ÒG“°Ð¢çVæF–æt–çWEF‚³ÒÖF‚æ‡—÷B†G‚ÂG’“°Ð¢ÐÐ Ð¢gVæ7F–öâW‡÷'D†—7F÷'’‚’°Ð¢–b‚æ†—7F÷'’æÆVæwF‚’°Ð¢6†÷uFö7B‚.[Ù>X˜Þk*iÈžXúþZûÎX{®y¨NXènXû.Šë[Ù^8""“°Ð¢&WGW&ã°Ð¢ÐÐ¢6öç7B&Æö"ÒæWr&Æö"…´¥4ôâç7G&–æv–g’‡²fW'6–öã¢"ÂW‡÷'FVDC¢æWrFFR‚’çFô•4õ7G&–ær‚’Â6W76–öç3¢æ†—7F÷'’ÒÂçVÆÂÂ"•ÒÂ²G—S¢&Æ–6F–öâö§6öâ"Ò“°Ð¢6öç7BW&ÂÒU$Âæ7&VFTö&¦V7EU$Â†&Æö"“°Ð¢6öç7Bæ6†÷"ÒFö7VÖVçBæ7&VFTVÆVÖVçB‚&"“°Ð¢æ6†÷"æ‡&VbÒW&Ã°Ð¢æ6†÷"æF÷væÆöBÒ6Vç6—F—f—G’ÖfÆ–v‡BÖÆörÒG¶æWrFFR‚’çFô•4õ7G&–ær‚’ç6Æ–6RƒÃ—Òæ§6öæ°Ð¢æ6†÷"æ6Æ–6²‚“°Ð¢6WEF–ÖV÷WB‚‚’ÓâU$Âç&Wfö¶Tö&¦V7EU$Â‡W&Â’ÂS“°Ð¢ÐÐ Ð¢gVæ7F–öâ6ÆV$†—7F÷'’‚’°Ð¢–b‚æ†—7F÷'’æÆVæwF‚’°Ð¢6†÷uFö7B‚.XènXû.Šë[Ù^[{.{¸þK‹®z›®8""“°Ð¢&WGW&ã°Ð¢ÐÐ¢–b‚6öæf—&Ò‚.zîZé®kˆ^z›®XZŽ˜:ŽiÊÎYËj
-XxnXènXû.Y	~ûÉþjÚNi8ÞKÙÎizk9^i*N™H8""’’&WGW&ã°Ð¢æ†—7F÷'’ÒµÓ°Ð¢Æö6Å7F÷&vRç&VÖ÷fT—FVÒ…5Dõ$tUô´U’“°Ð¢Æö6Å7F÷&vRç&VÖ÷fT—FVÒ„ÄTt5•õ5Dõ$tUô´U’“°Ð¢&VæFW$†öÖR‚“°Ð¢6†÷uFö7B‚.iÊÎYËj
-XxnXènXû.[{.kˆ^z›®8""“°Ð¢ÐÐ Ð¢gVæ7F–öâvô†öÖR‚’°Ð¢6æ6VÄæ–ÖF–öäg&ÖR†ç&b“°Ð¢çFW7BÒçVÆÃ°Ð¢æ6Æ–'&F–öâÒçVÆÃ°Ð¢6†÷u67&VVâ‚&†öÖR"“°Ð¢&VæFW$†öÖR‚“°Ð¢–b†Fö7VÖVçBçö–çFW$Æö6´VÆVÖVçB’Fö7VÖVçBæW†—Eö–çFW$Æö6²‚“°Ð¢ÐÐ Ð¢gVæ7F–öâ6æ6VÄ7F—fUFW7B‚’°Ð¢6öç7B†5&öw&W72ÒçFW7BÇÂç7FvU&W7VÇG2æÆVæwFƒ°Ð¢–b††5&öw&W72bbv–æF÷ræ6öæf—&Ò‚.XùnkhŽiÊÎjÊkX¾Šù^ûÉþ[Ù>X˜ÞiÊ®ZèÎh‰y¨Ni[hÚîKˆÞKÉ®KùÞZÙŽ8""’’&WGW&ã°Ð¢vô†öÖR‚“°Ð¢ÐÐ Ð¢gVæ7F–öâ&–æDWfVçG2‚’°Ð¢&–æDÆWfW$6öçG&öÂ‚“°Ð¢Fö7VÖVçBçVW'•6VÆV7F÷$ÆÂ‚"ævÖR×7v—F6‚"’æf÷$V6‚‚†'WGFöâ’Óâ°Ð¢'WGFöâæFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â‚’Óâ7v—F6„vÖR†'WGFöâæFF6WBævÖR’“°Ð¢Ò“°Ð¢B‚'7F'DæWt'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â&Vv–å6WGW“°Ð¢B‚&6öææV7DÖ÷W6T'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â6öææV7D†–DÖ÷W6R“°Ð¢B‚'6WGW&õ6V&6‚"’æFDWfVçDÆ—7FVæW"‚&–çWB"Âf–ÇFW%6WGW&÷2“°Ð¢B‚'6WGW&ôG”f–ÇFW""’æFDWfVçDÆ—7FVæW"‚&6†ævR"Âf–ÇFW%6WGW&÷2“°Ð¢B‚'6WGW&ôÆ—7B"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â†WfVçB’Óâ°Ð¢6öç7B&÷rÒWfVçBçF&vWBæ6Æ÷6W7B‚%¶FF×6WGW×&òÖ–æFW…Ò"“°Ð¢–b‡&÷r’6VÆV7E6WGW&ò„çVÖ&W"‡&÷ræFF6WBç6WGW&ô–æFW‚’“°Ð¢Ò“°Ð¢B‚'6WGW&ôG”6†ö–6W2"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â†WfVçB’Óâ°Ð¢6öç7B6†—ÒWfVçBçF&vWBæ6Æ÷6W7B‚%¶FF×6WGW×&òÖG•Ò"“°Ð¢–b‚6†—’&WGW&ã°Ð¢ç6WGW&÷2çF&vWDG’ÒçVÖ&W"†6†—æFF6WBç6WGW&ôG’“°Ð¢&VæFW%6WGW&õ6VÆV7F–öâ‚“°Ð¢Ò“°Ð¢B‚&Ç•6WGW&ô'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"ÂÇ•6WGW&ô6†ö–6R“°Ð¢B‚&G”–çWB"’æFDWfVçDÆ—7FVæW"‚&–çWB"Â‚’Óâ°Ð¢–b†æG•6÷W&6RÓÓÒ'vV&†–B"’æG•6÷W&6RÒ&ÖçVÂ#°Ð¢Ò“°Ð¢B‚&f÷d–çWB"’æFDWfVçDÆ—7FVæW"‚&–çWB"Â‚’Óâ°Ð¢6öç7BfÇVRÒçVÖ&W"‚B‚&f÷d–çWB"’çfÇVR“°Ð¢–b„çVÖ&W"æ—4f–æ—FR‡fÇVR’’æ†÷&—¦öçFÄf÷bÒfÇVS°Ð¢Ò“°Ð Ð¢B‚'Fô6Æ–'&F–öä'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â&W&T6Æ–'&F–öâ“°Ð¢B‚'7F'D6Æ–'&F–öä'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â7F'D6Æ–'&F–öâ“°Ð¢B‚'6fU&W7VÇD'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â6fT7W'&VçE&W7VÇB“°Ð¢B‚''Väv–ä'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â&W7F'E'Vâ“°Ð¢B‚&6æ6VÅFW7D'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â6æ6VÄ7F—fUFW7B“°Ð¢B‚&W‡÷'D'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"ÂW‡÷'D†—7F÷'’“°Ð¢B‚&6ÆV$'Fâ"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â6ÆV$†—7F÷'’“°Ð¢B‚&6öçfW'FW$vÖU–6¶W""’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â†WfVçB’Óâ°Ð¢6öç7B'WGFöâÒWfVçBçF&vWBæ6Æ÷6W7B‚%¶FFÖ6öçfW'FW"ÖvÖUÒ"“°Ð¢–b†'WGFöâ’6WD6öçfW'FW$vÖR†'WGFöâæFF6WBæ6öçfW'FW$vÖR“°Ð¢Ò“°Ð¢B‚&6öçfW'FW%6Vç4–çWB"’æFDWfVçDÆ—7FVæW"‚&–çWB"Â†WfVçB’Óâ°Ð¢æ6öçfW'FW%6Vç2ÒçVÖ&W"†WfVçBçF&vWBçfÇVR“°Ð¢&VæFW$6öçfW'FW$÷WGWG2‚“°Ð¢Ò“°Ð¢B‚&6öçfW'FW$G”–çWB"’æFDWfVçDÆ—7FVæW"‚&–çWB"Â†WfVçB’Óâ°Ð¢æ6öçfW'FW$G’ÒçVÖ&W"†WfVçBçF&vWBçfÇVR“°Ð¢&VæFW$6öçfW'FW$÷WGWG2‚“°Ð¢Ò“°Ð¢B‚&6öçfW'FW$÷WGWDÆ—7B"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â†WfVçB’Óâ°Ð¢6öç7B'WGFöâÒWfVçBçF&vWBæ6Æ÷6W7B‚%¶FFÖ6÷’×fÇVUÒ"“°Ð¢–b†'WGFöâ’6÷”6öçfW'FW%fÇVR†'WGFöâæFF6WBæ6÷•fÇVR“°Ð¢Ò“°Ð¢Fö7VÖVçBçVW'•6VÆV7F÷$ÆÂ‚%¶FFÖvòÖ†öÖUÒ"’æf÷$V6‚‚†'WGFöâ’Óâ'WGFöâæFDWfVçDÆ—7FVæW"‚&6Æ–6²"Âvô†öÖR’“°Ð Ð¢B‚'6÷VæEFövvÆR"’æFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â7–æ2‚’Óâ°Ð¢ç6÷VæBÒç6÷VæC°Ð¢B‚'6÷VæEFövvÆR"’çFW‡D6öçFVçBÒç6÷VæBò/	ùH¢"¢/	ùHr#°Ð¢B‚'6÷VæEFövvÆR"’ç6WDGG&–'WFR‚&&–×&W76VB"Â7G&–ær†ç6÷VæB’“°Ð¢B‚'6÷VæEFövvÆR"’ç6WDGG&–'WFR‚&&–ÖÆ&VÂ"Âç6÷VæBò.X[>™zÞZ;™û2"¢.[ÈY
-þZ;™û2"“°Ð¢–b†ç6÷VæB’°Ð¢v—BVç7W&TVF–ò‚“°Ð¢FöæRƒs#ÂãbÂã3R“°Ð¢ÐÐ¢Ò“°Ð Ð¢Fö7VÖVçBæFDWfVçDÆ—7FVæW"‚&Ö÷W6VÖ÷fR"ÂöäÖ÷W6TÖ÷fR“°Ð¢Fö7VÖVçBæFDWfVçDÆ—7FVæW"‚'ö–çFW&Æö6¶6†ævR"Â‚’Óâ°Ð¢6öç7BÆö6¶VBÒ&ööÆVâ†Fö7VÖVçBçö–çFW$Æö6´VÆVÖVçB“°Ð¢–b†Æö6¶VB’6WD–çWE7FGW2†ç&t–çWBò.iz{;¾{¹þXª˜	þ‹é>XZR"¢.{;¾{¹þZHNyn‹é>XZR"Â&Æ—fR"“°Ð¢VÇ6R–b†ç67&VVâÓÓÒ'FW7B"bbçFW7CòæÆö6¶VBbb²''Vææ–ær"Â&6÷VçFF÷vâ"Â&f7F÷"Ö6÷VçFF÷vâ%Òæ–æ6ÇVFW2†çFW7Bç†6R’’°Ð¢W6T7F—fUFW7B‚.›Êj~™HZé®[{.˜X{¢"“°Ð¢ÐÐ¢Ò“°Ð¢Fö7VÖVçBæFDWfVçDÆ—7FVæW"‚'ö–çFW&Æö6¶W'&÷""Â‚’Óâ°Ð¢6WD–çWE7FGW2‚.X[ÎZëžz{¾XªŽjŠ[Èò"Â'v&â"“°Ð¢6†÷uFö7B‚.›Êj~™HZé®ZK‹J^ûÈÎ[{.[	ÞŠù^X[ÎZëž‹é>XZ^jŠ[Èþ8""“°Ð¢Ò“°Ð¢Fö7VÖVçBæFDWfVçDÆ—7FVæW"‚'f—6–&–Æ—G–6†ævR"Â‚’Óâ°Ð¢–b†Fö7VÖVçBæ†–FFVâbbç67&VVâÓÓÒ'FW7B"’W6T7F—fUFW7B‚.š^™Ú.[{.Xˆ~hÚ.X‹YîXû"“°Ð¢Ò“°Ð¢v–æF÷ræFDWfVçDÆ—7FVæW"‚&&ÇW""Â‚’Óâ°Ð¢–b†ç67&VVâÓÓÒ'FW7B"’W6T7F—fUFW7B‚.kXþŠxŽYšŽz©~Xú>ZKXë¾xJnx+’"“°Ð¢Ò“°Ð¢v–æF÷ræFDWfVçDÆ—7FVæW"‚'&W6—¦R"Â‚’Óâ°Ð¢æ6çf4&÷VæG2Òö&¦V7Bæ7&VFR†çVÆÂ“°Ð¢w&–D66†RæFVÆWFR‚B‚&6Æ–'&F–öä6çf2"’“°Ð¢w&–D66†RæFVÆWFR‚B‚&–Ô6çf2"’“°Ð¢–b†ç67&VVâÓÓÒ&6Æ–'&F–öâ"’G&t6Æ–'&F–öâ‚“°Ð¢–b†ç67&VVâÓÓÒ'FW7B"’G&uFW7E66VæR‚“°Ð¢Ò“°Ð¢B‚'FW7E7FvR"’æFDWfVçDÆ—7FVæW"‚'v†VVÂ"Â†WfVçB’Óâ°Ð¢–b†ç67&VVâÓÓÒ'FW7B"’WfVçBç&WfVçDFVfVÇB‚“°Ð¢ÒÂ²76—fS¢fÇ6RÒ“°Ð¢B‚'FW7E7FvR"’æFDWfVçDÆ—7FVæW"‚&Ö÷W6VF÷vâ"Â†WfVçB’Óâ°Ð¢–b†WfVçBæ'WGFöâÓÒÇÂç67&VVâÓÒ'FW7B"’&WGW&ã°Ð¢WfVçBç&WfVçDFVfVÇB‚“°Ð¢GFV×E6†÷B‡W&f÷&Öæ6Rææ÷r‚’“°Ð¢Ò“°Ð¢–b‚%&W6—¦Tö'6W'fW""–âv–æF÷r’°Ð¢6öç7Bö'6W'fW"ÒæWr&W6—¦Tö'6W'fW"‚‚’Óâ°Ð¢FVÆWFRæ6çf4&÷VæG2æ–Ô6çf3°Ð¢w&–D66†RæFVÆWFR‚B‚&–Ô6çf2"’“°Ð¢–b†ç67&VVâÓÓÒ'FW7B"’G&uFW7E66VæR‚“°Ð¢Ò“°Ð¢ö'6W'fW"æö'6W'fR‚B‚&–Ô6çf2"’“°Ð¢ÐÐ¢ÐÐ Ð¢gVæ7F–öâ&–æDÖ÷F–öäfVVF&6²‚’°Ð¢Fö7VÖVçBæFDWfVçDÆ—7FVæW"‚&6Æ–6²"Â†WfVçB’Óâ°Ð¢6öç7B6öçG&öÂÒWfVçBçF&vWBæ6Æ÷6W7B‚&'WGFöã¦æ÷B‚ævÖR×7v—F6‚’ÂæÆ"ÖVçG'’ÖÆ–æ²"“°Ð¢–b†6öçG&öÂ’VÇ6T6öçG&öÂ†6öçG&öÂ“°Ð¢Ò“°Ð¢ÐÐ Ð¢gVæ7F–öâ–æ—B‚’°Ð¢Ç”ÆVæ6…&ÖWFW'2‚“°Ð¢ÆöD†—7F÷'’‚“°Ð¢WFFTvÖUV’‚“°Ð¢–æ—F–Æ—¦U6WGW&õ6VÆV7F÷"‚“°Ð¢&VæFW$†öÖR‚“°Ð¢&–æDWfVçG2‚“°Ð¢&–æDÖ÷F–öäfVVF&6²‚“°Ð¢v–æF÷ræFDWfVçDÆ—7FVæW"‚'&W6—¦R"ÂVWVT†öÖU÷vW$Æ–÷WBÂ²76—fS¢G'VRÒ“°Ð¢–æ—D†–D76—7B‚“°Ð¢6WD–çWE7FGW2‚.zØž[è^›Êj~‹é>XZR"Â""“°Ð¢G&t6Æ–'&F–öâ‚“°Ð¢G&uFW7E66VæR‚“°Ð¢'Vå67&VVäÖ÷F–öâ‚&†öÖR"“°Ð¢ÐÐ Ð¢–æ—B‚“°Ð¢Ò’‚“°Ð
+        homePowerTimeline = gsap.timeline({
+          defaults: { overwrite: "auto" },
+          onComplete: () => {
+            gsap.set(panels, { clearProps: "opacity,visibility,transform,filter,clipPath,boxShadow,willChange" });
+            gsap.set(leverTrack, { clearProps: "filter,boxShadow" });
+            gsap.set(loopFlows, { strokeDasharray: "none", strokeDashoffset: 0, opacity: .55 });
+            gsap.set(connectorFlows, { strokeDasharray: "none", strokeDashoffset: 0, opacity: .52 });
+            gsap.set(parts.nodes, { opacity: .58, scale: 1 });
+            gsap.to(parts.network, { opacity: .72, duration: .24, ease: "power1.out" });
+            homePowerTimeline = null;
+          }
+        });
+
+        homePowerTimeline
+          .addLabel("mainPower", 0)
+          .fromTo(brandMark,
+            { rotate: -24, scale: .9, filter: "brightness(.72)" },
+            { rotate: 0, scale: 1, filter: "brightness(1)", duration: .48, ease: "back.out(1.5)" },
+            "mainPower")
+          .fromTo(lamps,
+            { opacity: .28, filter: "brightness(.55)" },
+            { opacity: 1, filter: "brightness(1)", duration: .36, stagger: .035, ease: "power2.out" },
+            "mainPower+=.04")
+          .addLabel("panelsOnline", .08)
+          .to(panels, panelDefaults, "panelsOnline")
+          .to(loopFlows,
+            { strokeDashoffset: 0, opacity: 1, duration: .62, ease: "power2.inOut" },
+            "panelsOnline")
+          .to(connectorFlows,
+            { strokeDashoffset: 0, opacity: 1, duration: .42, ease: "power1.inOut" },
+            "panelsOnline+=.08")
+          .to(parts.nodes,
+            { opacity: 1, scale: 1.32, duration: .18, yoyo: true, repeat: 1, stagger: .018, ease: "power2.out" },
+            "panelsOnline+=.28")
+          .fromTo(parts.cluster.querySelectorAll(".cluster-header, .home-result-empty, .home-result-content"),
+            { y: 7, opacity: .35 },
+            { y: 0, opacity: 1, duration: .3, stagger: .04, ease: "power2.out" },
+            "panelsOnline+=.22")
+          .fromTo(leverTrack,
+            { filter: "brightness(.55)", boxShadow: "inset 0 8px 18px var(--panel-void), 0 0 0 rgba(155,229,100,0)" },
+            { filter: "brightness(1)", boxShadow: "inset 0 8px 18px var(--panel-void), 0 0 22px rgba(155,229,100,.24)", duration: .24, yoyo: true, repeat: 1, ease: "power2.out" },
+            "panelsOnline+=.2")
+          .fromTo(parts.history.querySelectorAll(".history-header, .history-list"),
+            { y: 7, opacity: .35 },
+            { y: 0, opacity: 1, duration: .3, stagger: .04, ease: "power2.out" },
+            "panelsOnline+=.22")
+          .fromTo(parts.converter.querySelectorAll(".converter-copy, .converter-controls"),
+            { y: 7, opacity: .34 },
+            { y: 0, opacity: 1, duration: .3, stagger: .04, ease: "power2.out" },
+            "panelsOnline+=.22")
+          .to(parts.nodes, { opacity: .58, scale: 1, duration: .18, ease: "power1.out" }, "panelsOnline+=.58");
+        return true;
+      }
+
+      function queueHomePowerLayout() {
+        cancelAnimationFrame(homePowerResizeFrame);
+        homePowerResizeFrame = requestAnimationFrame(() => {
+          if (homePowerTimeline) {
+            runHomePowerSequence();
+          } else {
+            layoutHomePowerBus();
+          }
+          homePowerResizeFrame = 0;
+        });
+      }
+
+      function animateNumericReadout(element, from, to, formatter, duration = 620) {
+        if (!element || !motionAllowed() || !Number.isFinite(from) || !Number.isFinite(to)) return;
+        const token = Symbol("readout");
+        element.motionToken = token;
+        const startedAt = performance.now();
+        const tick = (now) => {
+          if (element.motionToken !== token) return;
+          const progress = clamp((now - startedAt) / duration, 0, 1);
+          const eased = 1 - ((1 - progress) ** 4);
+          element.textContent = formatter(from + (to - from) * eased);
+          if (progress < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            element.textContent = formatter(to);
+            playMotion(element, [
+              { color: "var(--ink)", textShadow: "0 0 0 rgba(155,229,100,0)" },
+              { color: "var(--active-soft)", textShadow: "0 0 16px rgba(155,229,100,.42)", offset: .38 },
+              { color: "var(--active-soft)", textShadow: "0 0 0 rgba(155,229,100,0)" }
+            ], { duration: 360 });
+          }
+        };
+        requestAnimationFrame(tick);
+      }
+
+      function runResultLockSequence() {
+        const result = app.currentResult;
+        if (!result || !motionAllowed()) return;
+        const resultGame = GAMES[result.gameId] || GAMES.valorant;
+        const baseSensitivity = Number(result.baseSens) || Number(result.mainSens);
+        const baseDistance = cm360(result.dpi, baseSensitivity, resultGame.yaw);
+        animateNumericReadout($("resultPrimarySens"), baseSensitivity, result.mainSens, (value) => formatSens(value, resultGame.id), 720);
+        animateNumericReadout($("resultCm360"), baseDistance, result.cm360, (value) => `${value.toFixed(1)} cm`);
+        animateNumericReadout($("resultEdpi"), edpi(result.dpi, baseSensitivity), result.edpi, (value) => String(Math.round(value)));
+        animateNumericReadout($("resultAccuracy"), 0, (result.accuracy || 0) * 100, (value) => `${Math.round(value)}%`, 540);
+        animateNumericReadout($("resultConfidence"), 0, result.confidence * 100, (value) => `${Math.round(value)}%`, 580);
+
+        document.querySelectorAll("#screen-results .factor-score-fill, #screen-results .score-fill").forEach((fill, index) => {
+          const computed = getComputedStyle(fill).transform;
+          playMotion(fill, [
+            { transform: "scaleX(0)", filter: "brightness(1.65)" },
+            { transform: computed === "none" ? "scaleX(1)" : computed, filter: "brightness(1)" }
+          ], { duration: 560, delay: 210 + index * 55 });
+        });
+      }
+
+      function runScreenMotion(name) {
+        if (!motionAllowed()) return;
+        const screen = $(`screen-${name}`);
+        if (!screen) return;
+        if (name === "home") {
+          runConsoleBoot();
+          if (runHomePowerSequence()) return;
+        } else {
+          stopHomePowerSequence({ reset: true });
+        }
+        const plans = {
+          home: [],
+          setup: [
+            [".workflow-rail", "translateX(-18px)", "inset(0 100% 0 0)"],
+            [".setup-card", "translateY(12px)", "inset(0 0 100% 0 round 8px)"]
+          ],
+          calibration: [
+            [".calibration-info", "translateX(-16px)", "inset(0 100% 0 0 round 12px)"],
+            [".calibration-stage", "translateX(12px)", "inset(0 0 0 100% round 12px)"]
+          ],
+          test: [
+            [".test-sidebar:first-child", "translateX(-12px)", "inset(0 100% 0 0 round 12px)"],
+            [".test-main", "scale(.992)", "inset(46% 0 46% 0 round 12px)"],
+            [".test-sidebar:last-child", "translateX(12px)", "inset(0 0 0 100% round 12px)"]
+          ],
+          results: [
+            [".result-cluster", "translateX(-18px)", "inset(0 100% 0 0 round 12px)"],
+            [".result-detail", "translateX(18px)", "inset(0 0 0 100% round 12px)"]
+          ]
+        };
+        (plans[name] || []).forEach(([selector, transform, clipPath], index) => {
+          playMotion(screen.querySelector(selector), [
+            { opacity: .3, transform, clipPath, filter: "brightness(.72)" },
+            { opacity: 1, transform: "none", clipPath: "inset(0 0 0 0 round 12px)", filter: "brightness(1)" }
+          ], { duration: name === "test" ? 280 : 520, delay: 30 + index * 75 });
+        });
+        if (name === "results") setTimeout(runResultLockSequence, 150);
+      }
+
+      function pulseControl(control) {
+        if (!control || !motionAllowed() || control.disabled) return;
+        const restingShadow = getComputedStyle(control).boxShadow;
+        playMotion(control, [
+          { filter: "brightness(1)", boxShadow: restingShadow },
+          { filter: "brightness(1.28)", boxShadow: "0 0 0 2px rgba(155,229,100,.2), 0 5px 14px rgba(0,0,0,.54)", offset: .38 },
+          { filter: "brightness(1)", boxShadow: restingShadow }
+        ], { duration: 260 });
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function round(value, digits = 3) {
+        const power = 10 ** digits;
+        return Math.round(value * power) / power;
+      }
+
+      function currentGame() {
+        return GAMES[app.gameId] || GAMES.valorant;
+      }
+
+      function applyLaunchParameters() {
+        const params = new URLSearchParams(location.search);
+        const requestedGame = params.get("game");
+        const requestedDpi = Number(params.get("dpi"));
+        const requestedSens = Number(params.get("sens"));
+        const game = GAMES[requestedGame] || currentGame();
+        if (
+          !requestedGame ||
+          !GAMES[requestedGame] ||
+          !Number.isFinite(requestedDpi) ||
+          requestedDpi < 100 ||
+          requestedDpi > 32000 ||
+          !Number.isFinite(requestedSens) ||
+          requestedSens < game.sens.min ||
+          requestedSens > game.sens.max
+        ) {
+          return;
+        }
+        app.gameId = game.id;
+        app.dpi = requestedDpi;
+        app.currentSens = requestedSens;
+        app.horizontalFov = game.fov;
+        app.launchPreset = { gameId: game.id, dpi: requestedDpi, sensitivity: requestedSens };
+        app.converterGameId = game.id;
+        app.converterDpi = requestedDpi;
+        app.converterSens = requestedSens;
+        app.converterInitialized = true;
+        $("dpiInput").value = String(requestedDpi);
+        $("sensInput").value = formatSens(requestedSens, game.id);
+      }
+
+      function gameIcon(gameId) {
+        return document.querySelector(`.game-switch[data-game="${gameId}"] img`)?.src || "";
+      }
+
+      function formatSens(value, gameId = app.gameId) {
+        const game = GAMES[gameId] || currentGame();
+        return Number(value).toFixed(game.sens.digits);
+      }
+
+      function edpi(dpi, sens) {
+        return dpi * sens;
+      }
+
+      function cm360(dpi, sens, yaw = currentGame().yaw) {
+        return (360 * 2.54) / (dpi * sens * yaw);
+      }
+
+      function sensitivityForCm360(distance, dpi, yaw) {
+        return (360 * 2.54) / (dpi * yaw * distance);
+      }
+
+      function equivalentSensitivity(sensitivity, fromGame, toGame) {
+        return sensitivity * fromGame.yaw / toGame.yaw;
+      }
+
+      function candidateSensitivity(baseSensitivity, factor, game = currentGame()) {
+        return clamp(baseSensitivity * factor, game.sens.min, game.sens.max);
+      }
+
+
+      function setupProEquivalent(player, targetDpi, game = currentGame()) {
+        const valorantSensitivity = player.edpi / targetDpi;
+        const rawSensitivity = equivalentSensitivity(valorantSensitivity, GAMES.valorant, game);
+        const sensitivity = clamp(rawSensitivity, game.sens.min, game.sens.max);
+        return {
+          sensitivity,
+          cm: cm360(targetDpi, sensitivity, game.yaw),
+          rangeLimited: Math.abs(sensitivity - rawSensitivity) / Math.max(.001, rawSensitivity) > .01
+        };
+      }
+
+      function renderSetupProList() {
+        const list = $("setupProList");
+        if (!list) return;
+        if (!app.setupPros.filtered.length) {
+          const empty = document.createElement("div");
+          empty.className = "setup-pro-list-state";
+          empty.textContent = "?????????????????????";
+          list.replaceChildren(empty);
+          $("setupProListState").textContent = "0 ?????";
+          return;
+        }
+        const rows = app.setupPros.filtered.map((player) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "setup-pro-row";
+          button.dataset.setupProIndex = String(player.datasetIndex);
+          button.setAttribute("role", "option");
+          button.setAttribute("aria-selected", String(app.setupPros.selected?.datasetIndex === player.datasetIndex));
+          const identity = document.createElement("span");
+          const name = document.createElement("strong");
+          name.textContent = player.player;
+          const team = document.createElement("small");
+          team.textContent = player.team;
+          identity.append(name, team);
+          const dpi = document.createElement("b");
+          dpi.textContent = `${player.dpi} DPI`;
+          button.append(identity, dpi);
+          return button;
+        });
+        list.replaceChildren(...rows);
+        const date = app.setupPros.retrievedAt ? new Date(app.setupPros.retrievedAt).toLocaleDateString("zh-CN") : "????";
+        $("setupProListState").textContent = `${app.setupPros.filtered.length} ??? ? ??????????? ? ?? ${date}`;
+      }
+
+      function filterSetupPros() {
+        const query = $("setupProSearch").value.trim().toLocaleLowerCase();
+        const dpi = Number($("setupProDpiFilter").value) || null;
+        app.setupPros.filtered = app.setupPros.players.filter((player) => {
+          const searchable = `${player.player} ${player.team} ${player.mouse}`.toLocaleLowerCase();
+          return (!query || searchable.includes(query)) && (!dpi || player.dpi === dpi);
+        });
+        renderSetupProList();
+      }
+
+      function renderSetupProSelection() {
+        const player = app.setupPros.selected;
+        if (!player || !$("setupProPlayer")) return;
+        const targetDpi = clamp(Number(app.setupPros.targetDpi) || player.dpi, 100, 32000);
+        app.setupPros.targetDpi = targetDpi;
+        $("setupProPlayer").textContent = `${player.player} ? ${player.team}`;
+        $("setupProMeta").textContent = `${player.mouse} ? ?? ${player.dpi} DPI / ${player.sensitivity} ??? / ${player.edpi} eDPI`;
+        const candidateDpis = [...new Set([400, 800, 1600, 3200, player.dpi, targetDpi])]
+          .filter((dpi) => dpi >= 100 && dpi <= 32000)
+          .sort((a, b) => a - b);
+        $("setupProDpiChoices").replaceChildren(...candidateDpis.map((dpi) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "setup-pro-dpi-chip";
+          button.dataset.setupProDpi = String(dpi);
+          button.setAttribute("aria-pressed", String(dpi === targetDpi));
+          button.textContent = `${dpi} DPI`;
+          return button;
+        }));
+        const game = currentGame();
+        const preview = setupProEquivalent(player, targetDpi, game);
+        $("setupProTargetDpi").textContent = String(targetDpi);
+        $("setupProSensLabel").textContent = `${game.name} ???`;
+        $("setupProTargetSens").textContent = `${formatSens(preview.sensitivity, game.id)}${preview.rangeLimited ? "*" : ""}`;
+        $("setupProTargetCm").textContent = `${preview.cm.toFixed(1)} cm`;
+        $("applySetupProBtn").disabled = false;
+        $("setupProList")?.querySelectorAll("[data-setup-pro-index]").forEach((row) => {
+          row.setAttribute("aria-selected", String(Number(row.dataset.setupProIndex) === player.datasetIndex));
+        });
+      }
+
+      function selectSetupPro(datasetIndex) {
+        const player = app.setupPros.players.find((entry) => entry.datasetIndex === datasetIndex);
+        if (!player) return;
+        app.setupPros.selected = player;
+        app.setupPros.targetDpi = player.dpi;
+        renderSetupProSelection();
+      }
+
+      function applySetupProChoice() {
+        const player = app.setupPros.selected;
+        if (!player) return;
+        const targetDpi = app.setupPros.targetDpi;
+        const game = currentGame();
+        const preview = setupProEquivalent(player, targetDpi, game);
+        $("dpiInput").value = String(targetDpi);
+        $("sensInput").value = formatSens(preview.sensitivity, game.id);
+        app.dpi = targetDpi;
+        app.currentSens = preview.sensitivity;
+        app.dpiSource = "prosettings";
+        tone(690, .06, .035);
+        showToast(`??? ${player.player} ????????${targetDpi} DPI?${game.name} ${formatSens(preview.sensitivity, game.id)}??????????`);
+      }
+
+      function initializeSetupProSelector() {
+        const snapshot = window.VALORANT_PRO_SNAPSHOT;
+        if (!snapshot || !Array.isArray(snapshot.players) || !snapshot.players.length) {
+          $("setupProList").innerHTML = '<div class="setup-pro-list-state">??????????????? DPI????????????</div>';
+          $("setupProListState").textContent = "?????";
+          $("setupProSearch").disabled = true;
+          $("setupProDpiFilter").disabled = true;
+          return;
+        }
+        app.setupPros.players = snapshot.players.map((player, datasetIndex) => ({ ...player, datasetIndex }));
+        app.setupPros.retrievedAt = snapshot.retrievedAt;
+        const counts = new Map();
+        app.setupPros.players.forEach((player) => counts.set(player.dpi, (counts.get(player.dpi) || 0) + 1));
+        const filter = $("setupProDpiFilter");
+        const allOption = document.createElement("option");
+        allOption.value = "";
+        allOption.textContent = "??";
+        const options = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([dpi, count]) => {
+          const option = document.createElement("option");
+          option.value = String(dpi);
+          option.textContent = `${dpi} (${count})`;
+          return option;
+        });
+        filter.replaceChildren(allOption, ...options);
+        app.setupPros.filtered = [...app.setupPros.players];
+        app.setupPros.selected = app.setupPros.players[0];
+        app.setupPros.targetDpi = app.setupPros.selected.dpi;
+        renderSetupProList();
+        renderSetupProSelection();
+      }
+      function evidenceItems(result) {
+        const hasNumber = (value) => value !== null && value !== undefined && Number.isFinite(Number(value));
+        return [
+          ["??", hasNumber(result.shots) ? `${result.hits || 0} / ${result.shots}` : "?"],
+          ["??", hasNumber(result.misses) ? result.misses : "?"],
+          ["???", hasNumber(result.accuracy) ? `${Math.round(result.accuracy * 100)}%` : "?"],
+          ["????", hasNumber(result.avgReaction) ? `${Math.round(result.avgReaction)} ms` : "?"],
+          ["????", hasNumber(result.avgClickError) ? `${Math.round(result.avgClickError * 100)}%` : "?"],
+          ["????", hasNumber(result.pathEfficiency) ? `${Math.round(result.pathEfficiency * 100)}%` : "?"],
+          ["??", hasNumber(result.overshoots) ? result.overshoots : "?"],
+          ["????", hasNumber(result.control) ? `${Math.round(result.control)}%` : "?"]
+        ];
+      }
+
+      function renderEvidenceGrid(container, result) {
+        container.replaceChildren(...evidenceItems(result).map(([label, value]) => {
+          const item = document.createElement("div");
+          item.innerHTML = `<dt>${label}</dt><dd>${value}</dd>`;
+          return item;
+        }));
+      }
+
+      function conversionValues(sensitivity, fromGame, dpi) {
+        return Object.values(GAMES).map((game) => {
+          const rawSensitivity = equivalentSensitivity(sensitivity, fromGame, game);
+          const convertedSensitivity = clamp(rawSensitivity, game.sens.min, game.sens.max);
+          const convertedCm360 = cm360(dpi, convertedSensitivity, game.yaw);
+          return {
+            game,
+            sensitivity: convertedSensitivity,
+            cm360: convertedCm360,
+            rangeLimited: Math.abs(convertedSensitivity - rawSensitivity) / Math.max(.001, rawSensitivity) > .01
+          };
+        });
+      }
+
+      function renderCompactConversions(container, result) {
+        const fromGame = GAMES[result.gameId] || GAMES.valorant;
+        container.replaceChildren(...conversionValues(result.mainSens, fromGame, result.dpi).map((entry) => {
+          const row = document.createElement("li");
+          row.className = `compact-conversion-row${entry.game.id === fromGame.id ? " current" : ""}`;
+          row.innerHTML = `
+            <img src="${gameIcon(entry.game.id)}" alt="">
+            <strong>${entry.game.name}</strong>
+            <strong>${formatSens(entry.sensitivity, entry.game.id)}</strong>
+            <span>${entry.cm360.toFixed(1)} cm</span>`;
+          return row;
+        }));
+      }
+
+      function initializeConverter() {
+        if (app.converterInitialized) return;
+        const latest = app.history[0];
+        const sourceGame = latest ? (GAMES[latest.gameId] || currentGame()) : currentGame();
+        app.converterGameId = sourceGame.id;
+        app.converterSens = latest?.mainSens || app.currentSens || sourceGame.sens.default;
+        app.converterDpi = latest?.dpi || app.dpi || 800;
+        app.converterInitialized = true;
+      }
+
+      function renderConverter() {
+        initializeConverter();
+        const sourceGame = GAMES[app.converterGameId] || GAMES.valorant;
+        const picker = $("converterGamePicker");
+        picker.replaceChildren(...Object.values(GAMES).map((game) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "converter-game-button";
+          button.dataset.converterGame = game.id;
+          button.setAttribute("role", "radio");
+          button.setAttribute("aria-checked", String(game.id === sourceGame.id));
+          button.innerHTML = `<img src="${gameIcon(game.id)}" alt=""><span>${game.name}</span>`;
+          return button;
+        }));
+
+        const sensitivityInput = $("converterSensInput");
+        sensitivityInput.min = sourceGame.sens.min;
+        sensitivityInput.max = sourceGame.sens.max;
+        sensitivityInput.step = sourceGame.sens.step;
+        sensitivityInput.value = formatSens(clamp(app.converterSens, sourceGame.sens.min, sourceGame.sens.max), sourceGame.id);
+        $("converterDpiInput").value = String(app.converterDpi);
+        renderConverterOutputs();
+      }
+
+      function renderConverterOutputs() {
+        const sourceGame = GAMES[app.converterGameId] || GAMES.valorant;
+        const output = $("converterOutputList");
+        const validSensitivity = Number(app.converterSens);
+        const validDpi = Number(app.converterDpi);
+        if (!Number.isFinite(validSensitivity) || validSensitivity <= 0 || !Number.isFinite(validDpi) || validDpi < 100) {
+          output.innerHTML = `<div class="notice">???????????? DPI ?????</div>`;
+          return;
+        }
+        output.replaceChildren(...conversionValues(validSensitivity, sourceGame, validDpi).map((entry) => {
+          const row = document.createElement("div");
+          row.className = "converter-output";
+          const formatted = formatSens(entry.sensitivity, entry.game.id);
+          row.innerHTML = `
+            <img src="${gameIcon(entry.game.id)}" alt="">
+            <span>${entry.game.name}</span>
+            <strong>${formatted}</strong>
+            <small>${entry.cm360.toFixed(1)} cm/360?${entry.rangeLimited ? " ? ????" : ""}</small>
+            <button class="copy-value-btn" type="button" data-copy-value="${formatted}" aria-label="?? ${entry.game.name} ??? ${formatted}">??</button>`;
+          return row;
+        }));
+      }
+
+      function setConverterGame(nextGameId) {
+        const fromGame = GAMES[app.converterGameId] || GAMES.valorant;
+        const toGame = GAMES[nextGameId];
+        if (!toGame || toGame.id === fromGame.id) return;
+        app.converterSens = clamp(equivalentSensitivity(Number(app.converterSens) || fromGame.sens.default, fromGame, toGame), toGame.sens.min, toGame.sens.max);
+        app.converterGameId = toGame.id;
+        renderConverter();
+      }
+
+      async function copyConverterValue(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+          showToast(`?????? ${value}?`);
+        } catch {
+          const input = $("converterSensInput");
+          input.value = value;
+          input.select();
+          showToast("?????????????????????????");
+        }
+      }
+
+      function mulberry32(seed) {
+        return function() {
+          let t = seed += 0x6D2B79F5;
+          t = Math.imul(t ^ t >>> 15, t | 1);
+          t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+      }
+
+      function showToast(message) {
+        const toast = $("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove("show"), 2600);
+      }
+
+      function setInputStatus(mode, state = "live") {
+        $("inputModeText").textContent = mode;
+        $("inputLamp").className = `lamp ${state}`;
+      }
+
+      function updateGameUi() {
+        const game = currentGame();
+        document.querySelectorAll(".game-switch").forEach((button) => {
+          const selected = button.dataset.game === game.id;
+          button.setAttribute("aria-checked", String(selected));
+        });
+        $("brandGameName").textContent = `${game.brandName} ? `;
+        $("setupGameName").textContent = game.name;
+        $("setupGameIcon").src = gameIcon(game.id);
+        $("setupGameIcon").alt = `${game.name} ??`;
+        $("sensInput").min = String(game.sens.min);
+        $("sensInput").max = String(game.sens.max);
+        $("sensInput").step = String(game.sens.step);
+        $("sensHint").textContent = `${game.name} ???? ${game.sens.min}?${game.sens.max} ????????? ${game.sens.step}???????????????????`;
+        $("fovInput").value = String(app.horizontalFov);
+
+        document.title = `${game.name} ? ????????`;
+        renderSetupProSelection();
+      }
+
+      function switchGame(nextGameId) {
+        if (!GAMES[nextGameId] || nextGameId === app.gameId) return;
+        if (!["home", "setup"].includes(app.screen)) {
+          showToast("???????????????");
+          return;
+        }
+        const from = currentGame();
+        const to = GAMES[nextGameId];
+        const dpi = clamp(Number($("dpiInput").value) || app.dpi || 800, 100, 32000);
+        const currentValue = Number($("sensInput").value);
+        const sourceSensitivity = Number.isFinite(currentValue) && currentValue > 0 ? currentValue : app.currentSens;
+        const beforeCm = cm360(dpi, sourceSensitivity, from.yaw);
+        const converted = clamp(equivalentSensitivity(sourceSensitivity, from, to), to.sens.min, to.sens.max);
+        app.gameId = nextGameId;
+        app.horizontalFov = to.fov;
+        app.currentSens = converted;
+        $("sensInput").value = formatSens(converted, to.id);
+        updateGameUi();
+        renderHome();
+        const selectedButton = document.querySelector(`.game-switch[data-game="${nextGameId}"]`);
+        playMotion(selectedButton, [
+          { transform: "scale(.82) rotate(-4deg)", filter: "brightness(1.7)" },
+          { transform: "scale(1.08) rotate(1deg)", filter: "brightness(1.25)", offset: .56 },
+          { transform: "scale(1) rotate(0)", filter: "brightness(1)" }
+        ], { duration: 360 });
+        tone(620, .045, .028);
+        const afterCm = cm360(dpi, Number($("sensInput").value), to.yaw);
+        const clampedNote = Math.abs(afterCm - beforeCm) / beforeCm > .01 ? "?????????????" : "";
+        showToast(`${from.name} ? ${to.name}????? ${formatSens(converted, to.id)}???? ${beforeCm.toFixed(1)} cm/360?${clampedNote}??????????????`);
+      }
+
+      function hexId(value) {
+        return `0x${Number(value || 0).toString(16).padStart(4, "0").toUpperCase()}`;
+      }
+
+      function describeHidDevice(device) {
+        const vid = Number(device?.vendorId);
+        const pid = Number(device?.productId);
+        let brand = "????";
+        let candidate = false;
+        let readerKind = "";
+        if (vid === 0x1532) {
+          brand = "Razer";
+          candidate = true;
+          readerKind = "razer";
+        } else if (vid === 0x046d) {
+          brand = "Logitech";
+          candidate = true;
+          readerKind = "logitech";
+        } else if (vid === 0x373b || vid === 0x3710) {
+          brand = "ATK";
+          candidate = true;
+          readerKind = "atk";
+        }
+        return {
+          brand,
+          candidate,
+          readerKind,
+          name: device?.productName || "???????",
+          key: `${vid}:${pid}`,
+          ids: `VID ${hexId(vid)} ? PID ${hexId(pid)}`
+        };
+      }
+
+      function setHidAssist(status, state = "", meta = "") {
+        $("hidStatus").textContent = status;
+        $("hidLamp").className = `lamp ${state}`;
+        $("hidDeviceMeta").textContent = meta;
+        $("hidDeviceMeta").hidden = !meta;
+      }
+
+      function updateHardwareReadouts({ dpi = app.hardwareDpi, pollingHz = app.hardwarePollingHz } = {}) {
+        app.hardwareDpi = Number.isFinite(Number(dpi)) ? Number(dpi) : null;
+        app.hardwarePollingHz = Number.isFinite(Number(pollingHz)) ? Number(pollingHz) : null;
+        $("hidDpiReadout").textContent = app.hardwareDpi ? `${app.hardwareDpi}` : "?";
+        $("hidPollingReadout").textContent = app.hardwarePollingHz ? `${app.hardwarePollingHz} Hz` : "?";
+      }
+
+      function canUseWebHid() {
+        return location.protocol !== "file:" && window.isSecureContext && Boolean(navigator.hid);
+      }
+
+      function dataViewBytes(data) {
+        return new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+      }
+
+      function withTimeout(ms, executor) {
+        return new Promise((resolve, reject) => {
+          const timer = setTimeout(() => reject(new Error("??????????")), ms);
+          executor(
+            (value) => { clearTimeout(timer); resolve(value); },
+            (error) => { clearTimeout(timer); reject(error); }
+          );
+        });
+      }
+
+      async function hidppRequest(device, deviceIndex, featureIndex, functionId, params = [0, 0, 0]) {
+        const softwareId = 0x01;
+        const fnSw = ((functionId & 0x0f) << 4) | softwareId;
+        const response = withTimeout(420, (resolve) => {
+          const handler = (event) => {
+            if (event.device !== device || ![0x10, 0x11].includes(event.reportId)) return;
+            const bytes = dataViewBytes(event.data);
+            if (bytes[0] !== deviceIndex || bytes[1] !== featureIndex || bytes[2] !== fnSw) return;
+            device.removeEventListener("inputreport", handler);
+            resolve(bytes);
+          };
+          device.addEventListener("inputreport", handler);
+          setTimeout(() => device.removeEventListener("inputreport", handler), 450);
+        });
+        response.catch(() => {});
+        await device.sendReport(0x10, Uint8Array.from([
+          deviceIndex, featureIndex, fnSw,
+          params[0] || 0, params[1] || 0, params[2] || 0
+        ]));
+        return response;
+      }
+
+      async function hidppFeatureIndex(device, deviceIndex, featureId) {
+        const response = await hidppRequest(device, deviceIndex, 0x00, 0x00, [
+          (featureId >> 8) & 0xff, featureId & 0xff, 0
+        ]);
+        const index = response[3];
+        return index && index !== 0xff ? index : null;
+      }
+
+      async function readLogitechConfig(device) {
+        const candidateIndices = device.productId === 0xc539 ? [1, 2, 3, 4, 5, 6] : [0xff, 1, 2, 3, 4, 5, 6];
+        for (const deviceIndex of candidateIndices) {
+          try {
+            const dpiFeature = await hidppFeatureIndex(device, deviceIndex, 0x2201);
+            if (!dpiFeature) continue;
+            const dpiResponse = await hidppRequest(device, deviceIndex, dpiFeature, 0x02, [0, 0, 0]);
+            const dpi = (dpiResponse[4] << 8) | dpiResponse[5];
+            let pollingHz = null;
+            try {
+              const reportRateFeature = await hidppFeatureIndex(device, deviceIndex, 0x8060);
+              if (reportRateFeature) {
+                const pollingResponse = await hidppRequest(device, deviceIndex, reportRateFeature, 0x01, [0, 0, 0]);
+                const intervalMs = pollingResponse[3];
+                if (intervalMs >= 1 && intervalMs <= 8) pollingHz = Math.round(1000 / intervalMs);
+              }
+            } catch { /* DPI remains usable when report-rate feature is absent. */ }
+            if (dpi >= 50 && dpi <= 60000) return { dpi, pollingHz, protocol: `HID++ 2.0 / device ${deviceIndex}` };
+          } catch { /* Receiver slots and unsupported interfaces are expected. */ }
+        }
+        throw new Error("?? Logitech ??????? HID++ 2.0 ????");
+      }
+
+      function atkChecksum(frame) {
+        let sum = 0;
+        for (let index = 0; index < 15; index += 1) sum += frame[index] || 0;
+        return (0x4d - (sum & 0xff)) & 0xff;
+      }
+
+      function atkReadFrame(address, length) {
+        const frame = new Uint8Array(16);
+        frame[0] = 0x08;
+        frame[2] = (address >> 8) & 0xff;
+        frame[3] = address & 0xff;
+        frame[4] = length;
+        frame[15] = atkChecksum(frame);
+        return frame;
+      }
+
+      async function atkReadRegister(device, address, length) {
+        const response = withTimeout(520, (resolve) => {
+          const handler = (event) => {
+            if (event.device !== device || event.reportId !== 0x08) return;
+            const bytes = dataViewBytes(event.data);
+            if (![0x07, 0x08].includes(bytes[0]) || bytes[2] !== ((address >> 8) & 0xff) || bytes[3] !== (address & 0xff)) return;
+            device.removeEventListener("inputreport", handler);
+            resolve(bytes);
+          };
+          device.addEventListener("inputreport", handler);
+          setTimeout(() => device.removeEventListener("inputreport", handler), 550);
+        });
+        response.catch(() => {});
+        await device.sendReport(0x08, atkReadFrame(address, length));
+        const frame = await response;
+        if (frame.length !== 16 || frame[15] !== atkChecksum(frame)) throw new Error("ATK ????????");
+        return frame.slice(5, 5 + frame[4]);
+      }
+
+      function decodeAtkDpiAxis(byte, nibble) {
+        const mode = nibble & 0x0f;
+        const high = (mode >> 2) & 0x03;
+        const stepped50 = (mode & 0x02) !== 0;
+        const doubled = (mode & 0x01) !== 0;
+        const value = (high << 8) | byte;
+        const base = stepped50 ? 10050 + value * 50 : (value + 1) * 10;
+        return doubled ? base * 2 : base;
+      }
+
+      async function readAtkConfig(device) {
+        const vendorCollection = (device.collections || []).some((collection) =>
+          collection.usagePage === 0xff02 && collection.usage === 0x0002
+        );
+        if (!vendorCollection) throw new Error("? ATK ????? ClickSync ??? 0xFF02 ????");
+        const system = await atkReadRegister(device, 0x0000, 6);
+        const rateMap = { 0x08: 125, 0x04: 250, 0x02: 500, 0x01: 1000, 0x10: 2000, 0x20: 4000, 0x40: 8000 };
+        const slotCount = clamp(system[2] || 1, 1, 6);
+        const currentIndex = clamp(system[4] || 0, 0, slotCount - 1);
+        const dpiWord = await atkReadRegister(device, 0x000c + currentIndex * 4, 4);
+        if (((dpiWord[0] + dpiWord[1] + dpiWord[2] + dpiWord[3]) & 0xff) !== 0x55) {
+          throw new Error("ATK ?? DPI ?????");
+        }
+        const dpi = decodeAtkDpiAxis(dpiWord[0], dpiWord[2] & 0x0f);
+        return { dpi, pollingHz: rateMap[system[0]] || null, protocol: "ClickSync ATK ?????" };
+      }
+
+      async function tryReadHardwareConfig(device, descriptor) {
+        if (descriptor.readerKind === "logitech") return readLogitechConfig(device);
+        if (descriptor.readerKind === "atk") return readAtkConfig(device);
+        if (descriptor.readerKind === "razer") {
+          throw new Error("Razer ?????????????????????????????");
+        }
+        return null;
+      }
+
+      async function useHidDevice(device, { silent = false } = {}) {
+        if (!device) return;
+        const descriptor = describeHidDevice(device);
+        app.hidDevice = device;
+        updateHardwareReadouts({ dpi: null, pollingHz: null });
+        setHidAssist(
+          descriptor.candidate
+            ? `??? ${descriptor.brand} ???????????? DPI ???????`
+            : "???????????????????????? DPI?",
+          descriptor.candidate ? "live" : "warn",
+          `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+        );
+        if (!descriptor.candidate) return;
+
+        try {
+          if (!device.opened) await device.open();
+          const config = await tryReadHardwareConfig(device, descriptor);
+          if (config?.dpi) {
+            $("dpiInput").value = String(config.dpi);
+            app.dpiSource = "webhid";
+            updateHardwareReadouts(config);
+            setHidAssist(
+              `???????????? DPI????????????????????`,
+              "live",
+              `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids} ? ${config.protocol}`
+            );
+            if (!silent) {
+              completeTone();
+              showToast(`??? ${config.dpi} DPI${config.pollingHz ? ` / ${config.pollingHz} Hz` : ""}?`);
+            }
+            return;
+          }
+          setHidAssist(
+            "???????????????????????????? DPI ????????",
+            "warn",
+            `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+          );
+          if (!silent) showToast("????????????????? DPI?");
+        } catch (error) {
+          const razerFallback = descriptor.readerKind === "razer";
+          setHidAssist(
+            razerFallback
+              ? "??? Razer????????????????????DPI ???????????????????"
+              : `?????????????????${error?.message || "?????"}?`,
+            "warn",
+            `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+          );
+          if (!silent) showToast(razerFallback ? "Razer ?????????????" : (error?.message || "??????????"));
+        }
+      }
+
+      async function connectHidMouse() {
+        if (!canUseWebHid()) {
+          showToast("WebHID ?? Chrome/Edge???? HTTPS ? localhost ???");
+          return;
+        }
+        const button = $("connectMouseBtn");
+        button.disabled = true;
+        button.textContent = "????????";
+        try {
+          const devices = await navigator.hid.requestDevice({ filters: HID_VENDOR_FILTERS });
+          if (!devices.length) {
+            setHidAssist("????????????? DPI?", "warn");
+            return;
+          }
+          await useHidDevice(devices[0]);
+        } catch (error) {
+          const cancelled = error?.name === "NotFoundError";
+          setHidAssist(
+            cancelled ? "????????????? DPI?" : "??????????????????",
+            "warn"
+          );
+          showToast(cancelled ? "????????" : "WebHID ?????????????????");
+        } finally {
+          button.disabled = false;
+          button.textContent = "????????";
+        }
+      }
+
+      async function initHidAssist() {
+        const button = $("connectMouseBtn");
+        if (!canUseWebHid()) {
+          button.disabled = true;
+          setHidAssist(
+            "????????? WebHID?????? DPI?????????? Chrome/Edge ?? HTTPS ? localhost ???",
+            "warn"
+          );
+          return;
+        }
+        setHidAssist("WebHID ?????????????????????????", "live");
+        try {
+          const authorized = await navigator.hid.getDevices();
+          const known = authorized.find((device) => HID_VENDOR_FILTERS.some((filter) => filter.vendorId === device.vendorId));
+          if (known) await useHidDevice(known, { silent: true });
+        } catch {
+          setHidAssist("WebHID ????????????????????????", "warn");
+        }
+        navigator.hid.addEventListener("disconnect", (event) => {
+          if (event.device !== app.hidDevice) return;
+          app.hidDevice = null;
+          app.dpiSource = "manual";
+          updateHardwareReadouts({ dpi: null, pollingHz: null });
+          setHidAssist("???????? DPI ??????????????", "warn");
+        });
+      }
+
+      function showScreen(name) {
+        app.screen = name;
+        document.querySelectorAll(".game-switch").forEach((button) => {
+          const locked = !["home", "setup"].includes(name);
+          button.setAttribute("aria-disabled", String(locked));
+        });
+        document.documentElement.classList.toggle("test-active", name === "test");
+        document.body.classList.toggle("test-active", name === "test");
+        screens.forEach((screen) => screen.classList.toggle("active", screen.id === `screen-${name}`));
+        if (name === "test") {
+          delete app.canvasBounds.aimCanvas;
+          gridCache.delete($("aimCanvas"));
+        } else if (name === "calibration") {
+          delete app.canvasBounds.calibrationCanvas;
+          gridCache.delete($("calibrationCanvas"));
+        }
+        window.scrollTo({ top: 0, behavior: name === "test" || reducedMotionQuery.matches ? "auto" : "smooth" });
+        requestAnimationFrame(() => runScreenMotion(name));
+      }
+
+      function loadHistory() {
+        try {
+          const currentRaw = localStorage.getItem(STORAGE_KEY);
+          const legacyRaw = localStorage.getItem(LEGACY_STORAGE_KEY);
+          const parsed = JSON.parse(currentRaw || legacyRaw || '{"version":2,"sessions":[]}');
+          app.history = Array.isArray(parsed.sessions)
+            ? parsed.sessions.slice(0, 50).map((session) => ({
+                gameId: "valorant",
+                gameName: "????",
+                yaw: GAMES.valorant.yaw,
+                horizontalFov: GAMES.valorant.fov,
+                ...session
+              }))
+            : [];
+          if (!currentRaw && legacyRaw) persistHistory();
+        } catch {
+          app.history = [];
+          showToast("??????????????????");
+        }
+      }
+
+      function persistHistory() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 2, sessions: app.history.slice(0, 50) }));
+          return true;
+        } catch {
+          showToast("??????????????????????");
+          return false;
+        }
+      }
+
+      function createGauge({ label, value, unit, percent = 50 }) {
+        const gauge = document.createElement("div");
+        gauge.className = "gauge";
+        gauge.style.setProperty("--value", clamp(percent, 0, 100));
+        gauge.innerHTML = `
+          <div class="gauge-needle" aria-hidden="true"></div>
+          <div class="gauge-data">
+            <span class="gauge-label">${label}</span>
+            <strong class="gauge-value">${value}</strong>
+            <span class="gauge-unit">${unit || "&nbsp;"}</span>
+          </div>`;
+        return gauge;
+      }
+
+      function gaugeData(result) {
+        if (!result) {
+          return [
+            { label: "?????", value: "?", unit: "SENSITIVITY", percent: 50 },
+            { label: "?? DPI", value: "?", unit: "eDPI", percent: 50 },
+            { label: "????", value: "?", unit: "cm / 360?", percent: 50 },
+            { label: "????", value: "?", unit: "SPEED", percent: 50 },
+            { label: "????", value: "?", unit: "CONTROL", percent: 50 },
+            { label: "????", value: "?", unit: "CONFIDENCE", percent: 50 }
+          ];
+        }
+        return [
+          { label: "?????", value: formatSens(result.mainSens, result.gameId), unit: "SENSITIVITY", percent: clamp(result.mainSens / Math.max((result.baseSens || app.currentSens) * 1.3, .01) * 70, 8, 92) },
+          { label: "?? DPI", value: Math.round(result.edpi), unit: "eDPI", percent: clamp(result.edpi / 800 * 100, 5, 95) },
+          { label: "????", value: result.cm360.toFixed(1), unit: "cm / 360?", percent: clamp(100 - result.cm360 / 80 * 100, 6, 94) },
+          { label: "????", value: `${Math.round(result.speed)}%`, unit: "SPEED", percent: result.speed },
+          { label: "????", value: `${Math.round(result.control)}%`, unit: "CONTROL", percent: result.control },
+          { label: "????", value: `${Math.round(result.confidence * 100)}%`, unit: "CONFIDENCE", percent: result.confidence * 100 }
+        ];
+      }
+
+      function renderGaugeSet(container, result) {
+        container.replaceChildren(...gaugeData(result).map(createGauge));
+      }
+
+      function renderHome() {
+        const latest = app.history.find((session) => session.gameId === app.gameId) || null;
+        $("homeResultLamp").className = latest ? "lamp live" : "lamp";
+        $("homeResultState").textContent = latest ? `${currentGame().name} ? ???` : `${currentGame().name} ? ????`;
+        $("homeResultEmpty").hidden = Boolean(latest);
+        $("homeResultContent").hidden = !latest;
+        if (latest) {
+          const game = GAMES[latest.gameId] || GAMES.valorant;
+          const main = Number.isFinite(Number(latest.mainSens)) ? Number(latest.mainSens) : game.sens.default;
+          const dpi = Number.isFinite(Number(latest.dpi)) ? Number(latest.dpi) : app.dpi;
+          const distance = Number.isFinite(Number(latest.cm360)) ? Number(latest.cm360) : cm360(dpi, main, game.yaw);
+          const effectiveDpi = Number.isFinite(Number(latest.edpi)) ? Number(latest.edpi) : edpi(dpi, main);
+          const confidence = Number.isFinite(Number(latest.confidence)) ? Number(latest.confidence) : null;
+          const low = Number.isFinite(Number(latest.lowSens)) ? Number(latest.lowSens) : clamp(main * .93, game.sens.min, game.sens.max);
+          const high = Number.isFinite(Number(latest.highSens)) ? Number(latest.highSens) : clamp(main * 1.07, game.sens.min, game.sens.max);
+          $("homePrimarySens").textContent = formatSens(main, game.id);
+          $("homePrimaryUnit").textContent = `${game.name} ??????`;
+          $("homeCm360").textContent = `${distance.toFixed(1)} cm`;
+          $("homeEdpi").textContent = Math.round(effectiveDpi);
+          $("homeAccuracy").textContent = Number.isFinite(Number(latest.accuracy)) ? `${Math.round(Number(latest.accuracy) * 100)}%` : "?";
+          $("homeConfidence").textContent = confidence === null ? "?" : `${Math.round(confidence * 100)}%`;
+          $("homeLowSens").textContent = formatSens(low, game.id);
+          $("homeMainSens").textContent = formatSens(main, game.id);
+          $("homeHighSens").textContent = formatSens(high, game.id);
+          renderCompactConversions($("homeConversionList"), { ...latest, mainSens: main, dpi });
+          renderEvidenceGrid($("homeEvidenceGrid"), latest);
+        }
+        renderConverter();
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const list = $("historyList");
+        list.replaceChildren();
+        if (!app.history.length) {
+          const empty = document.createElement("li");
+          empty.className = "empty-log";
+          empty.innerHTML = "<div><strong>??????</strong>????????????????????????????</div>";
+          list.append(empty);
+          return;
+        }
+
+        app.history.forEach((session, index) => {
+          const sessionGame = GAMES[session.gameId] || GAMES.valorant;
+          const row = document.createElement("li");
+          row.className = `history-row${session.gameId === app.gameId && index === app.history.findIndex((item) => item.gameId === app.gameId) ? " current" : ""}`;
+          const date = new Date(session.timestamp);
+          row.innerHTML = `
+            <img class="history-game-icon" src="${gameIcon(sessionGame.id)}" alt="${sessionGame.name}">
+            <div class="history-date">${date.toLocaleDateString("zh-CN")}<br>${date.toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })}</div>
+            <div class="history-main">
+              <strong>${formatSens(session.mainSens, sessionGame.id)}</strong><span>${sessionGame.name}</span>
+              <strong>${Math.round(session.edpi)}</strong><span>eDPI</span>
+              <strong>${session.cm360.toFixed(1)}</strong><span>cm/360?</span>
+              <strong>${Math.round(session.confidence * 100)}%</strong><span>???</span>
+            </div>
+            <span class="lamp ${session.confidence >= .65 ? "live" : "warn"}" aria-label="${session.confidence >= .65 ? "?????" : "?????"}"></span>`;
+          list.append(row);
+        });
+      }
+
+      async function ensureAudio() {
+        if (!app.sound) return;
+        if (!app.audio) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          app.audio = new AudioContext();
+        }
+        if (app.audio.state === "suspended") {
+          try { await app.audio.resume(); } catch { /* Visual feedback remains available. */ }
+        }
+      }
+
+      function tone(frequency = 880, duration = .04, volume = .045, delay = 0) {
+        if (!app.sound || !app.audio || app.audio.state !== "running") return;
+        const at = app.audio.currentTime + delay;
+        const oscillator = app.audio.createOscillator();
+        const gain = app.audio.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, at);
+        gain.gain.setValueAtTime(.0001, at);
+        gain.gain.exponentialRampToValueAtTime(volume, at + .005);
+        gain.gain.exponentialRampToValueAtTime(.0001, at + duration);
+        oscillator.connect(gain).connect(app.audio.destination);
+        oscillator.start(at);
+        oscillator.stop(at + duration + .02);
+      }
+
+      function hitTone() { tone(880, .035, .035); }
+      function cautionTone() { tone(190, .09, .04); }
+      function completeTone() {
+        tone(660, .08, .04);
+        tone(990, .12, .04, .09);
+      }
+
+      async function requestRelativeInput(element, requestedMode = app.inputMode) {
+        app.pointerRequested = false;
+        app.rawInput = false;
+        if (!element.requestPointerLock) {
+          setInputStatus("??????", "warn");
+          return false;
+        }
+        if (requestedMode === "desktop") {
+          try {
+            app.pointerRequested = true;
+            const maybePromise = element.requestPointerLock();
+            if (maybePromise?.then) await maybePromise;
+            setInputStatus("??????", "live");
+            return true;
+          } catch {
+            setInputStatus("??????", "warn");
+            return false;
+          }
+        }
+        try {
+          app.pointerRequested = true;
+          const maybePromise = element.requestPointerLock({ unadjustedMovement: true });
+          if (maybePromise?.then) await maybePromise;
+          app.rawInput = true;
+          setInputStatus("???????", "live");
+          return true;
+        } catch {
+          try {
+            const maybePromise = element.requestPointerLock();
+            if (maybePromise?.then) await maybePromise;
+            setInputStatus("???????????", "warn");
+            return true;
+          } catch {
+            setInputStatus("??????", "warn");
+            return false;
+          }
+        }
+      }
+
+      function sizeCanvas(canvas) {
+        const bounds = getCanvasBounds(canvas.id, true);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.max(1, Math.round(bounds.width * dpr));
+        const height = Math.max(1, Math.round(bounds.height * dpr));
+        let resized = false;
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+          gridCache.delete(canvas);
+          resized = true;
+        }
+        const ctx = canvas.getContext("2d");
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { ctx, width: bounds.width, height: bounds.height, dpr, resized };
+      }
+
+      function getCanvasBounds(id, refresh = false) {
+        const canvas = $(id);
+        const cached = app.canvasBounds[id];
+        if (!refresh && cached?.width > 0 && cached?.height > 0) return cached;
+        const width = canvas.clientWidth || canvas.getBoundingClientRect().width || 1;
+        const height = canvas.clientHeight || canvas.getBoundingClientRect().height || 1;
+        const bounds = { width, height };
+        app.canvasBounds[id] = bounds;
+        return bounds;
+      }
+
+      function drawPanelGrid(ctx, width, height, canvas, dpr) {
+        let cached = gridCache.get(canvas);
+        if (!cached || cached.width !== width || cached.height !== height || cached.dpr !== dpr) {
+          const layer = document.createElement("canvas");
+          layer.width = Math.max(1, Math.round(width * dpr));
+          layer.height = Math.max(1, Math.round(height * dpr));
+          const layerCtx = layer.getContext("2d");
+          layerCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          layerCtx.fillStyle = "#050706";
+          layerCtx.fillRect(0, 0, width, height);
+          layerCtx.strokeStyle = "rgba(165, 184, 163, .065)";
+          layerCtx.lineWidth = 1;
+          layerCtx.beginPath();
+          for (let x = 40; x < width; x += 40) {
+            layerCtx.moveTo(x, 0);
+            layerCtx.lineTo(x, height);
+          }
+          for (let y = 40; y < height; y += 40) {
+            layerCtx.moveTo(0, y);
+            layerCtx.lineTo(width, y);
+          }
+          layerCtx.stroke();
+          layerCtx.strokeStyle = "rgba(241,240,223,.28)";
+          layerCtx.beginPath();
+          layerCtx.moveTo(width / 2, 0);
+          layerCtx.lineTo(width / 2, height);
+          layerCtx.moveTo(0, height / 2);
+          layerCtx.lineTo(width, height / 2);
+          layerCtx.stroke();
+          cached = { layer, width, height, dpr };
+          gridCache.set(canvas, cached);
+        }
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(cached.layer, 0, 0, width, height);
+      }
+
+      function setLeverPosition(top, dragging = false) {
+        const clamped = clamp(top, LEVER_TOP, LEVER_BOTTOM);
+        const track = $("startLeverControl");
+        $("startLever").style.top = `${clamped}px`;
+        track.classList.toggle("is-dragging", dragging);
+        const percent = Math.round((clamped - LEVER_TOP) / (LEVER_BOTTOM - LEVER_TOP) * 100);
+        track.setAttribute("aria-valuenow", String(percent));
+        return percent;
+      }
+
+      function beginSetup() {
+        if (app.screen !== "home") return;
+        setLeverPosition(LEVER_BOTTOM);
+        $("leverHint").innerHTML = "<strong>????</strong>??????";
+        tone(540, .06, .035);
+        setTimeout(() => {
+          setLeverPosition(LEVER_TOP);
+          $("leverHint").innerHTML = "<strong>?????</strong>?????";
+        }, 420);
+        const latest = app.history.find((session) => session.gameId === app.gameId);
+        if (app.launchPreset?.gameId === app.gameId) {
+          $("dpiInput").value = String(app.launchPreset.dpi);
+          $("sensInput").value = formatSens(app.launchPreset.sensitivity, app.gameId);
+          app.dpi = app.launchPreset.dpi;
+          app.currentSens = app.launchPreset.sensitivity;
+          app.horizontalFov = currentGame().fov;
+          $("fovInput").value = String(app.horizontalFov);
+          showToast(`???????????${app.launchPreset.dpi} DPI?${currentGame().name} ${formatSens(app.launchPreset.sensitivity, app.gameId)}?`);
+        } else if (latest) {
+          $("dpiInput").value = latest.dpi;
+          $("sensInput").value = formatSens(latest.mainSens, latest.gameId);
+          app.horizontalFov = latest.horizontalFov || currentGame().fov;
+          $("fovInput").value = String(app.horizontalFov);
+        }
+        showScreen("setup");
+      }
+
+      function bindLeverControl() {
+        const track = $("startLeverControl");
+        let dragging = false;
+        let startY = 0;
+        let startTop = LEVER_TOP;
+
+        track.addEventListener("pointerdown", (event) => {
+          if (event.button !== 0 || app.screen !== "home") return;
+          dragging = true;
+          startY = event.clientY;
+          startTop = LEVER_TOP + Number(track.getAttribute("aria-valuenow") || 0) / 100 * (LEVER_BOTTOM - LEVER_TOP);
+          track.setPointerCapture(event.pointerId);
+          setLeverPosition(startTop, true);
+        });
+
+        track.addEventListener("pointermove", (event) => {
+          if (!dragging) return;
+          setLeverPosition(startTop + event.clientY - startY, true);
+        });
+
+        const finishDrag = (event) => {
+          if (!dragging) return;
+          dragging = false;
+          if (track.hasPointerCapture(event.pointerId)) track.releasePointerCapture(event.pointerId);
+          const percent = Number(track.getAttribute("aria-valuenow") || 0);
+          if (percent >= 78) beginSetup();
+          else setLeverPosition(LEVER_TOP);
+        };
+
+        track.addEventListener("pointerup", finishDrag);
+        track.addEventListener("pointercancel", finishDrag);
+        track.addEventListener("keydown", (event) => {
+          const current = Number(track.getAttribute("aria-valuenow") || 0);
+          if (event.key === "ArrowDown") {
+            event.preventDefault();
+            const percent = Math.min(100, current + 20);
+            setLeverPosition(LEVER_TOP + percent / 100 * (LEVER_BOTTOM - LEVER_TOP));
+            if (percent >= 100) beginSetup();
+          } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            const percent = Math.max(0, current - 20);
+            setLeverPosition(LEVER_TOP + percent / 100 * (LEVER_BOTTOM - LEVER_TOP));
+          } else if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            beginSetup();
+          } else if (event.key === "Home") {
+            event.preventDefault();
+            setLeverPosition(LEVER_TOP);
+          } else if (event.key === "End") {
+            event.preventDefault();
+            beginSetup();
+          }
+        });
+      }
+
+      function validateSetup() {
+        const dpi = Number($("dpiInput").value);
+        const sens = Number($("sensInput").value);
+        const fov = Number($("fovInput").value);
+        const game = currentGame();
+        if (!Number.isFinite(dpi) || dpi < 100 || dpi > 32000) {
+          showToast("??? 100?32000 ?????? DPI?");
+          $("dpiInput").focus();
+          return false;
+        }
+        if (!Number.isFinite(sens) || sens < game.sens.min || sens > game.sens.max) {
+          showToast(`??? ${game.sens.min}?${game.sens.max} ???? ${game.name} ????`);
+          $("sensInput").focus();
+          return false;
+        }
+        if (!Number.isFinite(fov) || fov < 60 || fov > 130) {
+          showToast("??? 60?130? ???????????");
+          $("fovInput").focus();
+          return false;
+        }
+        app.dpi = dpi;
+        app.currentSens = sens;
+        app.horizontalFov = fov;
+        app.inputMode = document.querySelector('input[name="inputMode"]:checked')?.value || "raw";
+        return true;
+      }
+
+      function prepareCalibration() {
+        if (!validateSetup()) return;
+        app.calibration = {
+          phase: "ready",
+          startedAt: 0,
+          endAt: 0,
+          integratedX: 0,
+          minX: 0,
+          maxX: 0,
+          totalDistance: 0,
+          points: [],
+          pauses: 0
+        };
+        $("calOverlay").hidden = false;
+        $("calTime").textContent = "8.0 s";
+        $("calSpan").textContent = "0";
+        $("calInputMode").textContent = "???";
+        showScreen("calibration");
+        drawCalibration();
+      }
+
+      async function startCalibration() {
+        await ensureAudio();
+        const calibration = app.calibration;
+        calibration.phase = "running";
+        calibration.startedAt = performance.now();
+        calibration.endAt = calibration.startedAt + CAL_DURATION;
+        calibration.points = [];
+        calibration.lastPointAt = 0;
+        calibration.integratedX = 0;
+        calibration.minX = 0;
+        calibration.maxX = 0;
+        app.pendingCalibrationX = 0;
+        $("calOverlay").hidden = true;
+        const locked = await requestRelativeInput($("calibrationStage"));
+        $("calInputMode").textContent = locked ? (app.rawInput ? "???????" : "??????") : "??????";
+        tone(520, .07, .035);
+        cancelAnimationFrame(app.raf);
+        app.raf = requestAnimationFrame(tickCalibration);
+      }
+
+      function tickCalibration(now) {
+        const calibration = app.calibration;
+        if (!calibration || calibration.phase !== "running") return;
+        const pendingX = app.pendingCalibrationX;
+        app.pendingCalibrationX = 0;
+        if (pendingX) {
+          calibration.integratedX += pendingX;
+          calibration.minX = Math.min(calibration.minX, calibration.integratedX);
+          calibration.maxX = Math.max(calibration.maxX, calibration.integratedX);
+          if (!calibration.lastPointAt || now - calibration.lastPointAt >= 28) {
+            calibration.points.push({ x: calibration.integratedX, t: now });
+            calibration.lastPointAt = now;
+          }
+        }
+        const remaining = Math.max(0, calibration.endAt - now);
+        $("calTime").textContent = `${(remaining / 1000).toFixed(1)} s`;
+        $("calSpan").textContent = Math.round(calibration.maxX - calibration.minX);
+        drawCalibration();
+        if (remaining <= 0) {
+          finishCalibration();
+          return;
+        }
+        app.raf = requestAnimationFrame(tickCalibration);
+      }
+
+      function drawCalibration() {
+        const canvas = $("calibrationCanvas");
+        const { ctx, width, height, dpr } = sizeCanvas(canvas);
+        drawPanelGrid(ctx, width, height, canvas, dpr);
+        const calibration = app.calibration;
+
+        ctx.fillStyle = "#b8b9aa";
+        ctx.font = "14px 'Segoe UI'";
+        ctx.textAlign = "center";
+        ctx.fillText("????????", width / 2, 34);
+
+        const baseline = height / 2;
+        ctx.strokeStyle = "rgba(155,229,100,.35)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(width * .12, baseline);
+        ctx.lineTo(width * .88, baseline);
+        ctx.stroke();
+
+        if (!calibration?.points?.length) return;
+        const span = Math.max(1, calibration.maxX - calibration.minX);
+        const scale = width * .72 / span;
+        ctx.strokeStyle = "#9be564";
+        ctx.lineWidth = 2;
+        ctx.shadowColor = "rgba(155,229,100,.4)";
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        calibration.points.forEach((point, index) => {
+          const x = width / 2 + (point.x - (calibration.maxX + calibration.minX) / 2) * scale;
+          const y = baseline + Math.sin(index * .11) * 12;
+          if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      function finishCalibration() {
+        const calibration = app.calibration;
+        calibration.phase = "done";
+        const span = calibration.maxX - calibration.minX;
+        if (document.pointerLockElement) document.exitPointerLock();
+        if (span < 180 || calibration.totalDistance < 500) {
+          cautionTone();
+          $("calOverlay").hidden = false;
+          $("calOverlay").innerHTML = `
+            <div class="overlay-card">
+              <p class="placard-title caution-ink">CALIBRATION INSUFFICIENT</p>
+              <h3 class="section-title">??????</h3>
+              <p>?????????????????????????????</p>
+              <button class="primary-btn" id="retryCalBtn" type="button">????</button>
+            </div>`;
+          $("retryCalBtn").addEventListener("click", () => {
+            $("calOverlay").innerHTML = `
+              <div class="overlay-card">
+                <p class="placard-title">READY</p>
+                <h3 class="section-title">??????????</h3>
+                <p>?????????????????????????????????????????????????</p>
+                <button class="primary-btn" id="startCalibrationBtn" type="button">?? 8 ???</button>
+              </div>`;
+            $("startCalibrationBtn").addEventListener("click", startCalibration);
+          });
+          return;
+        }
+
+        completeTone();
+        $("calOverlay").hidden = false;
+        $("calOverlay").innerHTML = `
+          <div class="overlay-card">
+            <p class="placard-title active-ink">MOVEMENT ENVELOPE CAPTURED</p>
+            <h3 class="section-title">?????????</h3>
+            <p>????????? <strong>${Math.round(span)}</strong>???????????????????????????</p>
+            <button class="primary-btn" id="beginTestsBtn" type="button">??????</button>
+          </div>`;
+        $("beginTestsBtn").addEventListener("click", prepareTests);
+      }
+
+      function prepareTests() {
+        app.stageIndex = 0;
+        app.stageResults = [];
+        app.pauseCount = 0;
+        app.inputGapCount = 0;
+        app.coreRawInput = false;
+        app.test = null;
+        showScreen("test");
+        drawTestScene();
+        renderTestChecklist();
+        prepareStage();
+      }
+
+      function renderTestChecklist() {
+        const list = $("testChecklist");
+        list.replaceChildren();
+        stageDefs.forEach((stage, index) => {
+          const item = document.createElement("li");
+          if (index < app.stageIndex) item.className = "done";
+          if (index === app.stageIndex) item.className = "active";
+          item.innerHTML = `<span class="step-num">${index + 1}</span><span>${stage.name}</span><span class="lamp ${index < app.stageIndex ? "live" : index === app.stageIndex ? "warn" : ""}"></span>`;
+          list.append(item);
+        });
+      }
+
+      function prepareStage() {
+        const stage = stageDefs[app.stageIndex];
+        $("stageNumber").textContent = app.stageIndex + 1;
+        $("stageTotal").textContent = stageDefs.length;
+        $("sessionProgress").textContent = `${app.stageIndex + 1} / ${stageDefs.length}`;
+        $("testTitle").textContent = stage.name;
+        $("stageDescription").textContent = stage.description;
+        $("liveHitsLabel").textContent = stage.id === "track" ? "?? / ??" : "?? / ??";
+        $("liveHits").textContent = stage.id === "track" ? "0" : "0 / 0";
+        $("liveAccuracyLabel").textContent = stage.id === "track" ? "???" : "???";
+        $("liveAccuracy").textContent = "?";
+        $("liveMisses").textContent = stage.id === "track" ? "?" : "0";
+        $("liveReactionLabel").textContent = stage.id === "track" ? "????" : "????";
+        $("liveReaction").textContent = "?";
+        $("liveClickError").textContent = "?";
+        $("liveEfficiency").textContent = "?";
+        $("liveOvershoots").textContent = stage.id === "track" ? "?" : "0";
+        $("liveGainLabel").textContent = stage.mode === "desktop" ? "????" : "????";
+        $("liveGain").textContent = `1 / ${FACTORS.length}`;
+        updateTestFactorDisplay(FACTOR_ORDERS[app.stageIndex][0]);
+        $("testTime").textContent = ((stage.mode === "desktop" ? AUXILIARY_DURATION : TEST_DURATION) / 1000).toFixed(1);
+        $("overlayKicker").textContent = `TEST ${app.stageIndex + 1}`;
+        $("overlayTitle").textContent = stage.name;
+        $("overlayText").textContent = stage.mode === "desktop"
+          ? "????????????????????????????????????????????????????"
+          : stage.id === "track"
+            ? "????????????????????????????????????????"
+            : "?????????????????????????????????????????????";
+        $("stageActionBtn").textContent = "??????";
+        $("testOverlay").hidden = false;
+        $("bigCountdown").hidden = true;
+        hideFactorChangeCue();
+        $("stageActionBtn").onclick = startStage;
+        renderTestChecklist();
+        drawTestScene();
+      }
+
+      function blankSegment() {
+        return {
+          hits: 0,
+          shots: 0,
+          misses: 0,
+          spawns: 0,
+          path: 0,
+          optimal: 0,
+          reactionTotal: 0,
+          overshoots: 0,
+          errorTotal: 0,
+          errorSamples: 0,
+          clickErrorTotal: 0,
+          clickErrorSamples: 0,
+          dwellMs: 0,
+          activeMs: 0
+        };
+      }
+
+      async function startStage() {
+        await ensureAudio();
+        const stage = stageDefs[app.stageIndex];
+        app.pendingInputX = 0;
+        app.pendingInputY = 0;
+        app.pendingInputPath = 0;
+        const duration = stage.mode === "desktop" ? AUXILIARY_DURATION : TEST_DURATION;
+        const bounds = getCanvasBounds("aimCanvas", true);
+        app.test = {
+          stage,
+          duration,
+          segmentDuration: duration / FACTORS.length,
+          phase: "countdown",
+          countdownEnd: performance.now() + 3000,
+          factorCountdownEnd: 0,
+          runStart: 0,
+          endAt: 0,
+          pausedRemaining: 0,
+          activeRemaining: 0,
+          segmentIndex: 0,
+          pendingFactorIndex: null,
+          pendingOrderPosition: null,
+          currentFactorIndex: FACTOR_ORDERS[app.stageIndex][0],
+          segments: Array.from({ length: FACTORS.length }, blankSegment),
+          target: null,
+          targetSpawnAt: 0,
+          lastDistance: Infinity,
+          wasApproaching: false,
+          aimReady: false,
+          trackingInside: false,
+          viewYaw: 0,
+          viewPitch: 0,
+          prevViewYaw: 0,
+          prevViewPitch: 0,
+          cursorX: bounds.width / 2,
+          cursorY: bounds.height / 2,
+          prevCursorX: bounds.width / 2,
+          prevCursorY: bounds.height / 2,
+          lastFrameAt: performance.now(),
+          lastUiAt: 0,
+          rand: mulberry32(app.seed + app.stageIndex * 131),
+          locked: false
+        };
+        $("testOverlay").hidden = true;
+        $("bigCountdown").hidden = false;
+        $("bigCountdown").textContent = "3";
+        showFactorChangeCue(app.test.currentFactorIndex, 3, true);
+        app.test.locked = await requestRelativeInput($("testStage"), stage.mode === "desktop" ? "desktop" : app.inputMode);
+        if (stage.mode !== "desktop" && app.rawInput) app.coreRawInput = true;
+        tone(440, .045, .03);
+        cancelAnimationFrame(app.raf);
+        app.raf = requestAnimationFrame(tickTest);
+      }
+
+      function currentSegment() {
+        return app.test.segments[app.test.currentFactorIndex];
+      }
+
+      function currentCandidateSensitivity() {
+        if (!app.test) return app.currentSens;
+        const game = currentGame();
+        return candidateSensitivity(app.currentSens, FACTORS[app.test.currentFactorIndex], game);
+      }
+
+      function updateTestFactorDisplay(factorIndex) {
+        const game = currentGame();
+        const factor = FACTORS[factorIndex] ?? 1;
+        $("liveCandidateSens").textContent = formatSens(candidateSensitivity(app.currentSens, factor, game), game.id);
+        $("liveCandidatePercent").textContent = `?????? ${Math.round(factor * 100)}%`;
+        const rail = $("testFactorRail");
+        rail.replaceChildren(...FACTORS.map((value, index) => {
+          const item = document.createElement("span");
+          item.className = index === factorIndex ? "active" : "";
+          item.textContent = `${Math.round(value * 100)}%`;
+          return item;
+        }));
+      }
+
+      function showFactorChangeCue(factorIndex, count, initial = false) {
+        const cue = $("factorChangeCue");
+        if (!cue) return;
+        const factor = FACTORS[factorIndex] ?? 1;
+        const game = currentGame();
+        $("factorChangeKicker").textContent = initial ? "????" : "???????";
+        $("factorChangeValue").textContent = `${Math.round(factor * 100)}% ? ${formatSens(candidateSensitivity(app.currentSens, factor, game), game.id)}`;
+        $("factorChangeCountdown").textContent = `${count} ??????`;
+        cue.hidden = false;
+        const motionKey = `${factorIndex}:${count}`;
+        if (cue.dataset.motionKey !== motionKey) {
+          cue.dataset.motionKey = motionKey;
+          cue.classList.remove("motion-tick");
+          void cue.offsetWidth;
+          cue.classList.add("motion-tick");
+          playMotion($("bigCountdown"), [
+            { transform: "translate(-50%, -50%) scale(.76)", opacity: .25, filter: "blur(3px)" },
+            { transform: "translate(-50%, -50%) scale(1)", opacity: 1, filter: "blur(0)" }
+          ], { duration: 280 });
+        }
+        $("testEvidenceHud")?.classList.add("is-switching");
+      }
+
+      function hideFactorChangeCue() {
+        const cue = $("factorChangeCue");
+        if (cue) {
+          cue.hidden = true;
+          cue.classList.remove("motion-tick");
+          delete cue.dataset.motionKey;
+        }
+        $("testEvidenceHud")?.classList.remove("is-switching");
+      }
+
+      function beginFactorCountdown(now, nextFactorIndex, orderPosition, activeRemaining) {
+        const test = app.test;
+        test.phase = "factor-countdown";
+        test.factorCountdownEnd = now + FACTOR_SWITCH_DURATION;
+        test.activeRemaining = activeRemaining;
+        test.pendingFactorIndex = nextFactorIndex;
+        test.pendingOrderPosition = orderPosition;
+        test.target = null;
+        updateTestFactorDisplay(nextFactorIndex);
+        $("liveGain").textContent = `${orderPosition + 1} / ${FACTORS.length}`;
+        $("bigCountdown").hidden = false;
+        $("bigCountdown").textContent = String(Math.ceil(FACTOR_SWITCH_DURATION / 1000));
+        showFactorChangeCue(nextFactorIndex, Math.ceil(FACTOR_SWITCH_DURATION / 1000));
+        tone(500, .06, .03);
+      }
+
+      function completeFactorCountdown(now) {
+        const test = app.test;
+        test.currentFactorIndex = test.pendingFactorIndex;
+        test.segmentIndex = test.pendingOrderPosition;
+        test.pendingFactorIndex = null;
+        test.pendingOrderPosition = null;
+        test.phase = "running";
+        test.endAt = now + test.activeRemaining;
+        test.lastFrameAt = now;
+        test.target = null;
+        spawnTarget();
+        $("bigCountdown").hidden = true;
+        hideFactorChangeCue();
+        tone(760, .07, .035);
+      }
+
+      function angularDistance(yawA, pitchA, yawB, pitchB) {
+        const meanPitch = (pitchA + pitchB) * .5 * DEG_TO_RAD;
+        const yawDelta = (yawA - yawB) * Math.cos(meanPitch);
+        return Math.hypot(yawDelta, pitchA - pitchB);
+      }
+
+      function projectionFor(width) {
+        return width / (2 * Math.tan(app.horizontalFov * .5 * DEG_TO_RAD));
+      }
+
+      function projectAngularTarget(target, test, width, height) {
+        const focal = projectionFor(width);
+        const relativeYaw = target.yaw - test.viewYaw;
+        const relativePitch = target.pitch - test.viewPitch;
+        const x = width / 2 + Math.tan(relativeYaw * DEG_TO_RAD) * focal;
+        const y = height / 2 - Math.tan(relativePitch * DEG_TO_RAD) * focal;
+        const radius = Math.max(4, Math.tan(target.radiusDeg * DEG_TO_RAD) * focal);
+        return {
+          x,
+          y,
+          radius,
+          relativeYaw,
+          relativePitch,
+          visible: relativeYaw > -89 && relativeYaw < 89 &&
+            x + radius >= 0 && x - radius <= width &&
+            y + radius >= 0 && y - radius <= height
+        };
+      }
+
+      function spawnTarget() {
+        const test = app.test;
+        const rand = test.rand;
+        test.aimReady = false;
+        if (test.stage.mode === "desktop") {
+          const { width, height } = getCanvasBounds("aimCanvas", true);
+          const radius = clamp(Math.min(width, height) * .018, 11, 16);
+          const padding = radius + 24;
+          const topSafeZone = Math.min(height - padding, Math.max(padding, 112));
+          const x = padding + rand() * Math.max(1, width - padding * 2);
+          const y = topSafeZone + rand() * Math.max(1, height - padding - topSafeZone);
+          test.target = { mode: "desktop", x, y, radius };
+          test.prevCursorX = test.cursorX;
+          test.prevCursorY = test.cursorY;
+          test.targetSpawnAt = performance.now();
+          test.lastDistance = Math.hypot(x - test.cursorX, y - test.cursorY);
+          test.wasApproaching = false;
+          currentSegment().spawns += 1;
+          currentSegment().optimal += test.lastDistance;
+          return;
+        }
+        let yawOffset;
+        let pitchOffset;
+        let radiusDeg;
+
+        if (test.stage.id === "wide") {
+          const side = currentSegment().spawns % 2 === 0 ? -1 : 1;
+          yawOffset = side * (34 + rand() * 10);
+          pitchOffset = (rand() - .5) * 22;
+          radiusDeg = 2.8;
+        } else if (test.stage.id === "micro") {
+          yawOffset = (rand() < .5 ? -1 : 1) * (6 + rand() * 15);
+          pitchOffset = (rand() - .5) * 14;
+          radiusDeg = 1.1;
+        } else if (test.stage.id === "switch") {
+          do {
+            yawOffset = (rand() - .5) * 76;
+            pitchOffset = (rand() - .5) * 28;
+          } while (Math.hypot(yawOffset, pitchOffset) < 18);
+          radiusDeg = 1.8;
+        } else {
+          yawOffset = 8;
+          pitchOffset = 3;
+          radiusDeg = 2.3;
+        }
+
+        const yaw = test.viewYaw + yawOffset;
+        const pitch = clamp(test.viewPitch + pitchOffset, -PITCH_LIMIT + 8, PITCH_LIMIT - 8);
+        test.target = {
+          yaw,
+          pitch,
+          radiusDeg,
+          baseYaw: yaw,
+          basePitch: pitch
+        };
+        test.prevViewYaw = test.viewYaw;
+        test.prevViewPitch = test.viewPitch;
+        test.targetSpawnAt = performance.now();
+        test.lastDistance = angularDistance(yaw, pitch, test.viewYaw, test.viewPitch);
+        test.wasApproaching = false;
+        currentSegment().spawns += 1;
+        currentSegment().optimal += test.lastDistance;
+      }
+
+      function consumePendingTestInput() {
+        const test = app.test;
+        const rawX = app.pendingInputX;
+        const rawY = app.pendingInputY;
+        const rawPath = app.pendingInputPath;
+        app.pendingInputX = 0;
+        app.pendingInputY = 0;
+        app.pendingInputPath = 0;
+        if (!test || test.phase !== "running" || (!rawX && !rawY)) return;
+
+        if (test.stage.mode === "desktop") {
+          const bounds = getCanvasBounds("aimCanvas", true);
+          test.prevCursorX = test.cursorX;
+          test.prevCursorY = test.cursorY;
+          test.cursorX = clamp(test.cursorX + rawX, 16, Math.max(16, bounds.width - 16));
+          test.cursorY = clamp(test.cursorY + rawY, 16, Math.max(16, bounds.height - 16));
+          currentSegment().path += rawPath;
+          return;
+        }
+
+        const sensitivity = currentCandidateSensitivity();
+        const yawDelta = rawX * sensitivity * currentGame().yaw;
+        const pitchDelta = rawY * sensitivity * currentGame().yaw;
+        test.prevViewYaw = test.viewYaw;
+        test.prevViewPitch = test.viewPitch;
+        test.viewYaw += yawDelta;
+        test.viewPitch = clamp(test.viewPitch - pitchDelta, -PITCH_LIMIT, PITCH_LIMIT);
+        currentSegment().path += rawPath * sensitivity * currentGame().yaw;
+      }
+
+      function tickTest(now) {
+        const test = app.test;
+        if (!test) return;
+
+        if (test.phase === "paused") {
+          drawTestScene();
+          return;
+        }
+
+        if (test.phase === "countdown") {
+          const remaining = Math.max(0, test.countdownEnd - now);
+          const count = Math.max(1, Math.ceil(remaining / 1000));
+          $("bigCountdown").textContent = String(count);
+          showFactorChangeCue(test.currentFactorIndex, count, true);
+          drawTestScene();
+          if (remaining <= 0) {
+            test.phase = "running";
+            test.runStart = now;
+            test.endAt = now + test.duration;
+            test.lastFrameAt = now;
+            $("bigCountdown").hidden = true;
+            hideFactorChangeCue();
+            spawnTarget();
+            tone(720, .06, .035);
+          }
+          app.raf = requestAnimationFrame(tickTest);
+          return;
+        }
+
+        if (test.phase === "factor-countdown") {
+          const remaining = Math.max(0, test.factorCountdownEnd - now);
+          const count = Math.max(1, Math.ceil(remaining / 1000));
+          $("bigCountdown").textContent = String(count);
+          showFactorChangeCue(test.pendingFactorIndex, count);
+          drawTestScene();
+          if (remaining <= 0) completeFactorCountdown(now);
+          app.raf = requestAnimationFrame(tickTest);
+          return;
+        }
+
+        if (test.phase !== "running") return;
+
+        const frameDelta = Math.min(100, now - test.lastFrameAt);
+        test.lastFrameAt = now;
+        if (frameDelta > 50) app.inputGapCount += 1;
+
+        const remaining = Math.max(0, test.endAt - now);
+        const elapsed = test.duration - remaining;
+        const orderPosition = Math.min(FACTORS.length - 1, Math.floor(elapsed / test.segmentDuration));
+        const nextFactorIndex = FACTOR_ORDERS[app.stageIndex][orderPosition];
+        if (nextFactorIndex !== test.currentFactorIndex) {
+          beginFactorCountdown(now, nextFactorIndex, orderPosition, remaining);
+          drawTestScene();
+          app.raf = requestAnimationFrame(tickTest);
+          return;
+        }
+
+        consumePendingTestInput();
+        if (test.stage.id === "track") {
+          updateTrackingTarget(elapsed, frameDelta);
+        }
+        detectHit(now, frameDelta);
+        if (!test.lastUiAt || now - test.lastUiAt >= 80 || remaining <= 0) {
+          $("liveGain").textContent = `${orderPosition + 1} / ${FACTORS.length}`;
+          $("testTime").textContent = (remaining / 1000).toFixed(1);
+          updateLiveReadouts();
+          test.lastUiAt = now;
+        }
+        drawTestScene();
+
+        if (remaining <= 0) {
+          finishStage();
+          return;
+        }
+        app.raf = requestAnimationFrame(tickTest);
+      }
+
+      function updateTrackingTarget(elapsed, frameDelta) {
+        const test = app.test;
+        if (!test.target) spawnTarget();
+        const t = elapsed / 1000;
+        test.target.yaw = test.target.baseYaw + Math.sin(t * 1.13) * 15 + Math.sin(t * 2.41) * 4;
+        test.target.pitch = clamp(
+          test.target.basePitch + Math.cos(t * .83) * 7 + Math.sin(t * 1.79) * 2.5,
+          -PITCH_LIMIT + 6,
+          PITCH_LIMIT - 6
+        );
+        currentSegment().activeMs += frameDelta;
+      }
+
+      function detectHit(now, frameDelta = 0) {
+        const test = app.test;
+        if (!test?.target) return;
+        const target = test.target;
+        if (test.stage.mode === "desktop") {
+          const segment = currentSegment();
+          const distance = Math.hypot(target.x - test.cursorX, target.y - test.cursorY);
+          if (distance < test.lastDistance - 1) test.wasApproaching = true;
+          if (test.wasApproaching && distance > test.lastDistance + 5) segment.overshoots += 1;
+          test.lastDistance = distance;
+          test.aimReady = distance <= target.radius;
+          return;
+        }
+        const distance = angularDistance(target.yaw, target.pitch, test.viewYaw, test.viewPitch);
+        const segment = currentSegment();
+
+        if (test.stage.id === "track") {
+          segment.errorTotal += distance;
+          segment.errorSamples += 1;
+          if (distance <= target.radiusDeg) {
+            segment.dwellMs += frameDelta;
+            if (!test.trackingInside) {
+              hitTone();
+              segment.hits += 1;
+            }
+            test.trackingInside = true;
+          } else {
+            test.trackingInside = false;
+          }
+          return;
+        }
+
+        if (distance < test.lastDistance - .03) test.wasApproaching = true;
+        if (test.wasApproaching && distance > test.lastDistance + .15) segment.overshoots += 1;
+        test.lastDistance = distance;
+        test.aimReady = distance <= target.radiusDeg;
+      }
+
+      function queueShotFeedback(kind, now, target) {
+        const test = app.test;
+        if (!test) return;
+        const { width, height } = getCanvasBounds("aimCanvas", true);
+        const shotX = test.stage.mode === "desktop" ? test.cursorX : width / 2;
+        const shotY = test.stage.mode === "desktop" ? test.cursorY : height / 2;
+        let targetX = shotX;
+        let targetY = shotY;
+        let targetRadius = 14;
+
+        if (test.stage.mode === "desktop") {
+          targetX = target.x;
+          targetY = target.y;
+          targetRadius = target.radius;
+        } else {
+          const projected = projectAngularTarget(target, test, width, height);
+          if (projected.visible) {
+            targetX = projected.x;
+            targetY = projected.y;
+            targetRadius = projected.radius;
+          }
+        }
+
+        test.shotFeedback = {
+          kind,
+          startedAt: now,
+          duration: reducedMotionQuery.matches ? 150 : kind === "hit" ? 360 : 420,
+          shotX,
+          shotY,
+          targetX,
+          targetY,
+          targetRadius
+        };
+      }
+
+      function drawShotFeedback(ctx, test) {
+        const feedback = test?.shotFeedback;
+        if (!feedback) return;
+        const elapsed = performance.now() - feedback.startedAt;
+        const progress = clamp(elapsed / feedback.duration, 0, 1);
+        if (progress >= 1) {
+          test.shotFeedback = null;
+          return;
+        }
+
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const fade = Math.pow(1 - progress, .72);
+        const motionScale = reducedMotionQuery.matches ? 0 : 1;
+        ctx.save();
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        if (feedback.kind === "hit") {
+          const ringRadius = feedback.targetRadius + (22 - eased * 14) * motionScale;
+          const innerRadius = Math.max(4, feedback.targetRadius * .24 + (1 - eased) * 5 * motionScale);
+          ctx.globalAlpha = fade;
+          ctx.strokeStyle = "#9be564";
+          ctx.fillStyle = "rgba(155,229,100,.22)";
+          ctx.shadowColor = "rgba(155,229,100,.8)";
+          ctx.shadowBlur = 16 * fade;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(feedback.targetX, feedback.targetY, ringRadius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(feedback.targetX, feedback.targetY, innerRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          const tickInner = ringRadius + 5;
+          const tickOuter = tickInner + 8 - eased * 3 * motionScale;
+          for (let index = 0; index < 4; index += 1) {
+            const angle = index * Math.PI / 2;
+            ctx.beginPath();
+            ctx.moveTo(
+              feedback.targetX + Math.cos(angle) * tickInner,
+              feedback.targetY + Math.sin(angle) * tickInner
+            );
+            ctx.lineTo(
+              feedback.targetX + Math.cos(angle) * tickOuter,
+              feedback.targetY + Math.sin(angle) * tickOuter
+            );
+            ctx.stroke();
+          }
+
+          const contract = 18 - eased * 9 * motionScale;
+          ctx.globalAlpha = fade * .9;
+          ctx.strokeStyle = "#f1f0df";
+          ctx.shadowColor = "rgba(241,240,223,.5)";
+          ctx.shadowBlur = 5;
+          ctx.beginPath();
+          ctx.moveTo(feedback.shotX - contract, feedback.shotY);
+          ctx.lineTo(feedback.shotX - 4, feedback.shotY);
+          ctx.moveTo(feedback.shotX + 4, feedback.shotY);
+          ctx.lineTo(feedback.shotX + contract, feedback.shotY);
+          ctx.moveTo(feedback.shotX, feedback.shotY - contract);
+          ctx.lineTo(feedback.shotX, feedback.shotY - 4);
+          ctx.moveTo(feedback.shotX, feedback.shotY + 4);
+          ctx.lineTo(feedback.shotX, feedback.shotY + contract);
+          ctx.stroke();
+        } else {
+          const expansion = 9 + eased * 13 * motionScale;
+          const marker = 5 + eased * 3 * motionScale;
+          const dx = feedback.targetX - feedback.shotX;
+          const dy = feedback.targetY - feedback.shotY;
+          const distance = Math.hypot(dx, dy);
+          const vectorLength = Math.min(58, distance);
+          const vectorX = distance > 0 ? feedback.shotX + dx / distance * vectorLength : feedback.shotX;
+          const vectorY = distance > 0 ? feedback.shotY + dy / distance * vectorLength : feedback.shotY;
+
+          ctx.globalAlpha = fade;
+          ctx.strokeStyle = "#f05a4f";
+          ctx.shadowColor = "rgba(240,90,79,.72)";
+          ctx.shadowBlur = 12 * fade;
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(feedback.shotX, feedback.shotY, expansion, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(feedback.shotX - marker, feedback.shotY - marker);
+          ctx.lineTo(feedback.shotX + marker, feedback.shotY + marker);
+          ctx.moveTo(feedback.shotX + marker, feedback.shotY - marker);
+          ctx.lineTo(feedback.shotX - marker, feedback.shotY + marker);
+          ctx.stroke();
+
+          if (distance > 2) {
+            ctx.globalAlpha = fade * .56;
+            ctx.setLineDash([3, 5]);
+            ctx.beginPath();
+            ctx.moveTo(feedback.shotX, feedback.shotY);
+            ctx.lineTo(vectorX, vectorY);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+
+      function attemptShot(now) {
+        const test = app.test;
+        if (!test?.target || test.phase !== "running" || test.stage.id === "track") return;
+        const segment = currentSegment();
+        const target = test.target;
+        const distance = test.stage.mode === "desktop"
+          ? Math.hypot(target.x - test.cursorX, target.y - test.cursorY)
+          : angularDistance(target.yaw, target.pitch, test.viewYaw, test.viewPitch);
+        const radius = test.stage.mode === "desktop" ? target.radius : target.radiusDeg;
+        const normalizedError = distance / Math.max(radius, .001);
+        segment.shots += 1;
+        segment.clickErrorTotal += normalizedError;
+        segment.clickErrorSamples += 1;
+        if (distance <= radius) {
+          segment.hits += 1;
+          segment.reactionTotal += now - test.targetSpawnAt;
+          queueShotFeedback("hit", now, target);
+          hitTone();
+          spawnTarget();
+        } else {
+          segment.misses += 1;
+          queueShotFeedback("miss", now, target);
+          cautionTone();
+        }
+      }
+
+      function updateLiveReadouts() {
+        const test = app.test;
+        const hits = test.segments.reduce((sum, segment) => sum + segment.hits, 0);
+        const shots = test.segments.reduce((sum, segment) => sum + segment.shots, 0);
+        const misses = test.segments.reduce((sum, segment) => sum + segment.misses, 0);
+        const reaction = test.segments.reduce((sum, segment) => sum + segment.reactionTotal, 0);
+        const clickErrorTotal = test.segments.reduce((sum, segment) => sum + segment.clickErrorTotal, 0);
+        const clickErrorSamples = test.segments.reduce((sum, segment) => sum + segment.clickErrorSamples, 0);
+        const path = test.segments.reduce((sum, segment) => sum + segment.path, 0);
+        const optimal = test.segments.reduce((sum, segment) => sum + segment.optimal, 0);
+        const overshoots = test.segments.reduce((sum, segment) => sum + segment.overshoots, 0);
+        const dwellMs = test.segments.reduce((sum, segment) => sum + segment.dwellMs, 0);
+        const activeMs = test.segments.reduce((sum, segment) => sum + segment.activeMs, 0);
+        const errorTotal = test.segments.reduce((sum, segment) => sum + segment.errorTotal, 0);
+        const errorSamples = test.segments.reduce((sum, segment) => sum + segment.errorSamples, 0);
+
+        if (test.stage.id === "track") {
+          $("liveHits").textContent = hits;
+          $("liveAccuracy").textContent = activeMs ? `${Math.round(dwellMs / activeMs * 100)}%` : "?";
+          $("liveMisses").textContent = "?";
+          $("liveReaction").textContent = errorSamples ? `${(errorTotal / errorSamples).toFixed(1)}?` : "?";
+          $("liveClickError").textContent = "?";
+          $("liveEfficiency").textContent = "?";
+          $("liveOvershoots").textContent = "?";
+          return;
+        }
+
+        $("liveHits").textContent = `${hits} / ${shots}`;
+        $("liveAccuracy").textContent = shots ? `${Math.round(hits / shots * 100)}%` : "?";
+        $("liveMisses").textContent = misses;
+        $("liveReaction").textContent = hits ? `${Math.round(reaction / hits)} ms` : "?";
+        $("liveClickError").textContent = clickErrorSamples ? `${Math.round(clickErrorTotal / clickErrorSamples * 100)}%` : "?";
+        $("liveEfficiency").textContent = path ? `${Math.round(clamp(optimal / path, 0, 1) * 100)}%` : "?";
+        $("liveOvershoots").textContent = overshoots;
+      }
+
+      function drawAngularWorldGrid(ctx, width, height, test) {
+        const focal = projectionFor(width);
+        const viewYaw = test?.viewYaw || 0;
+        const viewPitch = test?.viewPitch || 0;
+        const verticalHalfFov = Math.atan((height / 2) / focal) / DEG_TO_RAD;
+
+        ctx.save();
+        ctx.lineWidth = 1;
+        const yawStart = Math.ceil((viewYaw - app.horizontalFov * .55) / 10) * 10;
+        const yawEnd = viewYaw + app.horizontalFov * .55;
+        for (let worldYaw = yawStart; worldYaw <= yawEnd; worldYaw += 10) {
+          const x = width / 2 + Math.tan((worldYaw - viewYaw) * DEG_TO_RAD) * focal;
+          if (x < 0 || x > width) continue;
+          const major = Math.abs(worldYaw % 30) < .001;
+          ctx.strokeStyle = major ? "rgba(155,229,100,.16)" : "rgba(190,205,188,.08)";
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+
+        const pitchStart = Math.ceil((viewPitch - verticalHalfFov * 1.1) / 10) * 10;
+        const pitchEnd = viewPitch + verticalHalfFov * 1.1;
+        for (let worldPitch = pitchStart; worldPitch <= pitchEnd; worldPitch += 10) {
+          const y = height / 2 - Math.tan((worldPitch - viewPitch) * DEG_TO_RAD) * focal;
+          if (y < 0 || y > height) continue;
+          const horizon = Math.abs(worldPitch) < .001;
+          ctx.strokeStyle = horizon ? "rgba(241,218,176,.23)" : "rgba(190,205,188,.08)";
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        ctx.fillStyle = "rgba(184,185,170,.6)";
+        ctx.font = "11px 'IBM Plex Mono', Consolas, monospace";
+        ctx.fillText(`${currentGame().name} ? ?? ${app.horizontalFov}?  ?  YAW ${viewYaw.toFixed(1)}?  ?  PITCH ${viewPitch.toFixed(1)}?`, 18, height - 18);
+        ctx.restore();
+      }
+
+      function drawDirectionCue(ctx, projected, width, height) {
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const angle = Math.atan2(-projected.relativePitch, projected.relativeYaw);
+        const edgeX = clamp(centerX + Math.cos(angle) * width, 30, width - 30);
+        const edgeY = clamp(centerY + Math.sin(angle) * height, 30, height - 30);
+        ctx.save();
+        ctx.translate(edgeX, edgeY);
+        ctx.rotate(angle);
+        ctx.fillStyle = "rgba(241,218,176,.82)";
+        ctx.beginPath();
+        ctx.moveTo(10, 0);
+        ctx.lineTo(-6, -7);
+        ctx.lineTo(-6, 7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawTestScene() {
+        const canvas = $("aimCanvas");
+        const { ctx, width, height, dpr } = sizeCanvas(canvas);
+        drawPanelGrid(ctx, width, height, canvas, dpr);
+
+        const test = app.test;
+        const desktopMode = test?.stage.mode === "desktop";
+        if (desktopMode) {
+          test.cursorX = clamp(test.cursorX, 16, Math.max(16, width - 16));
+          test.cursorY = clamp(test.cursorY, 16, Math.max(16, height - 16));
+          test.prevCursorX = clamp(test.prevCursorX, 16, Math.max(16, width - 16));
+          test.prevCursorY = clamp(test.prevCursorY, 16, Math.max(16, height - 16));
+          if (test.target) {
+            const padding = test.target.radius + 20;
+            test.target.x = clamp(test.target.x, padding, Math.max(padding, width - padding));
+            test.target.y = clamp(test.target.y, padding, Math.max(padding, height - padding));
+          }
+          ctx.save();
+          ctx.fillStyle = "rgba(184,185,170,.6)";
+          ctx.font = "11px 'IBM Plex Mono', Consolas, monospace";
+          ctx.fillText("??????  ?  ?? 1:1 ??  ?  ??????????", 18, height - 18);
+          ctx.restore();
+        } else {
+          drawAngularWorldGrid(ctx, width, height, test);
+        }
+        if (test?.target) {
+          const target = test.target;
+          if (desktopMode) {
+            ctx.save();
+            ctx.shadowColor = test.aimReady ? "rgba(241,240,223,.9)" : "rgba(155,229,100,.7)";
+            ctx.shadowBlur = test.aimReady ? 14 : 8;
+            ctx.strokeStyle = test.aimReady ? "#f1f0df" : "#9be564";
+            ctx.fillStyle = test.aimReady ? "rgba(241,240,223,.18)" : "rgba(155,229,100,.12)";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, Math.max(3, target.radius * .18), 0, Math.PI * 2);
+            ctx.fillStyle = "#f1f0df";
+            ctx.fill();
+            ctx.restore();
+          } else {
+            const projected = projectAngularTarget(target, test, width, height);
+            if (projected.visible) {
+              ctx.save();
+              const ready = test.stage.id === "track" ? test.trackingInside : test.aimReady;
+              ctx.shadowColor = ready ? "rgba(241,240,223,.9)" : "rgba(155,229,100,.7)";
+              ctx.shadowBlur = ready ? 14 : 8;
+              ctx.strokeStyle = ready ? "#f1f0df" : "#9be564";
+              ctx.fillStyle = ready ? "rgba(241,240,223,.18)" : "rgba(155,229,100,.12)";
+              ctx.lineWidth = 2;
+              ctx.beginPath();
+              ctx.arc(projected.x, projected.y, projected.radius, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.stroke();
+              ctx.beginPath();
+              ctx.arc(projected.x, projected.y, Math.max(3, projected.radius * .18), 0, Math.PI * 2);
+              ctx.fillStyle = "#f1f0df";
+              ctx.fill();
+              ctx.restore();
+            } else {
+              drawDirectionCue(ctx, projected, width, height);
+            }
+          }
+        }
+
+        const x = desktopMode ? test.cursorX : width / 2;
+        const y = desktopMode ? test.cursorY : height / 2;
+        ctx.save();
+        ctx.strokeStyle = "#f1f0df";
+        ctx.lineWidth = 2;
+        ctx.shadowColor = "rgba(241,240,223,.35)";
+        ctx.shadowBlur = 2;
+        ctx.beginPath();
+        ctx.moveTo(x - 14, y);
+        ctx.lineTo(x - 4, y);
+        ctx.moveTo(x + 4, y);
+        ctx.lineTo(x + 14, y);
+        ctx.moveTo(x, y - 14);
+        ctx.lineTo(x, y - 4);
+        ctx.moveTo(x, y + 4);
+        ctx.lineTo(x, y + 14);
+        ctx.stroke();
+        ctx.fillStyle = "#f1f0df";
+        ctx.beginPath();
+        ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        drawShotFeedback(ctx, test);
+        if (test?.phase === "running" && test.stage.id !== "track" && test.aimReady) {
+          ctx.save();
+          ctx.fillStyle = "rgba(241,240,223,.9)";
+          ctx.font = "600 12px 'IBM Plex Mono', Consolas, monospace";
+          ctx.textAlign = "center";
+          ctx.fillText("?????", x, y + 36);
+          ctx.restore();
+        }
+      }
+
+      function finishStage() {
+        const test = app.test;
+        test.phase = "done";
+        if (document.pointerLockElement) document.exitPointerLock();
+        const summarized = summarizeStage(test);
+        app.stageResults.push(summarized);
+        completeTone();
+        $("testOverlay").hidden = false;
+        $("overlayKicker").textContent = `TEST ${app.stageIndex + 1} COMPLETE`;
+        $("overlayTitle").textContent = `${test.stage.name}??`;
+        $("overlayText").textContent = test.stage.mode === "desktop"
+          ? "???????????????????????????"
+          : "??????????????????????????????????????";
+
+        if (app.stageIndex < stageDefs.length - 1) {
+          $("stageActionBtn").textContent = "?????";
+          $("stageActionBtn").onclick = () => {
+            app.stageIndex += 1;
+            prepareStage();
+          };
+        } else {
+          $("stageActionBtn").textContent = "???????";
+          $("stageActionBtn").onclick = calculateResult;
+        }
+        renderTestChecklist();
+      }
+
+      function summarizeStage(test) {
+        const scores = test.segments.map((segment) => {
+          const efficiency = clamp(segment.optimal / Math.max(segment.path, 1), 0, 1);
+          const avgReaction = segment.hits ? segment.reactionTotal / segment.hits : 2200;
+          const avgError = segment.errorSamples ? segment.errorTotal / segment.errorSamples : 999;
+          const avgClickError = segment.clickErrorSamples ? segment.clickErrorTotal / segment.clickErrorSamples : 3;
+          const dwell = segment.activeMs ? segment.dwellMs / segment.activeMs : 0;
+          const accuracy = segment.hits / Math.max(1, segment.shots);
+          const missRate = segment.misses / Math.max(1, segment.shots);
+          const reactionNorm = Math.exp(-Math.max(0, avgReaction - 180) / 700);
+          const errorNorm = Math.exp(-avgClickError / 1.15);
+          const overshootNorm = Math.exp(-segment.overshoots / Math.max(1, segment.spawns));
+          const coverage = segment.hits / Math.max(1, segment.spawns);
+          let raw;
+          if (test.stage.id === "track") {
+            raw = dwell * 72 + clamp(1 - avgError / 8, 0, 1) * 28;
+          } else if (!segment.shots) {
+            raw = 0;
+          } else {
+            raw = clamp(
+              100 * (
+                .35 * accuracy +
+                .20 * reactionNorm * accuracy +
+                .20 * errorNorm +
+                .10 * efficiency +
+                .10 * overshootNorm +
+                .05 * coverage
+              ) - 25 * missRate,
+              0,
+              100
+            );
+          }
+          return {
+            raw,
+            hits: segment.hits,
+            shots: segment.shots,
+            misses: segment.misses,
+            path: segment.path,
+            optimal: segment.optimal,
+            accuracy,
+            efficiency,
+            avgReaction,
+            avgError,
+            avgClickError,
+            reactionNorm,
+            errorNorm,
+            dwell,
+            overshoots: segment.overshoots
+          };
+        });
+        const mean = scores.reduce((sum, score) => sum + score.raw, 0) / scores.length;
+        return {
+          id: test.stage.id,
+          name: test.stage.name,
+          scores,
+          displayScore: clamp(mean, 0, 100)
+        };
+      }
+
+      function calculateResult() {
+        const weights = { wide: .25, micro: .3, switch: .2, track: .25 };
+        const factorTotals = FACTORS.map((_, factorIndex) => app.stageResults.reduce((sum, stage) => {
+          return sum + stage.scores[factorIndex].raw * (weights[stage.id] || 0);
+        }, 0));
+        const bestIndex = factorTotals.indexOf(Math.max(...factorTotals));
+        const sorted = [...factorTotals].sort((a, b) => b - a);
+        const margin = sorted[0] - sorted[1];
+        const game = currentGame();
+        const mainSens = clamp(app.currentSens * FACTORS[bestIndex], game.sens.min, game.sens.max);
+        const auxiliaryStage = app.stageResults.find((stage) => stage.id === "desktop");
+        const auxiliaryScore = auxiliaryStage ? auxiliaryStage.displayScore : 50;
+        const auxiliaryContribution = clamp((auxiliaryScore - 50) / 50, -1, 1) * .04;
+        const selectedClickScores = app.stageResults
+          .filter((stage) => !["track", "desktop"].includes(stage.id))
+          .map((stage) => stage.scores[bestIndex]);
+        const allClickScores = app.stageResults
+          .filter((stage) => !["track", "desktop"].includes(stage.id))
+          .flatMap((stage) => stage.scores);
+        const selectedShots = selectedClickScores.reduce((sum, score) => sum + score.shots, 0);
+        const selectedHits = selectedClickScores.reduce((sum, score) => sum + score.hits, 0);
+        const selectedAccuracy = selectedHits / Math.max(1, selectedShots);
+        const totalShots = allClickScores.reduce((sum, score) => sum + score.shots, 0);
+        const totalHits = allClickScores.reduce((sum, score) => sum + score.hits, 0);
+        const totalMisses = allClickScores.reduce((sum, score) => sum + score.misses, 0);
+        const totalReaction = allClickScores.reduce((sum, score) => sum + score.avgReaction * score.hits, 0);
+        const totalClickError = allClickScores.reduce((sum, score) => sum + score.avgClickError * score.shots, 0);
+        const totalPath = allClickScores.reduce((sum, score) => sum + (score.path || 0), 0);
+        const totalOptimal = allClickScores.reduce((sum, score) => sum + (score.optimal || 0), 0);
+        const totalOvershoots = allClickScores.reduce((sum, score) => sum + score.overshoots, 0);
+        const accuracy = totalHits / Math.max(1, totalShots);
+        const avgReaction = totalHits ? totalReaction / totalHits : null;
+        const avgClickError = totalShots ? totalClickError / totalShots : null;
+        const pathEfficiency = totalPath ? clamp(totalOptimal / totalPath, 0, 1) : null;
+        const sampleConfidence = clamp(selectedShots / 9, 0, 1);
+        const confidence = clamp(
+          .42 +
+          sampleConfidence * .12 +
+          selectedAccuracy * .08 +
+          clamp(margin / 20, 0, 1) * .22 +
+          (app.coreRawInput ? .12 : .05) +
+          auxiliaryContribution -
+          Math.min(.15, app.pauseCount * .035) -
+          Math.min(.1, app.inputGapCount / 180),
+          .38,
+          .93
+        );
+
+        const speedScores = app.stageResults.slice(0, 3).map((stage) => {
+          const chosen = stage.scores[bestIndex];
+          return clamp(chosen.reactionNorm * chosen.accuracy * 80 + chosen.accuracy * 20, 0, 100);
+        });
+        const controlScores = app.stageResults.map((stage) => {
+          if (stage.id === "desktop") {
+            return stage.scores.reduce((sum, score) => {
+              return sum + clamp(score.efficiency * 70 + (1 - Math.min(1, score.overshoots / 8)) * 30, 0, 100);
+            }, 0) / stage.scores.length;
+          }
+          const chosen = stage.scores[bestIndex];
+          if (stage.id === "track") return clamp(chosen.dwell * 70 + (1 - chosen.avgError / 8) * 30, 0, 100);
+          return clamp(
+            chosen.accuracy * 45 +
+            chosen.errorNorm * 30 +
+            chosen.efficiency * 15 +
+            Math.exp(-chosen.overshoots / Math.max(1, chosen.hits)) * 10,
+            0,
+            100
+          );
+        });
+        const speed = speedScores.reduce((a, b) => a + b, 0) / speedScores.length;
+        const control = controlScores.reduce((a, b) => a + b, 0) / controlScores.length;
+
+        const stageScores = Object.fromEntries(app.stageResults.map((stage) => {
+          if (stage.id === "desktop") return [stage.id, clamp(stage.displayScore, 0, 100)];
+          const rawValues = stage.scores.map((score) => score.raw);
+          const min = Math.min(...rawValues);
+          const max = Math.max(...rawValues);
+          const chosen = stage.scores[bestIndex].raw;
+          const relative = max === min ? 72 : 55 + (chosen - min) / (max - min) * 40;
+          return [stage.id, clamp(relative, 0, 100)];
+        }));
+
+        app.currentResult = {
+          id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+          timestamp: new Date().toISOString(),
+          gameId: game.id,
+          gameName: game.name,
+          dpi: app.dpi,
+          baseSens: app.currentSens,
+          mainSens: round(mainSens, game.sens.digits),
+          lowSens: round(clamp(mainSens * .93, game.sens.min, game.sens.max), game.sens.digits),
+          highSens: round(clamp(mainSens * 1.07, game.sens.min, game.sens.max), game.sens.digits),
+          edpi: edpi(app.dpi, mainSens),
+          cm360: cm360(app.dpi, mainSens, game.yaw),
+          confidence,
+          speed,
+          control,
+          accuracy,
+          shots: totalShots,
+          hits: totalHits,
+          misses: totalMisses,
+          avgReaction,
+          avgClickError,
+          pathEfficiency,
+          overshoots: totalOvershoots,
+          stageScores,
+          selectedFactor: FACTORS[bestIndex],
+          factorTotals,
+          rawInput: app.coreRawInput,
+          inputMode: app.inputMode,
+          viewModel: "angular-click-confirm-v2",
+          horizontalFov: app.horizontalFov,
+          auxiliaryScore,
+          pauseCount: app.pauseCount,
+          yaw: game.yaw,
+          saved: false
+        };
+        renderResults();
+        showScreen("results");
+      }
+
+      function renderResults() {
+        const result = app.currentResult;
+        const resultGame = GAMES[result.gameId] || GAMES.valorant;
+        $("resultPrimarySens").textContent = formatSens(result.mainSens, resultGame.id);
+        $("resultPrimaryUnit").textContent = `${resultGame.name} ??????`;
+        $("resultCm360").textContent = `${result.cm360.toFixed(1)} cm`;
+        $("resultEdpi").textContent = Math.round(result.edpi);
+        $("resultAccuracy").textContent = `${Math.round((result.accuracy || 0) * 100)}%`;
+        $("resultConfidence").textContent = `${Math.round(result.confidence * 100)}%`;
+        $("lowSens").textContent = formatSens(result.lowSens, resultGame.id);
+        $("mainSens").textContent = formatSens(result.mainSens, resultGame.id);
+        $("highSens").textContent = formatSens(result.highSens, resultGame.id);
+        $("resultGameName").textContent = resultGame.name;
+        $("resultGameIcon").src = gameIcon(resultGame.id);
+        $("resultGameIcon").alt = `${resultGame.name} ??`;
+        $("resultStateText").textContent = result.confidence >= .65 ? "??????" : "?????";
+        $("resultLamp").className = `lamp ${result.confidence >= .65 ? "live" : "warn"}`;
+        $("saveResultBtn").disabled = result.saved;
+        $("saveResultBtn").textContent = result.saved ? "??????" : "???????";
+        renderEvidenceGrid($("resultEvidenceGrid"), result);
+
+        const conversionList = $("conversionList");
+        conversionList.replaceChildren();
+        Object.values(GAMES).forEach((game) => {
+          const rawSensitivity = equivalentSensitivity(result.mainSens, resultGame, game);
+          const convertedSensitivity = clamp(rawSensitivity, game.sens.min, game.sens.max);
+          const convertedCm360 = cm360(result.dpi, convertedSensitivity, game.yaw);
+          const rangeLimited = Math.abs(convertedSensitivity - rawSensitivity) / Math.max(.001, rawSensitivity) > .01;
+          const item = document.createElement("li");
+          item.className = `conversion-row${game.id === resultGame.id ? " current" : ""}`;
+          item.innerHTML = `
+            <img src="${gameIcon(game.id)}" alt="">
+            <div class="conversion-game"><strong>${game.name}</strong><span>${game.id === resultGame.id ? "??????" : "??????"}</span></div>
+            <strong>${formatSens(convertedSensitivity, game.id)}</strong>
+            <span class="conversion-distance">${convertedCm360.toFixed(1)} cm/360?</span>
+            <span class="conversion-note">${rangeLimited ? "????????" : "??????"}</span>`;
+          conversionList.append(item);
+        });
+
+        const scoreBars = $("scoreBars");
+        scoreBars.replaceChildren();
+        stageDefs.forEach((stage) => {
+          const score = result.stageScores[stage.id];
+          const row = document.createElement("div");
+          row.className = "score-row";
+          row.innerHTML = `<span>${stage.name}</span><div class="score-track"><div class="score-fill" style="--score-scale:${score / 100}"></div></div><strong>${Math.round(score)}</strong>`;
+          scoreBars.append(row);
+        });
+
+        const factorScoreList = $("factorScoreList");
+        factorScoreList.replaceChildren();
+        FACTORS.forEach((factor, index) => {
+          const score = Number(result.factorTotals?.[index]);
+          const isWinner = Math.abs(factor - result.selectedFactor) < .001;
+          const row = document.createElement("div");
+          row.className = `factor-score-row${isWinner ? " winner" : ""}`;
+          row.innerHTML = `
+            <span>${Math.round(factor * 100)}%</span>
+            <strong>${formatSens(candidateSensitivity(result.baseSens, factor, resultGame), resultGame.id)}</strong>
+            <div class="factor-score-track"><div class="factor-score-fill" style="--score-scale:${Number.isFinite(score) ? clamp(score / 100, 0, 1) : 0}"></div></div>
+            <strong>${Number.isFinite(score) ? Math.round(score) : "?"}</strong>`;
+          factorScoreList.append(row);
+        });
+
+        const direction = result.selectedFactor < .9 ? "?????????????????????????????????" :
+          result.selectedFactor > 1.1 ? "????????????????????????????????????" :
+          "????????????????????????????????";
+        $("resultExplanation").innerHTML = `
+          <h3 class="section-title">???? ${resultGame.name} ?? ${formatSens(result.mainSens, resultGame.id)}</h3>
+          <p>${direction}</p>
+          <ul>
+            <li>?????????????????????? <strong>${formatSens(result.baseSens, resultGame.id)}</strong> ???????65%?82%?100%?122% ? 150%??????????????????</li>
+            <li>?????????????????????????????????????????? 0 ?????????????</li>
+            <li>??????? <strong>${result.shots}</strong> ???? <strong>${result.hits}</strong> ????? <strong>${result.misses}</strong> ?????????????????</li>
+            <li>????????? <strong>${Math.round(result.auxiliaryScore)}</strong>???????????????????????????????</li>
+            <li>?????? <strong>${Math.round(result.confidence * 100)}%</strong>?${result.rawInput ? "???????????????????" : result.inputMode === "desktop" ? "???????????????????????????????????????" : "?????????????????????????????????????"}</li>
+            <li>????? eDPI ? <strong>${Math.round(result.edpi)}</strong>?? yaw ${result.yaw} ??? cm/360? ?? <strong>${result.cm360.toFixed(1)} cm</strong>?</li>
+            <li>???????? cm/360? ????????????? FOV ???????????</li>
+            <li>??????????????????????????????????????</li>
+          </ul>
+          <div class="notice"><strong>???</strong> ?? ${resultGame.name} ???? ${result.horizontalFov}? ????? ${result.yaw}?/count ??????????????????????????????? cm/360????? FOV?????????????????????????????????????????</div>`;
+      }
+
+      function saveCurrentResult() {
+        const result = app.currentResult;
+        if (!result || result.saved) return;
+        const stored = { ...result };
+        delete stored.saved;
+        app.history.unshift(stored);
+        app.history = app.history.slice(0, 50);
+        if (persistHistory()) {
+          result.saved = true;
+          app.converterGameId = stored.gameId;
+          app.converterSens = stored.mainSens;
+          app.converterDpi = stored.dpi;
+          app.converterInitialized = true;
+          renderResults();
+          renderHome();
+          completeTone();
+          showToast("????????????????");
+        }
+      }
+
+      function restartRun() {
+        app.stageResults = [];
+        app.currentResult = null;
+        showScreen("setup");
+      }
+
+      function pauseActiveTest(reason) {
+        const test = app.test;
+        if (!test || !["running", "countdown", "factor-countdown"].includes(test.phase)) return;
+        const now = performance.now();
+        test.resumePhase = test.phase;
+        test.phase = "paused";
+        test.pausedRemaining = test.resumePhase === "countdown"
+          ? Math.max(0, test.countdownEnd - now)
+          : test.resumePhase === "factor-countdown"
+            ? Math.max(0, test.factorCountdownEnd - now)
+            : Math.max(0, test.endAt - now);
+        app.pauseCount += 1;
+        $("testOverlay").hidden = false;
+        $("overlayKicker").textContent = "PAUSED";
+        $("overlayTitle").textContent = "?????";
+        $("overlayText").textContent = `${reason}???????????????????`;
+        $("stageActionBtn").textContent = "??????";
+        $("stageActionBtn").onclick = resumeStage;
+        cautionTone();
+      }
+
+      async function resumeStage() {
+        const test = app.test;
+        if (!test || test.phase !== "paused") return;
+        await ensureAudio();
+        test.locked = await requestRelativeInput($("testStage"), test.stage.mode === "desktop" ? "desktop" : app.inputMode);
+        if (test.stage.mode !== "desktop" && app.rawInput) app.coreRawInput = true;
+        const now = performance.now();
+        test.phase = test.resumePhase;
+        if (test.phase === "countdown") test.countdownEnd = now + test.pausedRemaining;
+        else if (test.phase === "factor-countdown") test.factorCountdownEnd = now + test.pausedRemaining;
+        else {
+          test.endAt = now + test.pausedRemaining;
+          test.lastFrameAt = now;
+        }
+        $("testOverlay").hidden = true;
+        cancelAnimationFrame(app.raf);
+        app.raf = requestAnimationFrame(tickTest);
+      }
+
+      function onMouseMove(event) {
+        const now = performance.now();
+        if (app.lastMeasuredMoveAt) {
+          const interval = now - app.lastMeasuredMoveAt;
+          if (interval > .08 && interval < 40) {
+            app.measuredPollingSamples.push(interval);
+            if (app.measuredPollingSamples.length > 240) app.measuredPollingSamples.shift();
+          }
+        }
+        app.lastMeasuredMoveAt = now;
+        if (app.measuredPollingSamples.length >= 24 && now - app.lastMeasuredRenderAt > 500) {
+          const sorted = [...app.measuredPollingSamples].sort((a, b) => a - b);
+          const lowerHalf = sorted.slice(0, Math.max(8, Math.ceil(sorted.length * .65)));
+          const median = lowerHalf[Math.floor(lowerHalf.length / 2)];
+          const measured = clamp(Math.round(1000 / median), 1, 8000);
+          $("measuredPollingReadout").textContent = `${measured} Hz*`;
+          $("measuredPollingReadout").title = "??? mousemove ?????????????????????????";
+          app.lastMeasuredRenderAt = now;
+        }
+        if (app.lastMoveAt && now - app.lastMoveAt > 120) app.inputGapCount += 1;
+        app.lastMoveAt = now;
+        const fallbackX = app.lastClientX === null ? 0 : event.clientX - app.lastClientX;
+        const fallbackY = app.lastClientY === null ? 0 : event.clientY - app.lastClientY;
+        const movementX = event.movementX || fallbackX;
+        const movementY = event.movementY || fallbackY;
+        app.lastClientX = event.clientX;
+        app.lastClientY = event.clientY;
+
+        if (app.screen === "calibration" && app.calibration?.phase === "running") {
+          const dx = Number.isFinite(movementX) ? movementX : 0;
+          app.calibration.totalDistance += Math.abs(dx);
+          app.pendingCalibrationX += dx;
+          return;
+        }
+
+        const test = app.test;
+        if (app.screen !== "test" || test?.phase !== "running") return;
+        const dx = Number.isFinite(movementX) ? movementX : 0;
+        const dy = Number.isFinite(movementY) ? movementY : 0;
+        app.pendingInputX += dx;
+        app.pendingInputY += dy;
+        app.pendingInputPath += Math.hypot(dx, dy);
+      }
+
+      function exportHistory() {
+        if (!app.history.length) {
+          showToast("?????????????");
+          return;
+        }
+        const blob = new Blob([JSON.stringify({ version: 2, exportedAt: new Date().toISOString(), sessions: app.history }, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `sensitivity-flight-log-${new Date().toISOString().slice(0,10)}.json`;
+        anchor.click();
+        setTimeout(() => URL.revokeObjectURL(url), 500);
+      }
+
+      function clearHistory() {
+        if (!app.history.length) {
+          showToast("?????????");
+          return;
+        }
+        if (!confirm("??????????????????????")) return;
+        app.history = [];
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+        renderHome();
+        showToast("??????????");
+      }
+
+      function goHome() {
+        cancelAnimationFrame(app.raf);
+        app.test = null;
+        app.calibration = null;
+        showScreen("home");
+        renderHome();
+        if (document.pointerLockElement) document.exitPointerLock();
+      }
+
+      function cancelActiveTest() {
+        const hasProgress = app.test || app.stageResults.length;
+        if (hasProgress && !window.confirm("????????????????????")) return;
+        goHome();
+      }
+
+      function bindEvents() {
+        bindLeverControl();
+        document.querySelectorAll(".game-switch").forEach((button) => {
+          button.addEventListener("click", () => switchGame(button.dataset.game));
+        });
+        $("startNewBtn").addEventListener("click", beginSetup);
+        $("connectMouseBtn").addEventListener("click", connectHidMouse);
+        $("setupProSearch").addEventListener("input", filterSetupPros);
+        $("setupProDpiFilter").addEventListener("change", filterSetupPros);
+        $("setupProList").addEventListener("click", (event) => {
+          const row = event.target.closest("[data-setup-pro-index]");
+          if (row) selectSetupPro(Number(row.dataset.setupProIndex));
+        });
+        $("setupProDpiChoices").addEventListener("click", (event) => {
+          const chip = event.target.closest("[data-setup-pro-dpi]");
+          if (!chip) return;
+          app.setupPros.targetDpi = Number(chip.dataset.setupProDpi);
+          renderSetupProSelection();
+        });
+        $("applySetupProBtn").addEventListener("click", applySetupProChoice);
+        $("dpiInput").addEventListener("input", () => {
+          if (app.dpiSource === "webhid") app.dpiSource = "manual";
+        });
+        $("fovInput").addEventListener("input", () => {
+          const value = Number($("fovInput").value);
+          if (Number.isFinite(value)) app.horizontalFov = value;
+        });
+
+        $("toCalibrationBtn").addEventListener("click", prepareCalibration);
+        $("startCalibrationBtn").addEventListener("click", startCalibration);
+        $("saveResultBtn").addEventListener("click", saveCurrentResult);
+        $("runAgainBtn").addEventListener("click", restartRun);
+        $("cancelTestBtn").addEventListener("click", cancelActiveTest);
+        $("exportBtn").addEventListener("click", exportHistory);
+        $("clearBtn").addEventListener("click", clearHistory);
+        $("converterGamePicker").addEventListener("click", (event) => {
+          const button = event.target.closest("[data-converter-game]");
+          if (button) setConverterGame(button.dataset.converterGame);
+        });
+        $("converterSensInput").addEventListener("input", (event) => {
+          app.converterSens = Number(event.target.value);
+          renderConverterOutputs();
+        });
+        $("converterDpiInput").addEventListener("input", (event) => {
+          app.converterDpi = Number(event.target.value);
+          renderConverterOutputs();
+        });
+        $("converterOutputList").addEventListener("click", (event) => {
+          const button = event.target.closest("[data-copy-value]");
+          if (button) copyConverterValue(button.dataset.copyValue);
+        });
+        document.querySelectorAll("[data-go-home]").forEach((button) => button.addEventListener("click", goHome));
+
+        $("soundToggle").addEventListener("click", async () => {
+          app.sound = !app.sound;
+          $("soundToggle").textContent = app.sound ? "??" : "??";
+          $("soundToggle").setAttribute("aria-pressed", String(app.sound));
+          $("soundToggle").setAttribute("aria-label", app.sound ? "????" : "????");
+          if (app.sound) {
+            await ensureAudio();
+            tone(720, .06, .035);
+          }
+        });
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("pointerlockchange", () => {
+          const locked = Boolean(document.pointerLockElement);
+          if (locked) setInputStatus(app.rawInput ? "???????" : "??????", "live");
+          else if (app.screen === "test" && app.test?.locked && ["running", "countdown", "factor-countdown"].includes(app.test.phase)) {
+            pauseActiveTest("???????");
+          }
+        });
+        document.addEventListener("pointerlockerror", () => {
+          setInputStatus("??????", "warn");
+          showToast("?????????????????");
+        });
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden && app.screen === "test") pauseActiveTest("????????");
+        });
+        window.addEventListener("blur", () => {
+          if (app.screen === "test") pauseActiveTest("?????????");
+        });
+        window.addEventListener("resize", () => {
+          app.canvasBounds = Object.create(null);
+          gridCache.delete($("calibrationCanvas"));
+          gridCache.delete($("aimCanvas"));
+          if (app.screen === "calibration") drawCalibration();
+          if (app.screen === "test") drawTestScene();
+        });
+        $("testStage").addEventListener("wheel", (event) => {
+          if (app.screen === "test") event.preventDefault();
+        }, { passive: false });
+        $("testStage").addEventListener("mousedown", (event) => {
+          if (event.button !== 0 || app.screen !== "test") return;
+          event.preventDefault();
+          attemptShot(performance.now());
+        });
+        if ("ResizeObserver" in window) {
+          const observer = new ResizeObserver(() => {
+            delete app.canvasBounds.aimCanvas;
+            gridCache.delete($("aimCanvas"));
+            if (app.screen === "test") drawTestScene();
+          });
+          observer.observe($("aimCanvas"));
+        }
+      }
+
+      function bindMotionFeedback() {
+        document.addEventListener("click", (event) => {
+          const control = event.target.closest("button:not(.game-switch), .lab-entry-link");
+          if (control) pulseControl(control);
+        });
+      }
+
+      function init() {
+        applyLaunchParameters();
+        loadHistory();
+        updateGameUi();
+        initializeSetupProSelector();
+        renderHome();
+        bindEvents();
+        bindMotionFeedback();
+        window.addEventListener("resize", queueHomePowerLayout, { passive: true });
+        initHidAssist();
+        setInputStatus("??????", "");
+        drawCalibration();
+        drawTestScene();
+        runScreenMotion("home");
+      }
+
+      init();
+    })();
