@@ -14,24 +14,24 @@
       const LEVER_BOTTOM = 170;
       const GAMES = Object.freeze({
         valorant: Object.freeze({
-          id: "valorant", name: "????", brandName: "??????", yaw: 0.07, fov: 103,
+          id: "valorant", name: "无畏契约", brandName: "《无畏契约》", yaw: 0.07, fov: 103,
           sens: Object.freeze({ min: .01, max: 10, step: .001, digits: 3, default: .32 }),
-          sourceNote: "???? yaw 0.07?/count??????? 103? ??"
+          sourceNote: "社区常用 yaw 0.07°/count；水平视野常按 103° 模拟"
         }),
         overwatch2: Object.freeze({
-          id: "overwatch2", name: "???? 2", brandName: "????? 2?", yaw: .0066, fov: 103,
+          id: "overwatch2", name: "守望先锋 2", brandName: "《守望先锋 2》", yaw: .0066, fov: 103,
           sens: Object.freeze({ min: .01, max: 100, step: .01, digits: 2, default: 5 }),
-          sourceNote: "???? yaw 0.0066?/count????????????"
+          sourceNote: "社区常用 yaw 0.0066°/count；水平视野可在游戏中调整"
         }),
         cs2: Object.freeze({
-          id: "cs2", name: "CS2", brandName: "?CS2?", yaw: .022, fov: 90,
+          id: "cs2", name: "CS2", brandName: "《CS2》", yaw: .022, fov: 90,
           sens: Object.freeze({ min: .1, max: 8, step: .001, digits: 3, default: 1 }),
-          sourceNote: "?? m_yaw ??? 0.022?/count???? 90? ?????????"
+          sourceNote: "默认 m_yaw 通常为 0.022°/count；本页以 90° 水平视野作视觉模拟"
         }),
         deltaforce: Object.freeze({
-          id: "deltaforce", name: "?????", brandName: "???????", yaw: .022, fov: 100,
+          id: "deltaforce", name: "三角洲行动", brandName: "《三角洲行动》", yaw: .022, fov: 100,
           sens: Object.freeze({ min: .01, max: 100, step: .01, digits: 2, default: 5 }),
-          sourceNote: "?????? yaw 0.022?/count?????????? 100?"
+          sourceNote: "社区换算常按 yaw 0.022°/count；视野可调，本页默认 100°"
         })
       });
       const HID_VENDOR_FILTERS = [
@@ -49,11 +49,11 @@
       ];
 
       const stageDefs = [
-        { id: "wide", name: "?????", description: "??????????????????????????????????????????????????????" },
-        { id: "micro", name: "??????", description: "??????????????????????????????????????????" },
-        { id: "switch", name: "??????", description: "?????????????????????????????????????????" },
-        { id: "track", name: "????", description: "?????????????????????????????????????????????" },
-        { id: "desktop", mode: "desktop", name: "??????", description: "??????????????????????????????????????????????????????????????" }
+        { id: "wide", name: "大范围转向", description: "固定中央准星，目标在左右大角度交替出现。移动鼠标完成转向，瞄准后左键射击，测量速度、路径效率、命中率与过冲。" },
+        { id: "micro", name: "微小目标定位", description: "小目标在中心附近以较小角度出现。瞄准后左键射击，重点测量末端控制、点击误差与稳定性。" },
+        { id: "switch", name: "连续目标切换", description: "目标在不同方位角连续出现。逐个瞄准并左键射击，重点测量切换延迟、命中率与方向修正。" },
+        { id: "track", name: "平滑追踪", description: "持续旋转虚拟视角跟随移动目标。中央准星进入目标后保持贴合，重点测量平均角度误差与跟随时间。" },
+        { id: "desktop", mode: "desktop", name: "桌面微调辅助", description: "最后进行一项独立的二维微调测试。准星随鼠标移动，瞄准后左键射击；该结果只辅助评估控制稳定与置信度，不直接选择游戏灵敏度档位。" }
       ];
 
       const app = {
@@ -585,9 +585,9 @@
         if (!app.setupPros.filtered.length) {
           const empty = document.createElement("div");
           empty.className = "setup-pro-list-state";
-          empty.textContent = "?????????????????????";
+          empty.textContent = "没有匹配的选手，请清除筛选或换一个关键词。";
           list.replaceChildren(empty);
-          $("setupProListState").textContent = "0 ?????";
+          $("setupProListState").textContent = "0 名匹配选手";
           return;
         }
         const rows = app.setupPros.filtered.map((player) => {
@@ -609,8 +609,8 @@
           return button;
         });
         list.replaceChildren(...rows);
-        const date = app.setupPros.retrievedAt ? new Date(app.setupPros.retrievedAt).toLocaleDateString("zh-CN") : "????";
-        $("setupProListState").textContent = `${app.setupPros.filtered.length} ??? ? ??????????? ? ?? ${date}`;
+        const date = app.setupPros.retrievedAt ? new Date(app.setupPros.retrievedAt).toLocaleDateString("zh-CN") : "日期未知";
+        $("setupProListState").textContent = `${app.setupPros.filtered.length} 名匹配 · 已全部载入，可滚动查看 · 快照 ${date}`;
       }
 
       function filterSetupPros() {
@@ -628,8 +628,8 @@
         if (!player || !$("setupProPlayer")) return;
         const targetDpi = clamp(Number(app.setupPros.targetDpi) || player.dpi, 100, 32000);
         app.setupPros.targetDpi = targetDpi;
-        $("setupProPlayer").textContent = `${player.player} ? ${player.team}`;
-        $("setupProMeta").textContent = `${player.mouse} ? ?? ${player.dpi} DPI / ${player.sensitivity} ??? / ${player.edpi} eDPI`;
+        $("setupProPlayer").textContent = `${player.player} · ${player.team}`;
+        $("setupProMeta").textContent = `${player.mouse} · 来源 ${player.dpi} DPI / ${player.sensitivity} 灵敏度 / ${player.edpi} eDPI`;
         const candidateDpis = [...new Set([400, 800, 1600, 3200, player.dpi, targetDpi])]
           .filter((dpi) => dpi >= 100 && dpi <= 32000)
           .sort((a, b) => a - b);
@@ -645,7 +645,7 @@
         const game = currentGame();
         const preview = setupProEquivalent(player, targetDpi, game);
         $("setupProTargetDpi").textContent = String(targetDpi);
-        $("setupProSensLabel").textContent = `${game.name} ???`;
+        $("setupProSensLabel").textContent = `${game.name} 灵敏度`;
         $("setupProTargetSens").textContent = `${formatSens(preview.sensitivity, game.id)}${preview.rangeLimited ? "*" : ""}`;
         $("setupProTargetCm").textContent = `${preview.cm.toFixed(1)} cm`;
         $("applySetupProBtn").disabled = false;
@@ -674,14 +674,14 @@
         app.currentSens = preview.sensitivity;
         app.dpiSource = "prosettings";
         tone(690, .06, .035);
-        showToast(`??? ${player.player} ????????${targetDpi} DPI?${game.name} ${formatSens(preview.sensitivity, game.id)}??????????`);
+        showToast(`已采用 ${player.player} 的转身距离起点：${targetDpi} DPI，${game.name} ${formatSens(preview.sensitivity, game.id)}。仍需完成个人测试。`);
       }
 
       function initializeSetupProSelector() {
         const snapshot = window.VALORANT_PRO_SNAPSHOT;
         if (!snapshot || !Array.isArray(snapshot.players) || !snapshot.players.length) {
-          $("setupProList").innerHTML = '<div class="setup-pro-list-state">??????????????? DPI????????????</div>';
-          $("setupProListState").textContent = "?????";
+          $("setupProList").innerHTML = '<div class="setup-pro-list-state">职业选手快照未载入，请手动填写 DPI；其余校准功能不受影响。</div>';
+          $("setupProListState").textContent = "数据不可用";
           $("setupProSearch").disabled = true;
           $("setupProDpiFilter").disabled = true;
           return;
@@ -693,7 +693,7 @@
         const filter = $("setupProDpiFilter");
         const allOption = document.createElement("option");
         allOption.value = "";
-        allOption.textContent = "??";
+        allOption.textContent = "全部";
         const options = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([dpi, count]) => {
           const option = document.createElement("option");
           option.value = String(dpi);
@@ -710,14 +710,14 @@
       function evidenceItems(result) {
         const hasNumber = (value) => value !== null && value !== undefined && Number.isFinite(Number(value));
         return [
-          ["??", hasNumber(result.shots) ? `${result.hits || 0} / ${result.shots}` : "?"],
-          ["??", hasNumber(result.misses) ? result.misses : "?"],
-          ["???", hasNumber(result.accuracy) ? `${Math.round(result.accuracy * 100)}%` : "?"],
-          ["????", hasNumber(result.avgReaction) ? `${Math.round(result.avgReaction)} ms` : "?"],
-          ["????", hasNumber(result.avgClickError) ? `${Math.round(result.avgClickError * 100)}%` : "?"],
-          ["????", hasNumber(result.pathEfficiency) ? `${Math.round(result.pathEfficiency * 100)}%` : "?"],
-          ["??", hasNumber(result.overshoots) ? result.overshoots : "?"],
-          ["????", hasNumber(result.control) ? `${Math.round(result.control)}%` : "?"]
+          ["射击", hasNumber(result.shots) ? `${result.hits || 0} / ${result.shots}` : "—"],
+          ["空枪", hasNumber(result.misses) ? result.misses : "—"],
+          ["命中率", hasNumber(result.accuracy) ? `${Math.round(result.accuracy * 100)}%` : "—"],
+          ["平均反应", hasNumber(result.avgReaction) ? `${Math.round(result.avgReaction)} ms` : "—"],
+          ["点击偏差", hasNumber(result.avgClickError) ? `${Math.round(result.avgClickError * 100)}%` : "—"],
+          ["路径效率", hasNumber(result.pathEfficiency) ? `${Math.round(result.pathEfficiency * 100)}%` : "—"],
+          ["过冲", hasNumber(result.overshoots) ? result.overshoots : "—"],
+          ["控制稳定", hasNumber(result.control) ? `${Math.round(result.control)}%` : "—"]
         ];
       }
 
@@ -797,7 +797,7 @@
         const validSensitivity = Number(app.converterSens);
         const validDpi = Number(app.converterDpi);
         if (!Number.isFinite(validSensitivity) || validSensitivity <= 0 || !Number.isFinite(validDpi) || validDpi < 100) {
-          output.innerHTML = `<div class="notice">???????????? DPI ?????</div>`;
+          output.innerHTML = `<div class="notice">请输入有效的来源灵敏度和 DPI 后再换算。</div>`;
           return;
         }
         output.replaceChildren(...conversionValues(validSensitivity, sourceGame, validDpi).map((entry) => {
@@ -808,8 +808,8 @@
             <img src="${gameIcon(entry.game.id)}" alt="">
             <span>${entry.game.name}</span>
             <strong>${formatted}</strong>
-            <small>${entry.cm360.toFixed(1)} cm/360?${entry.rangeLimited ? " ? ????" : ""}</small>
-            <button class="copy-value-btn" type="button" data-copy-value="${formatted}" aria-label="?? ${entry.game.name} ??? ${formatted}">??</button>`;
+            <small>${entry.cm360.toFixed(1)} cm/360°${entry.rangeLimited ? " · 范围限制" : ""}</small>
+            <button class="copy-value-btn" type="button" data-copy-value="${formatted}" aria-label="复制 ${entry.game.name} 灵敏度 ${formatted}">复制</button>`;
           return row;
         }));
       }
@@ -826,12 +826,12 @@
       async function copyConverterValue(value) {
         try {
           await navigator.clipboard.writeText(value);
-          showToast(`?????? ${value}?`);
+          showToast(`已复制灵敏度 ${value}。`);
         } catch {
           const input = $("converterSensInput");
           input.value = value;
           input.select();
-          showToast("?????????????????????????");
+          showToast("浏览器未允许直接复制，数值已放入来源输入框并选中。");
         }
       }
 
@@ -863,24 +863,24 @@
           const selected = button.dataset.game === game.id;
           button.setAttribute("aria-checked", String(selected));
         });
-        $("brandGameName").textContent = `${game.brandName} ? `;
+        $("brandGameName").textContent = `${game.brandName} · `;
         $("setupGameName").textContent = game.name;
         $("setupGameIcon").src = gameIcon(game.id);
-        $("setupGameIcon").alt = `${game.name} ??`;
+        $("setupGameIcon").alt = `${game.name} 图标`;
         $("sensInput").min = String(game.sens.min);
         $("sensInput").max = String(game.sens.max);
         $("sensInput").step = String(game.sens.step);
-        $("sensHint").textContent = `${game.name} ???? ${game.sens.min}?${game.sens.max} ????????? ${game.sens.step}???????????????????`;
+        $("sensHint").textContent = `${game.name} 本页采用 ${game.sens.min}–${game.sens.max} 输入范围，显示精度 ${game.sens.step}；最终以当前游戏客户端实际接受值为准。`;
         $("fovInput").value = String(app.horizontalFov);
 
-        document.title = `${game.name} ? ????????`;
+        document.title = `${game.name} · 灵敏度夜航校准台`;
         renderSetupProSelection();
       }
 
       function switchGame(nextGameId) {
         if (!GAMES[nextGameId] || nextGameId === app.gameId) return;
         if (!["home", "setup"].includes(app.screen)) {
-          showToast("???????????????");
+          showToast("请先返回首页，再切换目标游戏。");
           return;
         }
         const from = currentGame();
@@ -904,8 +904,8 @@
         ], { duration: 360 });
         tone(620, .045, .028);
         const afterCm = cm360(dpi, Number($("sensInput").value), to.yaw);
-        const clampedNote = Math.abs(afterCm - beforeCm) / beforeCm > .01 ? "?????????????" : "";
-        showToast(`${from.name} ? ${to.name}????? ${formatSens(converted, to.id)}???? ${beforeCm.toFixed(1)} cm/360?${clampedNote}??????????????`);
+        const clampedNote = Math.abs(afterCm - beforeCm) / beforeCm > .01 ? "；已受目标游戏输入范围限制" : "";
+        showToast(`${from.name} → ${to.name}：已换算为 ${formatSens(converted, to.id)}，保持约 ${beforeCm.toFixed(1)} cm/360°${clampedNote}。视野与缩放体感仍可能不同。`);
       }
 
       function hexId(value) {
@@ -915,7 +915,7 @@
       function describeHidDevice(device) {
         const vid = Number(device?.vendorId);
         const pid = Number(device?.productId);
-        let brand = "????";
+        let brand = "未知厂商";
         let candidate = false;
         let readerKind = "";
         if (vid === 0x1532) {
@@ -935,9 +935,9 @@
           brand,
           candidate,
           readerKind,
-          name: device?.productName || "???????",
+          name: device?.productName || "未提供产品名称",
           key: `${vid}:${pid}`,
-          ids: `VID ${hexId(vid)} ? PID ${hexId(pid)}`
+          ids: `VID ${hexId(vid)} · PID ${hexId(pid)}`
         };
       }
 
@@ -951,8 +951,8 @@
       function updateHardwareReadouts({ dpi = app.hardwareDpi, pollingHz = app.hardwarePollingHz } = {}) {
         app.hardwareDpi = Number.isFinite(Number(dpi)) ? Number(dpi) : null;
         app.hardwarePollingHz = Number.isFinite(Number(pollingHz)) ? Number(pollingHz) : null;
-        $("hidDpiReadout").textContent = app.hardwareDpi ? `${app.hardwareDpi}` : "?";
-        $("hidPollingReadout").textContent = app.hardwarePollingHz ? `${app.hardwarePollingHz} Hz` : "?";
+        $("hidDpiReadout").textContent = app.hardwareDpi ? `${app.hardwareDpi}` : "—";
+        $("hidPollingReadout").textContent = app.hardwarePollingHz ? `${app.hardwarePollingHz} Hz` : "—";
       }
 
       function canUseWebHid() {
@@ -965,7 +965,7 @@
 
       function withTimeout(ms, executor) {
         return new Promise((resolve, reject) => {
-          const timer = setTimeout(() => reject(new Error("??????????")), ms);
+          const timer = setTimeout(() => reject(new Error("等待设备只读响应超时")), ms);
           executor(
             (value) => { clearTimeout(timer); resolve(value); },
             (error) => { clearTimeout(timer); reject(error); }
@@ -1023,7 +1023,7 @@
             if (dpi >= 50 && dpi <= 60000) return { dpi, pollingHz, protocol: `HID++ 2.0 / device ${deviceIndex}` };
           } catch { /* Receiver slots and unsupported interfaces are expected. */ }
         }
-        throw new Error("?? Logitech ??????? HID++ 2.0 ????");
+        throw new Error("当前 Logitech 接口未暴露可读 HID++ 2.0 配置报告");
       }
 
       function atkChecksum(frame) {
@@ -1057,7 +1057,7 @@
         response.catch(() => {});
         await device.sendReport(0x08, atkReadFrame(address, length));
         const frame = await response;
-        if (frame.length !== 16 || frame[15] !== atkChecksum(frame)) throw new Error("ATK ????????");
+        if (frame.length !== 16 || frame[15] !== atkChecksum(frame)) throw new Error("ATK 配置响应校验失败");
         return frame.slice(5, 5 + frame[4]);
       }
 
@@ -1075,24 +1075,24 @@
         const vendorCollection = (device.collections || []).some((collection) =>
           collection.usagePage === 0xff02 && collection.usage === 0x0002
         );
-        if (!vendorCollection) throw new Error("? ATK ????? ClickSync ??? 0xFF02 ????");
+        if (!vendorCollection) throw new Error("此 ATK 设备未暴露 ClickSync 所需的 0xFF02 厂商集合");
         const system = await atkReadRegister(device, 0x0000, 6);
         const rateMap = { 0x08: 125, 0x04: 250, 0x02: 500, 0x01: 1000, 0x10: 2000, 0x20: 4000, 0x40: 8000 };
         const slotCount = clamp(system[2] || 1, 1, 6);
         const currentIndex = clamp(system[4] || 0, 0, slotCount - 1);
         const dpiWord = await atkReadRegister(device, 0x000c + currentIndex * 4, 4);
         if (((dpiWord[0] + dpiWord[1] + dpiWord[2] + dpiWord[3]) & 0xff) !== 0x55) {
-          throw new Error("ATK ?? DPI ?????");
+          throw new Error("ATK 当前 DPI 档校验失败");
         }
         const dpi = decodeAtkDpiAxis(dpiWord[0], dpiWord[2] & 0x0f);
-        return { dpi, pollingHz: rateMap[system[0]] || null, protocol: "ClickSync ATK ?????" };
+        return { dpi, pollingHz: rateMap[system[0]] || null, protocol: "ClickSync ATK 只读寄存器" };
       }
 
       async function tryReadHardwareConfig(device, descriptor) {
         if (descriptor.readerKind === "logitech") return readLogitechConfig(device);
         if (descriptor.readerKind === "atk") return readAtkConfig(device);
         if (descriptor.readerKind === "razer") {
-          throw new Error("Razer ?????????????????????????????");
+          throw new Error("Razer 配置命令随型号变化，纯网页不发送未经实机验证的厂商控制报文");
         }
         return null;
       }
@@ -1104,10 +1104,10 @@
         updateHardwareReadouts({ dpi: null, pollingHz: null });
         setHidAssist(
           descriptor.candidate
-            ? `??? ${descriptor.brand} ???????????? DPI ???????`
-            : "???????????????????????? DPI?",
+            ? `已识别 ${descriptor.brand} 设备，正在以只读方式检查 DPI 与回报率配置。`
+            : "设备已授权，但不在当前验证范围内；请继续手动填写 DPI。",
           descriptor.candidate ? "live" : "warn",
-          `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+          `${descriptor.brand} · ${descriptor.name} · ${descriptor.ids}`
         );
         if (!descriptor.candidate) return;
 
@@ -1119,60 +1119,60 @@
             app.dpiSource = "webhid";
             updateHardwareReadouts(config);
             setHidAssist(
-              `???????????? DPI????????????????????`,
+              `已只读获取配置并自动填入 DPI。开始测试前仍可手动修改；不会写入鼠标。`,
               "live",
-              `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids} ? ${config.protocol}`
+              `${descriptor.brand} · ${descriptor.name} · ${descriptor.ids} · ${config.protocol}`
             );
             if (!silent) {
               completeTone();
-              showToast(`??? ${config.dpi} DPI${config.pollingHz ? ` / ${config.pollingHz} Hz` : ""}?`);
+              showToast(`已读取 ${config.dpi} DPI${config.pollingHz ? ` / ${config.pollingHz} Hz` : ""}。`);
             }
             return;
           }
           setHidAssist(
-            "???????????????????????????? DPI ????????",
+            "型号已识别，但没有返回可验证的配置数据；已安全回退到手动 DPI 与浏览器事件率。",
             "warn",
-            `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+            `${descriptor.brand} · ${descriptor.name} · ${descriptor.ids}`
           );
-          if (!silent) showToast("????????????????? DPI?");
+          if (!silent) showToast("鼠标已识别；此型号暂时需要手动填写 DPI。");
         } catch (error) {
           const razerFallback = descriptor.readerKind === "razer";
           setHidAssist(
             razerFallback
-              ? "??? Razer????????????????????DPI ???????????????????"
-              : `?????????????????${error?.message || "?????"}?`,
+              ? "已识别 Razer。当前网页不发送型号相关的厂商控制报文；DPI 请手动填写，回报率显示浏览器事件实测。"
+              : `设备已连接，但固件配置读取未完成：${error?.message || "协议不匹配"}。`,
             "warn",
-            `${descriptor.brand} ? ${descriptor.name} ? ${descriptor.ids}`
+            `${descriptor.brand} · ${descriptor.name} · ${descriptor.ids}`
           );
-          if (!silent) showToast(razerFallback ? "Razer ?????????????" : (error?.message || "??????????"));
+          if (!silent) showToast(razerFallback ? "Razer 已识别；当前使用安全回退。" : (error?.message || "无法读取该鼠标配置。"));
         }
       }
 
       async function connectHidMouse() {
         if (!canUseWebHid()) {
-          showToast("WebHID ?? Chrome/Edge???? HTTPS ? localhost ???");
+          showToast("WebHID 需要 Chrome/Edge，并通过 HTTPS 或 localhost 打开。");
           return;
         }
         const button = $("connectMouseBtn");
         button.disabled = true;
-        button.textContent = "????????";
+        button.textContent = "等待浏览器授权…";
         try {
           const devices = await navigator.hid.requestDevice({ filters: HID_VENDOR_FILTERS });
           if (!devices.length) {
-            setHidAssist("????????????? DPI?", "warn");
+            setHidAssist("未选择设备；可继续手动填写 DPI。", "warn");
             return;
           }
           await useHidDevice(devices[0]);
         } catch (error) {
           const cancelled = error?.name === "NotFoundError";
           setHidAssist(
-            cancelled ? "????????????? DPI?" : "??????????????????",
+            cancelled ? "未授权设备；可继续手动填写 DPI。" : "连接失败；手动填写路径仍可正常使用。",
             "warn"
           );
-          showToast(cancelled ? "????????" : "WebHID ?????????????????");
+          showToast(cancelled ? "已取消鼠标授权。" : "WebHID 连接失败，请检查浏览器与设备权限。");
         } finally {
           button.disabled = false;
-          button.textContent = "????????";
+          button.textContent = "只读连接鼠标配置";
         }
       }
 
@@ -1181,25 +1181,25 @@
         if (!canUseWebHid()) {
           button.disabled = true;
           setHidAssist(
-            "????????? WebHID?????? DPI?????????? Chrome/Edge ?? HTTPS ? localhost ???",
+            "当前打开方式不支持 WebHID；请手动填写 DPI。需要自动识别时可用 Chrome/Edge 通过 HTTPS 或 localhost 打开。",
             "warn"
           );
           return;
         }
-        setHidAssist("WebHID ?????????????????????????", "live");
+        setHidAssist("WebHID 可用。连接为可选操作，浏览器会先请求你的明确授权。", "live");
         try {
           const authorized = await navigator.hid.getDevices();
           const known = authorized.find((device) => HID_VENDOR_FILTERS.some((filter) => filter.vendorId === device.vendorId));
           if (known) await useHidDevice(known, { silent: true });
         } catch {
-          setHidAssist("WebHID ????????????????????????", "warn");
+          setHidAssist("WebHID 可用，但无法复用已授权设备；可点击按钮重新选择。", "warn");
         }
         navigator.hid.addEventListener("disconnect", (event) => {
           if (event.device !== app.hidDevice) return;
           app.hidDevice = null;
           app.dpiSource = "manual";
           updateHardwareReadouts({ dpi: null, pollingHz: null });
-          setHidAssist("???????? DPI ??????????????", "warn");
+          setHidAssist("鼠标已断开；当前 DPI 输入值会保留并按手动值使用。", "warn");
         });
       }
 
@@ -1231,7 +1231,7 @@
           app.history = Array.isArray(parsed.sessions)
             ? parsed.sessions.slice(0, 50).map((session) => ({
                 gameId: "valorant",
-                gameName: "????",
+                gameName: "无畏契约",
                 yaw: GAMES.valorant.yaw,
                 horizontalFov: GAMES.valorant.fov,
                 ...session
@@ -1240,7 +1240,7 @@
           if (!currentRaw && legacyRaw) persistHistory();
         } catch {
           app.history = [];
-          showToast("??????????????????");
+          showToast("本地历史读取失败，已使用空记录继续。");
         }
       }
 
@@ -1249,7 +1249,7 @@
           localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 2, sessions: app.history.slice(0, 50) }));
           return true;
         } catch {
-          showToast("??????????????????????");
+          showToast("无法写入本地存储；可能是隐私模式或空间不足。");
           return false;
         }
       }
@@ -1271,21 +1271,21 @@
       function gaugeData(result) {
         if (!result) {
           return [
-            { label: "?????", value: "?", unit: "SENSITIVITY", percent: 50 },
-            { label: "?? DPI", value: "?", unit: "eDPI", percent: 50 },
-            { label: "????", value: "?", unit: "cm / 360?", percent: 50 },
-            { label: "????", value: "?", unit: "SPEED", percent: 50 },
-            { label: "????", value: "?", unit: "CONTROL", percent: 50 },
-            { label: "????", value: "?", unit: "CONFIDENCE", percent: 50 }
+            { label: "推荐灵敏度", value: "—", unit: "SENSITIVITY", percent: 50 },
+            { label: "有效 DPI", value: "—", unit: "eDPI", percent: 50 },
+            { label: "视角距离", value: "—", unit: "cm / 360°", percent: 50 },
+            { label: "反应速度", value: "—", unit: "SPEED", percent: 50 },
+            { label: "控制稳定", value: "—", unit: "CONTROL", percent: 50 },
+            { label: "结果置信", value: "—", unit: "CONFIDENCE", percent: 50 }
           ];
         }
         return [
-          { label: "?????", value: formatSens(result.mainSens, result.gameId), unit: "SENSITIVITY", percent: clamp(result.mainSens / Math.max((result.baseSens || app.currentSens) * 1.3, .01) * 70, 8, 92) },
-          { label: "?? DPI", value: Math.round(result.edpi), unit: "eDPI", percent: clamp(result.edpi / 800 * 100, 5, 95) },
-          { label: "????", value: result.cm360.toFixed(1), unit: "cm / 360?", percent: clamp(100 - result.cm360 / 80 * 100, 6, 94) },
-          { label: "????", value: `${Math.round(result.speed)}%`, unit: "SPEED", percent: result.speed },
-          { label: "????", value: `${Math.round(result.control)}%`, unit: "CONTROL", percent: result.control },
-          { label: "????", value: `${Math.round(result.confidence * 100)}%`, unit: "CONFIDENCE", percent: result.confidence * 100 }
+          { label: "推荐灵敏度", value: formatSens(result.mainSens, result.gameId), unit: "SENSITIVITY", percent: clamp(result.mainSens / Math.max((result.baseSens || app.currentSens) * 1.3, .01) * 70, 8, 92) },
+          { label: "有效 DPI", value: Math.round(result.edpi), unit: "eDPI", percent: clamp(result.edpi / 800 * 100, 5, 95) },
+          { label: "视角距离", value: result.cm360.toFixed(1), unit: "cm / 360°", percent: clamp(100 - result.cm360 / 80 * 100, 6, 94) },
+          { label: "反应速度", value: `${Math.round(result.speed)}%`, unit: "SPEED", percent: result.speed },
+          { label: "控制稳定", value: `${Math.round(result.control)}%`, unit: "CONTROL", percent: result.control },
+          { label: "结果置信", value: `${Math.round(result.confidence * 100)}%`, unit: "CONFIDENCE", percent: result.confidence * 100 }
         ];
       }
 
@@ -1296,7 +1296,7 @@
       function renderHome() {
         const latest = app.history.find((session) => session.gameId === app.gameId) || null;
         $("homeResultLamp").className = latest ? "lamp live" : "lamp";
-        $("homeResultState").textContent = latest ? `${currentGame().name} ? ???` : `${currentGame().name} ? ????`;
+        $("homeResultState").textContent = latest ? `${currentGame().name} · 已载入` : `${currentGame().name} · 尚无记录`;
         $("homeResultEmpty").hidden = Boolean(latest);
         $("homeResultContent").hidden = !latest;
         if (latest) {
@@ -1309,11 +1309,11 @@
           const low = Number.isFinite(Number(latest.lowSens)) ? Number(latest.lowSens) : clamp(main * .93, game.sens.min, game.sens.max);
           const high = Number.isFinite(Number(latest.highSens)) ? Number(latest.highSens) : clamp(main * 1.07, game.sens.min, game.sens.max);
           $("homePrimarySens").textContent = formatSens(main, game.id);
-          $("homePrimaryUnit").textContent = `${game.name} ??????`;
+          $("homePrimaryUnit").textContent = `${game.name} 游戏内灵敏度`;
           $("homeCm360").textContent = `${distance.toFixed(1)} cm`;
           $("homeEdpi").textContent = Math.round(effectiveDpi);
-          $("homeAccuracy").textContent = Number.isFinite(Number(latest.accuracy)) ? `${Math.round(Number(latest.accuracy) * 100)}%` : "?";
-          $("homeConfidence").textContent = confidence === null ? "?" : `${Math.round(confidence * 100)}%`;
+          $("homeAccuracy").textContent = Number.isFinite(Number(latest.accuracy)) ? `${Math.round(Number(latest.accuracy) * 100)}%` : "—";
+          $("homeConfidence").textContent = confidence === null ? "—" : `${Math.round(confidence * 100)}%`;
           $("homeLowSens").textContent = formatSens(low, game.id);
           $("homeMainSens").textContent = formatSens(main, game.id);
           $("homeHighSens").textContent = formatSens(high, game.id);
@@ -1330,7 +1330,7 @@
         if (!app.history.length) {
           const empty = document.createElement("li");
           empty.className = "empty-log";
-          empty.innerHTML = "<div><strong>??????</strong>????????????????????????????</div>";
+          empty.innerHTML = "<div><strong>飞行日志为空</strong>完成第一次完整测试后，推荐灵敏度与分项结果会保存在这里。</div>";
           list.append(empty);
           return;
         }
@@ -1346,10 +1346,10 @@
             <div class="history-main">
               <strong>${formatSens(session.mainSens, sessionGame.id)}</strong><span>${sessionGame.name}</span>
               <strong>${Math.round(session.edpi)}</strong><span>eDPI</span>
-              <strong>${session.cm360.toFixed(1)}</strong><span>cm/360?</span>
-              <strong>${Math.round(session.confidence * 100)}%</strong><span>???</span>
+              <strong>${session.cm360.toFixed(1)}</strong><span>cm/360°</span>
+              <strong>${Math.round(session.confidence * 100)}%</strong><span>置信度</span>
             </div>
-            <span class="lamp ${session.confidence >= .65 ? "live" : "warn"}" aria-label="${session.confidence >= .65 ? "?????" : "?????"}"></span>`;
+            <span class="lamp ${session.confidence >= .65 ? "live" : "warn"}" aria-label="${session.confidence >= .65 ? "置信度良好" : "置信度较低"}"></span>`;
           list.append(row);
         });
       }
@@ -1392,7 +1392,7 @@
         app.pointerRequested = false;
         app.rawInput = false;
         if (!element.requestPointerLock) {
-          setInputStatus("??????", "warn");
+          setInputStatus("兼容移动模式", "warn");
           return false;
         }
         if (requestedMode === "desktop") {
@@ -1400,10 +1400,10 @@
             app.pointerRequested = true;
             const maybePromise = element.requestPointerLock();
             if (maybePromise?.then) await maybePromise;
-            setInputStatus("??????", "live");
+            setInputStatus("系统处理输入", "live");
             return true;
           } catch {
-            setInputStatus("??????", "warn");
+            setInputStatus("兼容移动模式", "warn");
             return false;
           }
         }
@@ -1412,16 +1412,16 @@
           const maybePromise = element.requestPointerLock({ unadjustedMovement: true });
           if (maybePromise?.then) await maybePromise;
           app.rawInput = true;
-          setInputStatus("???????", "live");
+          setInputStatus("无系统加速输入", "live");
           return true;
         } catch {
           try {
             const maybePromise = element.requestPointerLock();
             if (maybePromise?.then) await maybePromise;
-            setInputStatus("???????????", "warn");
+            setInputStatus("系统处理输入（已降级）", "warn");
             return true;
           } catch {
-            setInputStatus("??????", "warn");
+            setInputStatus("兼容移动模式", "warn");
             return false;
           }
         }
@@ -1504,11 +1504,11 @@
       function beginSetup() {
         if (app.screen !== "home") return;
         setLeverPosition(LEVER_BOTTOM);
-        $("leverHint").innerHTML = "<strong>????</strong>??????";
+        $("leverHint").innerHTML = "<strong>启动确认</strong>正在进入校准";
         tone(540, .06, .035);
         setTimeout(() => {
           setLeverPosition(LEVER_TOP);
-          $("leverHint").innerHTML = "<strong>?????</strong>?????";
+          $("leverHint").innerHTML = "<strong>按住向下拉</strong>拖到底开始";
         }, 420);
         const latest = app.history.find((session) => session.gameId === app.gameId);
         if (app.launchPreset?.gameId === app.gameId) {
@@ -1518,7 +1518,7 @@
           app.currentSens = app.launchPreset.sensitivity;
           app.horizontalFov = currentGame().fov;
           $("fovInput").value = String(app.horizontalFov);
-          showToast(`???????????${app.launchPreset.dpi} DPI?${currentGame().name} ${formatSens(app.launchPreset.sensitivity, app.gameId)}?`);
+          showToast(`已载入鼠标实验室方案：${app.launchPreset.dpi} DPI，${currentGame().name} ${formatSens(app.launchPreset.sensitivity, app.gameId)}。`);
         } else if (latest) {
           $("dpiInput").value = latest.dpi;
           $("sensInput").value = formatSens(latest.mainSens, latest.gameId);
@@ -1589,17 +1589,17 @@
         const fov = Number($("fovInput").value);
         const game = currentGame();
         if (!Number.isFinite(dpi) || dpi < 100 || dpi > 32000) {
-          showToast("??? 100?32000 ?????? DPI?");
+          showToast("请输入 100–32000 范围内的有效 DPI。");
           $("dpiInput").focus();
           return false;
         }
         if (!Number.isFinite(sens) || sens < game.sens.min || sens > game.sens.max) {
-          showToast(`??? ${game.sens.min}?${game.sens.max} ???? ${game.name} ????`);
+          showToast(`请输入 ${game.sens.min}–${game.sens.max} 范围内的 ${game.name} 灵敏度。`);
           $("sensInput").focus();
           return false;
         }
         if (!Number.isFinite(fov) || fov < 60 || fov > 130) {
-          showToast("??? 60?130? ???????????");
+          showToast("请输入 60–130° 范围内的测试水平视野。");
           $("fovInput").focus();
           return false;
         }
@@ -1626,7 +1626,7 @@
         $("calOverlay").hidden = false;
         $("calTime").textContent = "8.0 s";
         $("calSpan").textContent = "0";
-        $("calInputMode").textContent = "???";
+        $("calInputMode").textContent = "待检测";
         showScreen("calibration");
         drawCalibration();
       }
@@ -1645,7 +1645,7 @@
         app.pendingCalibrationX = 0;
         $("calOverlay").hidden = true;
         const locked = await requestRelativeInput($("calibrationStage"));
-        $("calInputMode").textContent = locked ? (app.rawInput ? "???????" : "??????") : "??????";
+        $("calInputMode").textContent = locked ? (app.rawInput ? "无系统加速输入" : "系统处理输入") : "兼容移动模式";
         tone(520, .07, .035);
         cancelAnimationFrame(app.raf);
         app.raf = requestAnimationFrame(tickCalibration);
@@ -1685,7 +1685,7 @@
         ctx.fillStyle = "#b8b9aa";
         ctx.font = "14px 'Segoe UI'";
         ctx.textAlign = "center";
-        ctx.fillText("????????", width / 2, 34);
+        ctx.fillText("左右舒适扫动包络", width / 2, 34);
 
         const baseline = height / 2;
         ctx.strokeStyle = "rgba(155,229,100,.35)";
@@ -1723,17 +1723,17 @@
           $("calOverlay").innerHTML = `
             <div class="overlay-card">
               <p class="placard-title caution-ink">CALIBRATION INSUFFICIENT</p>
-              <h3 class="section-title">??????</h3>
-              <p>?????????????????????????????</p>
-              <button class="primary-btn" id="retryCalBtn" type="button">????</button>
+              <h3 class="section-title">移动样本太少</h3>
+              <p>请至少完成几次完整的左右扫动，让工具观察到稳定的舒适范围。</p>
+              <button class="primary-btn" id="retryCalBtn" type="button">重新校准</button>
             </div>`;
           $("retryCalBtn").addEventListener("click", () => {
             $("calOverlay").innerHTML = `
               <div class="overlay-card">
                 <p class="placard-title">READY</p>
-                <h3 class="section-title">??????????</h3>
-                <p>?????????????????????????????????????????????????</p>
-                <button class="primary-btn" id="startCalibrationBtn" type="button">?? 8 ???</button>
+                <h3 class="section-title">做几次舒适的左右扫动</h3>
+                <p>点击开始会按你选择的方式读取相对移动。“无系统加速”更适合游戏视角模拟；浏览器不支持时会自动降级。</p>
+                <button class="primary-btn" id="startCalibrationBtn" type="button">开始 8 秒校准</button>
               </div>`;
             $("startCalibrationBtn").addEventListener("click", startCalibration);
           });
@@ -1745,9 +1745,9 @@
         $("calOverlay").innerHTML = `
           <div class="overlay-card">
             <p class="placard-title active-ink">MOVEMENT ENVELOPE CAPTURED</p>
-            <h3 class="section-title">?????????</h3>
-            <p>????????? <strong>${Math.round(span)}</strong>???????????????????????????</p>
-            <button class="primary-btn" id="beginTestsBtn" type="button">??????</button>
+            <h3 class="section-title">舒适移动范围已建立</h3>
+            <p>检测到相对移动跨度 <strong>${Math.round(span)}</strong>。该数据只用于判断移动样本是否充分，不再改变准星速度。</p>
+            <button class="primary-btn" id="beginTestsBtn" type="button">进入五项测试</button>
           </div>`;
         $("beginTestsBtn").addEventListener("click", prepareTests);
       }
@@ -1784,28 +1784,28 @@
         $("sessionProgress").textContent = `${app.stageIndex + 1} / ${stageDefs.length}`;
         $("testTitle").textContent = stage.name;
         $("stageDescription").textContent = stage.description;
-        $("liveHitsLabel").textContent = stage.id === "track" ? "?? / ??" : "?? / ??";
+        $("liveHitsLabel").textContent = stage.id === "track" ? "进入 / 贴合" : "命中 / 射击";
         $("liveHits").textContent = stage.id === "track" ? "0" : "0 / 0";
-        $("liveAccuracyLabel").textContent = stage.id === "track" ? "???" : "???";
-        $("liveAccuracy").textContent = "?";
-        $("liveMisses").textContent = stage.id === "track" ? "?" : "0";
-        $("liveReactionLabel").textContent = stage.id === "track" ? "????" : "????";
-        $("liveReaction").textContent = "?";
-        $("liveClickError").textContent = "?";
-        $("liveEfficiency").textContent = "?";
-        $("liveOvershoots").textContent = stage.id === "track" ? "?" : "0";
-        $("liveGainLabel").textContent = stage.mode === "desktop" ? "????" : "????";
+        $("liveAccuracyLabel").textContent = stage.id === "track" ? "贴合率" : "命中率";
+        $("liveAccuracy").textContent = "—";
+        $("liveMisses").textContent = stage.id === "track" ? "—" : "0";
+        $("liveReactionLabel").textContent = stage.id === "track" ? "平均角差" : "平均反应";
+        $("liveReaction").textContent = "—";
+        $("liveClickError").textContent = "—";
+        $("liveEfficiency").textContent = "—";
+        $("liveOvershoots").textContent = stage.id === "track" ? "—" : "0";
+        $("liveGainLabel").textContent = stage.mode === "desktop" ? "辅助分段" : "当前档位";
         $("liveGain").textContent = `1 / ${FACTORS.length}`;
         updateTestFactorDisplay(FACTOR_ORDERS[app.stageIndex][0]);
         $("testTime").textContent = ((stage.mode === "desktop" ? AUXILIARY_DURATION : TEST_DURATION) / 1000).toFixed(1);
         $("overlayKicker").textContent = `TEST ${app.stageIndex + 1}`;
         $("overlayTitle").textContent = stage.name;
         $("overlayText").textContent = stage.mode === "desktop"
-          ? "????????????????????????????????????????????????????"
+          ? "这一项使用二维移动准星，瞄准目标后按左键射击。它只辅助评估控制稳定与置信度，不直接改变推荐的游戏灵敏度。"
           : stage.id === "track"
-            ? "????????????????????????????????????????"
-            : "?????????????????????????????????????????????";
-        $("stageActionBtn").textContent = "??????";
+            ? "准星固定在中心。持续移动鼠标跟随目标，不需要点击；五段会分别测试不同候选灵敏度。"
+            : "准星固定在中心。移动鼠标旋转虚拟视角，瞄准目标后按左键射击；五段会分别测试不同候选灵敏度。";
+        $("stageActionBtn").textContent = "开始此项测试";
         $("testOverlay").hidden = false;
         $("bigCountdown").hidden = true;
         hideFactorChangeCue();
@@ -1901,7 +1901,7 @@
         const game = currentGame();
         const factor = FACTORS[factorIndex] ?? 1;
         $("liveCandidateSens").textContent = formatSens(candidateSensitivity(app.currentSens, factor, game), game.id);
-        $("liveCandidatePercent").textContent = `?????? ${Math.round(factor * 100)}%`;
+        $("liveCandidatePercent").textContent = `测试前设置的 ${Math.round(factor * 100)}%`;
         const rail = $("testFactorRail");
         rail.replaceChildren(...FACTORS.map((value, index) => {
           const item = document.createElement("span");
@@ -1916,9 +1916,9 @@
         if (!cue) return;
         const factor = FACTORS[factorIndex] ?? 1;
         const game = currentGame();
-        $("factorChangeKicker").textContent = initial ? "????" : "???????";
-        $("factorChangeValue").textContent = `${Math.round(factor * 100)}% ? ${formatSens(candidateSensitivity(app.currentSens, factor, game), game.id)}`;
-        $("factorChangeCountdown").textContent = `${count} ??????`;
+        $("factorChangeKicker").textContent = initial ? "首档准备" : "灵敏度档位切换";
+        $("factorChangeValue").textContent = `${Math.round(factor * 100)}% · ${formatSens(candidateSensitivity(app.currentSens, factor, game), game.id)}`;
+        $("factorChangeCountdown").textContent = `${count} 秒后开始采样`;
         cue.hidden = false;
         const motionKey = `${factorIndex}:${count}`;
         if (cue.dataset.motionKey !== motionKey) {
@@ -2407,21 +2407,21 @@
 
         if (test.stage.id === "track") {
           $("liveHits").textContent = hits;
-          $("liveAccuracy").textContent = activeMs ? `${Math.round(dwellMs / activeMs * 100)}%` : "?";
-          $("liveMisses").textContent = "?";
-          $("liveReaction").textContent = errorSamples ? `${(errorTotal / errorSamples).toFixed(1)}?` : "?";
-          $("liveClickError").textContent = "?";
-          $("liveEfficiency").textContent = "?";
-          $("liveOvershoots").textContent = "?";
+          $("liveAccuracy").textContent = activeMs ? `${Math.round(dwellMs / activeMs * 100)}%` : "—";
+          $("liveMisses").textContent = "—";
+          $("liveReaction").textContent = errorSamples ? `${(errorTotal / errorSamples).toFixed(1)}°` : "—";
+          $("liveClickError").textContent = "—";
+          $("liveEfficiency").textContent = "—";
+          $("liveOvershoots").textContent = "—";
           return;
         }
 
         $("liveHits").textContent = `${hits} / ${shots}`;
-        $("liveAccuracy").textContent = shots ? `${Math.round(hits / shots * 100)}%` : "?";
+        $("liveAccuracy").textContent = shots ? `${Math.round(hits / shots * 100)}%` : "—";
         $("liveMisses").textContent = misses;
-        $("liveReaction").textContent = hits ? `${Math.round(reaction / hits)} ms` : "?";
-        $("liveClickError").textContent = clickErrorSamples ? `${Math.round(clickErrorTotal / clickErrorSamples * 100)}%` : "?";
-        $("liveEfficiency").textContent = path ? `${Math.round(clamp(optimal / path, 0, 1) * 100)}%` : "?";
+        $("liveReaction").textContent = hits ? `${Math.round(reaction / hits)} ms` : "—";
+        $("liveClickError").textContent = clickErrorSamples ? `${Math.round(clickErrorTotal / clickErrorSamples * 100)}%` : "—";
+        $("liveEfficiency").textContent = path ? `${Math.round(clamp(optimal / path, 0, 1) * 100)}%` : "—";
         $("liveOvershoots").textContent = overshoots;
       }
 
@@ -2461,7 +2461,7 @@
 
         ctx.fillStyle = "rgba(184,185,170,.6)";
         ctx.font = "11px 'IBM Plex Mono', Consolas, monospace";
-        ctx.fillText(`${currentGame().name} ? ?? ${app.horizontalFov}?  ?  YAW ${viewYaw.toFixed(1)}?  ?  PITCH ${viewPitch.toFixed(1)}?`, 18, height - 18);
+        ctx.fillText(`${currentGame().name} · 视角 ${app.horizontalFov}°  ·  YAW ${viewYaw.toFixed(1)}°  ·  PITCH ${viewPitch.toFixed(1)}°`, 18, height - 18);
         ctx.restore();
       }
 
@@ -2504,7 +2504,7 @@
           ctx.save();
           ctx.fillStyle = "rgba(184,185,170,.6)";
           ctx.font = "11px 'IBM Plex Mono', Consolas, monospace";
-          ctx.fillText("??????  ?  ?? 1:1 ??  ?  ??????????", 18, height - 18);
+          ctx.fillText("桌面微调辅助  ·  二维 1:1 路径  ·  不直接选择游戏灵敏度", 18, height - 18);
           ctx.restore();
         } else {
           drawAngularWorldGrid(ctx, width, height, test);
@@ -2580,7 +2580,7 @@
           ctx.fillStyle = "rgba(241,240,223,.9)";
           ctx.font = "600 12px 'IBM Plex Mono', Consolas, monospace";
           ctx.textAlign = "center";
-          ctx.fillText("?????", x, y + 36);
+          ctx.fillText("按左键射击", x, y + 36);
           ctx.restore();
         }
       }
@@ -2594,19 +2594,19 @@
         completeTone();
         $("testOverlay").hidden = false;
         $("overlayKicker").textContent = `TEST ${app.stageIndex + 1} COMPLETE`;
-        $("overlayTitle").textContent = `${test.stage.name}??`;
+        $("overlayTitle").textContent = `${test.stage.name}完成`;
         $("overlayText").textContent = test.stage.mode === "desktop"
-          ? "???????????????????????????"
-          : "??????????????????????????????????????";
+          ? "二维微调辅助数据已记录，将只用于补充控制稳定与置信度。"
+          : "五档候选游戏灵敏度的测试数据已记录。全部测试结束后会统一归一化并计算推荐值。";
 
         if (app.stageIndex < stageDefs.length - 1) {
-          $("stageActionBtn").textContent = "?????";
+          $("stageActionBtn").textContent = "继续下一项";
           $("stageActionBtn").onclick = () => {
             app.stageIndex += 1;
             prepareStage();
           };
         } else {
-          $("stageActionBtn").textContent = "???????";
+          $("stageActionBtn").textContent = "生成灵敏度建议";
           $("stageActionBtn").onclick = calculateResult;
         }
         renderTestChecklist();
@@ -2796,7 +2796,7 @@
         const result = app.currentResult;
         const resultGame = GAMES[result.gameId] || GAMES.valorant;
         $("resultPrimarySens").textContent = formatSens(result.mainSens, resultGame.id);
-        $("resultPrimaryUnit").textContent = `${resultGame.name} ??????`;
+        $("resultPrimaryUnit").textContent = `${resultGame.name} 游戏内灵敏度`;
         $("resultCm360").textContent = `${result.cm360.toFixed(1)} cm`;
         $("resultEdpi").textContent = Math.round(result.edpi);
         $("resultAccuracy").textContent = `${Math.round((result.accuracy || 0) * 100)}%`;
@@ -2806,11 +2806,11 @@
         $("highSens").textContent = formatSens(result.highSens, resultGame.id);
         $("resultGameName").textContent = resultGame.name;
         $("resultGameIcon").src = gameIcon(resultGame.id);
-        $("resultGameIcon").alt = `${resultGame.name} ??`;
-        $("resultStateText").textContent = result.confidence >= .65 ? "??????" : "?????";
+        $("resultGameIcon").alt = `${resultGame.name} 图标`;
+        $("resultStateText").textContent = result.confidence >= .65 ? "交叉校验完成" : "置信度较低";
         $("resultLamp").className = `lamp ${result.confidence >= .65 ? "live" : "warn"}`;
         $("saveResultBtn").disabled = result.saved;
-        $("saveResultBtn").textContent = result.saved ? "??????" : "???????";
+        $("saveResultBtn").textContent = result.saved ? "已保存到本地" : "保存到本地历史";
         renderEvidenceGrid($("resultEvidenceGrid"), result);
 
         const conversionList = $("conversionList");
@@ -2824,10 +2824,10 @@
           item.className = `conversion-row${game.id === resultGame.id ? " current" : ""}`;
           item.innerHTML = `
             <img src="${gameIcon(game.id)}" alt="">
-            <div class="conversion-game"><strong>${game.name}</strong><span>${game.id === resultGame.id ? "??????" : "??????"}</span></div>
+            <div class="conversion-game"><strong>${game.name}</strong><span>${game.id === resultGame.id ? "本次测试游戏" : "自动等效换算"}</span></div>
             <strong>${formatSens(convertedSensitivity, game.id)}</strong>
-            <span class="conversion-distance">${convertedCm360.toFixed(1)} cm/360?</span>
-            <span class="conversion-note">${rangeLimited ? "????????" : "??????"}</span>`;
+            <span class="conversion-distance">${convertedCm360.toFixed(1)} cm/360°</span>
+            <span class="conversion-note">${rangeLimited ? "已受游戏范围限制" : "物理距离等效"}</span>`;
           conversionList.append(item);
         });
 
@@ -2852,27 +2852,27 @@
             <span>${Math.round(factor * 100)}%</span>
             <strong>${formatSens(candidateSensitivity(result.baseSens, factor, resultGame), resultGame.id)}</strong>
             <div class="factor-score-track"><div class="factor-score-fill" style="--score-scale:${Number.isFinite(score) ? clamp(score / 100, 0, 1) : 0}"></div></div>
-            <strong>${Number.isFinite(score) ? Math.round(score) : "?"}</strong>`;
+            <strong>${Number.isFinite(score) ? Math.round(score) : "—"}</strong>`;
           factorScoreList.append(row);
         });
 
-        const direction = result.selectedFactor < .9 ? "?????????????????????????????????" :
-          result.selectedFactor > 1.1 ? "????????????????????????????????????" :
-          "????????????????????????????????";
+        const direction = result.selectedFactor < .9 ? "你的较低候选灵敏度综合表现最好，说明更低的游戏灵敏度更有利于控制。" :
+          result.selectedFactor > 1.1 ? "你的较高候选灵敏度综合表现最好，说明略高的游戏灵敏度更有利于转向与切换。" :
+          "你在当前游戏灵敏度下表现最好，现有设置已经接近本次测试的平衡点。";
         $("resultExplanation").innerHTML = `
-          <h3 class="section-title">???? ${resultGame.name} ?? ${formatSens(result.mainSens, resultGame.id)}</h3>
+          <h3 class="section-title">为什么为 ${resultGame.name} 推荐 ${formatSens(result.mainSens, resultGame.id)}</h3>
           <p>${direction}</p>
           <ul>
-            <li>?????????????????????? <strong>${formatSens(result.baseSens, resultGame.id)}</strong> ???????65%?82%?100%?122% ? 150%??????????????????</li>
-            <li>?????????????????????????????????????????? 0 ?????????????</li>
-            <li>??????? <strong>${result.shots}</strong> ???? <strong>${result.hits}</strong> ????? <strong>${result.misses}</strong> ?????????????????</li>
-            <li>????????? <strong>${Math.round(result.auxiliaryScore)}</strong>???????????????????????????????</li>
-            <li>?????? <strong>${Math.round(result.confidence * 100)}%</strong>?${result.rawInput ? "???????????????????" : result.inputMode === "desktop" ? "???????????????????????????????????????" : "?????????????????????????????????????"}</li>
-            <li>????? eDPI ? <strong>${Math.round(result.edpi)}</strong>?? yaw ${result.yaw} ??? cm/360? ?? <strong>${result.cm360.toFixed(1)} cm</strong>?</li>
-            <li>???????? cm/360? ????????????? FOV ???????????</li>
-            <li>??????????????????????????????????????</li>
+            <li>五档不是允许输入范围，而是相对于测试前灵敏度 <strong>${formatSens(result.baseSens, resultGame.id)}</strong> 的五个实验值：65%、82%、100%、122% 和 150%。上方展示了每档实际数值与综合得分。</li>
+            <li>静态目标同时考察左键射击的命中率、反应时间、点击误差、路径效率与过冲；零射击分段记为 0 分，不能在没有样本时胜出。</li>
+            <li>本次核心射击共 <strong>${result.shots}</strong> 发，命中 <strong>${result.hits}</strong> 发，未命中 <strong>${result.misses}</strong> 发；单纯快速扫过目标不再计为命中。</li>
+            <li>桌面微调辅助得分为 <strong>${Math.round(result.auxiliaryScore)}</strong>，只补充控制稳定与置信度，不直接参与游戏灵敏度档位的胜负选择。</li>
+            <li>本次置信度为 <strong>${Math.round(result.confidence * 100)}%</strong>；${result.rawInput ? "浏览器接受了无系统加速的相对输入请求。" : result.inputMode === "desktop" ? "本次按系统处理输入运行，视角换算仍使用候选游戏灵敏度，但可能包含系统鼠标加速。" : "无系统加速输入不可用，浏览器已改用系统处理的相对输入，因此置信度受到折减。"}</li>
+            <li>对应游戏内 eDPI 为 <strong>${Math.round(result.edpi)}</strong>，按 yaw ${result.yaw} 换算的 cm/360° 约为 <strong>${result.cm360.toFixed(1)} cm</strong>。</li>
+            <li>上方已按相同物理 cm/360° 自动换算全部支持游戏；不同 FOV 的视觉速度仍可能不同。</li>
+            <li>先在游戏训练场试用主推荐值；若转身不足或过冲明显，再分别尝试较高或较低备选。</li>
           </ul>
-          <div class="notice"><strong>???</strong> ?? ${resultGame.name} ???? ${result.horizontalFov}? ????? ${result.yaw}?/count ??????????????????????????????? cm/360????? FOV?????????????????????????????????????????</div>`;
+          <div class="notice"><strong>重要：</strong> 本次 ${resultGame.name} 模拟使用 ${result.horizontalFov}° 水平视野与 ${result.yaw}°/count 换算模型，均不标作厂商公开的完整内部实现。跨游戏换算可保持物理 cm/360°，但不同 FOV、缩放和引擎输入链路仍会改变视觉体感；结果应作为可解释的个人起点，而不是绝对答案。</div>`;
       }
 
       function saveCurrentResult() {
@@ -2891,7 +2891,7 @@
           renderResults();
           renderHome();
           completeTone();
-          showToast("????????????????");
+          showToast("本次结果已保存到浏览器本地历史。");
         }
       }
 
@@ -2915,9 +2915,9 @@
         app.pauseCount += 1;
         $("testOverlay").hidden = false;
         $("overlayKicker").textContent = "PAUSED";
-        $("overlayTitle").textContent = "?????";
-        $("overlayText").textContent = `${reason}???????????????????`;
-        $("stageActionBtn").textContent = "??????";
+        $("overlayTitle").textContent = "测试已暂停";
+        $("overlayText").textContent = `${reason}。重新点击继续后，计时将从暂停处恢复。`;
+        $("stageActionBtn").textContent = "继续当前测试";
         $("stageActionBtn").onclick = resumeStage;
         cautionTone();
       }
@@ -2957,7 +2957,7 @@
           const median = lowerHalf[Math.floor(lowerHalf.length / 2)];
           const measured = clamp(Math.round(1000 / median), 1, 8000);
           $("measuredPollingReadout").textContent = `${measured} Hz*`;
-          $("measuredPollingReadout").title = "??? mousemove ?????????????????????????";
+          $("measuredPollingReadout").title = "浏览器 mousemove 事件间隔估算，可能被浏览器合并，不等于鼠标固件配置";
           app.lastMeasuredRenderAt = now;
         }
         if (app.lastMoveAt && now - app.lastMoveAt > 120) app.inputGapCount += 1;
@@ -2987,7 +2987,7 @@
 
       function exportHistory() {
         if (!app.history.length) {
-          showToast("?????????????");
+          showToast("当前没有可导出的历史记录。");
           return;
         }
         const blob = new Blob([JSON.stringify({ version: 2, exportedAt: new Date().toISOString(), sessions: app.history }, null, 2)], { type: "application/json" });
@@ -3001,15 +3001,15 @@
 
       function clearHistory() {
         if (!app.history.length) {
-          showToast("?????????");
+          showToast("历史记录已经为空。");
           return;
         }
-        if (!confirm("??????????????????????")) return;
+        if (!confirm("确定清空全部本地校准历史吗？此操作无法撤销。")) return;
         app.history = [];
         localStorage.removeItem(STORAGE_KEY);
         localStorage.removeItem(LEGACY_STORAGE_KEY);
         renderHome();
-        showToast("??????????");
+        showToast("本地校准历史已清空。");
       }
 
       function goHome() {
@@ -3023,7 +3023,7 @@
 
       function cancelActiveTest() {
         const hasProgress = app.test || app.stageResults.length;
-        if (hasProgress && !window.confirm("????????????????????")) return;
+        if (hasProgress && !window.confirm("取消本次测试？当前未完成的数据不会保存。")) return;
         goHome();
       }
 
@@ -3082,9 +3082,9 @@
 
         $("soundToggle").addEventListener("click", async () => {
           app.sound = !app.sound;
-          $("soundToggle").textContent = app.sound ? "??" : "??";
+          $("soundToggle").textContent = app.sound ? "🔊" : "🔇";
           $("soundToggle").setAttribute("aria-pressed", String(app.sound));
-          $("soundToggle").setAttribute("aria-label", app.sound ? "????" : "????");
+          $("soundToggle").setAttribute("aria-label", app.sound ? "关闭声音" : "开启声音");
           if (app.sound) {
             await ensureAudio();
             tone(720, .06, .035);
@@ -3094,20 +3094,20 @@
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("pointerlockchange", () => {
           const locked = Boolean(document.pointerLockElement);
-          if (locked) setInputStatus(app.rawInput ? "???????" : "??????", "live");
+          if (locked) setInputStatus(app.rawInput ? "无系统加速输入" : "系统处理输入", "live");
           else if (app.screen === "test" && app.test?.locked && ["running", "countdown", "factor-countdown"].includes(app.test.phase)) {
-            pauseActiveTest("???????");
+            pauseActiveTest("鼠标锁定已退出");
           }
         });
         document.addEventListener("pointerlockerror", () => {
-          setInputStatus("??????", "warn");
-          showToast("?????????????????");
+          setInputStatus("兼容移动模式", "warn");
+          showToast("鼠标锁定失败，已尝试兼容输入模式。");
         });
         document.addEventListener("visibilitychange", () => {
-          if (document.hidden && app.screen === "test") pauseActiveTest("????????");
+          if (document.hidden && app.screen === "test") pauseActiveTest("页面已切换到后台");
         });
         window.addEventListener("blur", () => {
-          if (app.screen === "test") pauseActiveTest("?????????");
+          if (app.screen === "test") pauseActiveTest("浏览器窗口失去焦点");
         });
         window.addEventListener("resize", () => {
           app.canvasBounds = Object.create(null);
@@ -3151,7 +3151,7 @@
         bindMotionFeedback();
         window.addEventListener("resize", queueHomePowerLayout, { passive: true });
         initHidAssist();
-        setInputStatus("??????", "");
+        setInputStatus("等待鼠标输入", "");
         drawCalibration();
         drawTestScene();
         runScreenMotion("home");
